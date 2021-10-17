@@ -8,10 +8,6 @@
 #define LOWS 4
 #define COLS 4
 
-void fill_hint_value_to_puzzle();
-
-
-
 
 int get_min_value_from_hint(int (*map)[4], int row_count, int col_count)
 {
@@ -178,7 +174,8 @@ void fill_case_array(int* case_array, int* sample_array, int sample_array_size)
 
 
 
-void recursive_array(int *arr, int start_index, int size, case_array_info *pcase_array)
+
+void recursive_array(int *arr, int start_index, int size, matrix_buffer_info*pcase_array)
 {
 	int i;
 	int idx;
@@ -200,38 +197,75 @@ void recursive_array(int *arr, int start_index, int size, case_array_info *pcase
 }
 
 
-//void make_check_array_list_for_check(int *puzzle_map_row, case_array_info* pcase_array, int puzzle_row_size)
-//{
-//	case_array_info check_case_array;
-//	int idx;
-//	int rows;
-//
-//	check_case_array.start_address = malloc( sizeof(int) * pcase_array->rows * pcase_array->cols);
-//	idx = 0;
-//	while (idx < pcase_array->rows * pcase_array->cols)
-//	{
-//		check_case_array.start_address[idx] = pcase_array->start_address[idx];
-//		idx++;
-//	}
-//	idx = 0;
-//	
-//	while (idx < puzzle_row_size)
-//	{
-//		if (puzzle_map_row[idx] != 0)
-//		{
-//			check_case_array.start_address[idx] = puzzle_map_row[idx];
-//		}
-//	}
-//}
 
-
-case_array_info make_case_array_list(int *sample_array, int sample_array_size)
+void fill_final_array_from_case_array(matrix_buffer_info*dest_array, matrix_buffer_info* src_array)
 {
-	case_array_info s_case_array;
+	int idx_row;
+	int idx_col;
+	int src_idx;
+	int dest_idx;
 
-	s_case_array.start_address = (int*)malloc(sizeof(int) * ((2 << sample_array_size) * (sample_array_size)));
+	idx_row = 0;
+	idx_col = 0;
+	src_idx = 0;
+	dest_idx = 0;	
+	while (idx_row < dest_array->rows)
+	{
+		idx_col = 0;
+		while (idx_col < dest_array->cols)
+		{
+			if (dest_array->start_address[dest_idx] == 0)
+			{
+				dest_array->start_address[dest_idx] = src_array->start_address[src_idx++];
+			}
+			dest_idx++;
+			idx_col++;
+		}
+		idx_row++;
+	}
+}
+
+matrix_buffer_info make_final_array_list_for_check(int *puzzle_map_row, matrix_buffer_info* pcase_array, int puzzle_col_size)
+{
+	matrix_buffer_info final_case_array;
+	int final_case_idx;
+	int puzzle_idx;
+
+	final_case_array.start_address = malloc( sizeof(int) * pcase_array->rows * puzzle_col_size);
+	final_case_idx = 0;
+	final_case_array.rows = pcase_array->rows;
+	final_case_array.cols = puzzle_col_size;
+	puzzle_idx = 0;
+	while (final_case_idx < final_case_array.rows * final_case_array.cols)
+	{
+		puzzle_idx = 0;
+		while (puzzle_idx < puzzle_col_size)
+		{
+			final_case_array.start_address[final_case_idx] = puzzle_map_row[puzzle_idx];
+			puzzle_idx++;
+			final_case_idx++;
+		}
+	}
+	fill_final_array_from_case_array(&final_case_array, pcase_array);
+	free(pcase_array->start_address);
+
+	return final_case_array;
+}
+
+
+
+int get_factorial(int n)
+{
+	if (n <= 1) return 1;
+	return n * get_factorial(n - 1);
+}
+
+matrix_buffer_info make_case_array_list(int *sample_array, int sample_array_size)
+{
+	matrix_buffer_info s_case_array;
 	s_case_array.cols = sample_array_size;
-	s_case_array.rows = 2 << sample_array_size;
+	s_case_array.rows = get_factorial(sample_array_size);
+	s_case_array.start_address = (int*)malloc(sizeof(int) * (s_case_array.rows * (sample_array_size)));
 	s_case_array.index = 0;
 
 	recursive_array(sample_array, 0, sample_array_size, &s_case_array);
@@ -251,6 +285,12 @@ buffer_info	make_sample_array_for_number_of_case(int *puzzle_map_row, int (*hint
 	buffer_info s_buffer_info;
 
 	not_zero_count = get_count_not_zero_from_rowmap(puzzle_map_row, col_size);
+	if (not_zero_count == 0)
+	{
+		s_buffer_info.not_zero_buffer = NULL;
+		return s_buffer_info;
+	}
+
 	s_buffer_info.not_zero_buffer = (int*)malloc(sizeof(int) * not_zero_count);
 	s_buffer_info.not_zero_buffer_size = not_zero_count;
 	fill_not_zero_buffer( puzzle_map_row, s_buffer_info.not_zero_buffer, row_size);
@@ -267,13 +307,7 @@ buffer_info	make_sample_array_for_number_of_case(int *puzzle_map_row, int (*hint
 	return s_buffer_info;
 }
 
-void scan_lows(int (*map)[4], int lows)
-{
-	while (1)
-	{
-			
-	}
-}
+
 
 int	main(int argc, char *argv[])
 {
@@ -281,7 +315,7 @@ int	main(int argc, char *argv[])
 		{0, 1, 2, 0},
 		{0, 3, 0, 0},
 		{0, 4, 1, 0},
-		{0, 0, 0, 0}
+		{1, 2, 3, 4}
 	};
 
 	int hint_map[4][4] = { 
@@ -292,31 +326,32 @@ int	main(int argc, char *argv[])
 	};
 
 	
-	int max_number;
-	int min_number;
+	//int max_number;
+	//int min_number;
 
 
-	max_number = get_max_value_from_hint(hint_map, 4, 4);
-	min_number = get_min_value_from_hint(hint_map, 4, 4);
-
+	//max_number = get_max_value_from_hint(hint_map, 4, 4);
+	//min_number = get_min_value_from_hint(hint_map, 4, 4);
 
 	buffer_info buffer1;
 	buffer_info buffer2;
-	buffer_info buffer3;
+	//buffer_info buffer3;
 	buffer_info buffer4;
-	case_array_info case_array1;
-	case_array_info case_array4;
-	buffer1 = make_sample_array_for_number_of_case(puzzle_map[0], hint_map, 4, 4);
-	buffer2 = make_sample_array_for_number_of_case(puzzle_map[1], hint_map, 4, 4);
-	//buffer3 = make_sample_array_for_number_of_case(puzzle_map[2], hint_map, 4, 4);
-	buffer4 = make_sample_array_for_number_of_case(puzzle_map[3], hint_map, 4, 4);
+	matrix_buffer_info case_array1;
+	matrix_buffer_info case_array2;
+	matrix_buffer_info final_case_array1;
+	//buffer1 = make_sample_array_for_number_of_case(puzzle_map[0], hint_map, 4, 4);
+	
 
-	case_array1 = make_case_array_list(buffer1.sample_buffer, buffer1.sample_buffer_size);
-	case_array4 = make_case_array_list(buffer4.sample_buffer, buffer4.sample_buffer_size);
-	/*scan_lows(1);
-	scan_cols(1);*/
-
+	buffer2 = make_sample_array_for_number_of_case(puzzle_map[0], hint_map, 4, 4);
+	if (buffer2.not_zero_buffer != NULL)
+	{
+		case_array2 = make_case_array_list(buffer2.sample_buffer, buffer2.sample_buffer_size);
+		final_case_array1 = make_final_array_list_for_check(puzzle_map[0], &case_array2, 4);
+	}
 
 
 	return (0);
 }
+
+
