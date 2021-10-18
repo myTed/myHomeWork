@@ -1,0 +1,67 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strcapitalize.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 12:03:08 by kyolee            #+#    #+#             */
+/*   Updated: 2021/10/18 13:33:36 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+int	is_found_delim(char ch)
+{
+	if (ch == ' ' || ch == '-' || ch == '+')
+	{
+		return (1);
+	}
+	else
+	{
+		return (0);
+	}
+}
+
+char	lower_to_upper(char ch)
+{
+	if (ch >= 'a' && ch <= 'z')
+	{
+		ch = ch - 'a' + 'A';
+	}
+	return (ch);
+}
+
+char	upper_to_lower(char ch)
+{
+	if (ch >= 'A' && ch <= 'Z')
+	{
+		ch = ch - 'A' + 'a';
+	}
+	return (ch);
+}
+
+char	*ft_strcapitalize(char *str)
+{
+	int		cnt_after_delim;
+	int		idx;
+
+	cnt_after_delim = 0;
+	idx = 0;
+	while (str[idx] != 0)
+	{
+		if (is_found_delim(str[idx]))
+		{
+			cnt_after_delim = 0;
+		}
+		else
+		{
+			cnt_after_delim++;
+		}
+		if (cnt_after_delim == 1)
+			str[idx] = lower_to_upper(str[idx]);
+		else
+			str[idx] = upper_to_lower(str[idx]);
+		idx++;
+	}
+	return (str);
+}
