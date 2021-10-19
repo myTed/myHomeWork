@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 20:50:53 by kyolee            #+#    #+#             */
-/*   Updated: 2021/10/19 02:09:46 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/10/19 11:39:01 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void *ft_print_memory(void *addr, unsigned int size)
 	int idx;
 	int hex_cnt;
 	int tmp_idx;
+	int pad_space;
 
 	if( size == 0)
 	{
@@ -113,6 +114,7 @@ void *ft_print_memory(void *addr, unsigned int size)
 	}
 
 	idx = 0;
+	pad_space = 0;
 	while( idx < size)
 	{
 		if( idx % 16 == 0)
@@ -141,27 +143,37 @@ void *ft_print_memory(void *addr, unsigned int size)
 			tmp_idx++;
 			idx++;
 		}
+		if((hex_cnt < 16) && (hex_cnt % 2 == 1))
+		{
+			pad_space = 1;
+			write(1, "   ", 3);
+			hex_cnt += pad_space;
+		}
 		
-
 		tmp_idx = 0;
 		if( hex_cnt < 16)
 		{
-			while( tmp_idx < 16 - hex_cnt)
+			while( tmp_idx < (16 - hex_cnt))
 			{
-				write(1, " ", 1);
+				write(1, "  ", 2);
+
+				if( tmp_idx % 2 == 1)
+				{
+					write(1, " ", 1);
+				}
 				tmp_idx++;
 			}
 		}
 
 		tmp_idx = 0;
-		idx -= hex_cnt;
+		idx = idx -(hex_cnt - pad_space);
 		while( tmp_idx < hex_cnt)
 		{
 			print_asci(*(char*)(addr+idx));
 			tmp_idx++;
 			idx++;
 		}
-
+		pad_space = 0;
 		write(1, "\n", 1);
 	}
 	return addr;
@@ -170,7 +182,10 @@ void *ft_print_memory(void *addr, unsigned int size)
 
 int main(void)
 {
-
+	/*
 	char str[] = { 0x42, 0x6f, 0x6e, 0x6a, 0x6f, 0x75, 0x72, 0x20, 0x6c, 0x65, 0x73, 0x20, 0x61, 0x6d, 0x69, 0x6e, 0x63, 0x68, 0x65, 0x73, 0x09, 0x0a, 0x09, 0x63, 0x20, 0x20, 0x65, 0x73, 0x74, 0x20, 0x66, 0x6f, 0x75, 0x09, 0x74, 0x6f, 0x75, 0x74, 0x09, 0x63, 0x65, 0x20, 0x71, 0x75, 0x20, 0x6f, 0x6e, 0x20, 0x70, 0x65, 0x75, 0x74, 0x20, 0x66, 0x61, 0x69, 0x72, 0x65, 0x20, 0x61, 0x76, 0x65, 0x63, 0x09, 0x0a, 0x09, 0x70, 0x72, 0x69, 0x6e, 0x74, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x0a, 0x0a, 0x0a, 0x09, 0x6c, 0x6f, 0x6c, 0x2e, 0x6c, 0x6f, 0x6c, 0x0a, 0x20, 0x00 };
+	*/
+	char str[] = { 0x42, 0x6f, 0x6e, 0x6a, 0x6f, 0x75, 0x72, 0x20, 0x6c, 0x65, 0x73, 0x20, 0x61, 0x6d, 0x69, 0x6e, 0x63, 0x68, 0x00 };
+	
 	ft_print_memory(str,sizeof(str));
 }
