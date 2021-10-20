@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 02:21:57 by kyolee            #+#    #+#             */
-/*   Updated: 2021/10/20 12:10:19 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/10/20 22:28:38 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -16,7 +16,7 @@
 */
 int	ft_strlen(const char *src)
 {
-	int	idx;
+	unsigned int	idx;
 
 	idx = 0;
 	while (src[idx] != 0)
@@ -26,9 +26,9 @@ int	ft_strlen(const char *src)
 
 unsigned int	ft_strlcat(char *dest, char *src, unsigned int size)
 {
-	int	dst_len;
-	int	src_len;
-	int	idx;
+	unsigned int	dst_len;
+	unsigned int	src_len;
+	unsigned int	idx;
 
 	dst_len = ft_strlen(dest);
 	src_len = ft_strlen(src);
@@ -49,7 +49,6 @@ int	main(void)
 {
 	char dest1[20] = "ajsdkf";
 	char dest2[20] = "ajsdkf";
-	char dest3[20] = "ajsdkf";
 	char src[20] = "AAAA";
 	printf("strlcat    :%ld\n",strlcat(dest1,src,2));
 	printf("%s\n",dest1);	

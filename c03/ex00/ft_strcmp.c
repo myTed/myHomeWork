@@ -6,10 +6,13 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 00:02:36 by kyolee            #+#    #+#             */
-/*   Updated: 2021/10/20 00:03:52 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/10/20 22:17:30 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+/*
+#include <stdio.h>
+#include <string.h>
+*/
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	idx;
@@ -25,7 +28,6 @@ int	ft_strcmp(char *s1, char *s2)
 	}
 	return (0);
 }
-
 /*
 int	main(void)
 {

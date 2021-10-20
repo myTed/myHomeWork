@@ -6,10 +6,13 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 01:07:14 by kyolee            #+#    #+#             */
-/*   Updated: 2021/10/20 02:18:17 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/10/20 22:25:34 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+/*
+#include <stdio.h>
+#include <string.h>
+*/
 int	ft_strlen(char *str)
 {
 	int	idx;
@@ -67,7 +70,6 @@ int	main(void)
 
 	printf("\n");
 	printf("strstr: %s\n",strstr(str, src));
-	printf("othr  : %s\n",other_ft_strstr(str, src));
 
 	return (0);
 }
