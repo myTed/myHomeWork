@@ -6,16 +6,18 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 00:17:53 by kyolee            #+#    #+#             */
-/*   Updated: 2021/10/18 15:01:25 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/10/24 10:18:04 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+/*
+#include <stdio.h>
+*/
 char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {
-	int		idx;
+	unsigned int	idx;
 
 	idx = 0;
-	while (src[idx] != 0 && idx < n)
+	while ((src[idx] != 0) && (idx < n))
 	{
 		dest[idx] = src[idx];
 		idx++;
@@ -26,3 +28,12 @@ char	*ft_strncpy(char *dest, char *src, unsigned int n)
 	}
 	return (dest);
 }
+
+/*
+int	main(void)
+{
+	char dest[128];
+	
+	printf("%s\n",ft_strncpy(dest, "asjdklf",10));
+}
+*/

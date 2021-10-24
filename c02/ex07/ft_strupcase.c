@@ -6,26 +6,33 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 11:38:11 by kyolee            #+#    #+#             */
-/*   Updated: 2021/10/18 11:51:59 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/10/24 10:34:06 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+/*
+#include <stdio.h>
+*/
 char	*ft_strupcase(char *str)
 {
 	char	ch;
+	int		idx;
 
-	while (1)
+	idx = 0;
+	while (str[idx] != 0)
 	{
-		ch = *str;
-		if (ch == 0)
-		{
-			break ;
-		}
+		ch = str[idx];
 		if (ch >= 'a' && ch <= 'z')
 		{
-			*str = ch - 'a' + 'A';
+			str[idx] = ch - 'a' + 'A';
 		}
-		str++;
+		idx++;
 	}
 	return (str);
 }
+/*
+int	main(void)
+{
+	char buf[128] = "asdfjlABC*^&abkq";
+	printf("%s\n",ft_strupcase(buf));
+}
+*/

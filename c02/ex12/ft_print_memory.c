@@ -5,187 +5,97 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/18 20:50:53 by kyolee            #+#    #+#             */
-/*   Updated: 2021/10/19 11:39:01 by kyolee           ###   ########.fr       */
+/*   Created: 2021/10/24 12:42:28 by kyolee            #+#    #+#             */
+/*   Updated: 2021/10/24 16:28:55 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#include <stdio.h>
-#include <string.h>
 #include <unistd.h>
 
-
-char	int_to_hex(long int num)
+void	print_hex(unsigned char *addr, unsigned int cnt)
 {
-	char ch;
-	if( num >= 10 && num <= 15)
+	char			*base;
+	unsigned char	hex_array[41];
+	unsigned int	idx;
+	unsigned int	addr_idx;
+
+	base = "0123456789abcdef";
+	idx = 0;
+	while (idx < sizeof(hex_array))
+		hex_array[idx++] = ' ';
+	idx = 0;
+	addr_idx = 0;
+	while (addr_idx < cnt)
 	{
-		ch = num - 10 + 'a';
+		if (idx % 5 != 0)
+		{
+			hex_array[idx++] = base[(addr[addr_idx]) / 16];
+			hex_array[idx++] = base[(addr[addr_idx]) % 16];
+			addr_idx++;
+		}
+		else
+			idx++;
 	}
-	else
-	{
-		ch = num + '0';
-	}
-	return ch;
+	write(1, hex_array, sizeof(hex_array));
 }
 
-
-void	non_padd_print_hex(long int num)
+void	print_address(unsigned long int num)
 {
-	char ch;
+	char			*base;
+	char			address[16];
+	unsigned int	idx;
 
-	if (num == 0)
+	base = "0123456789abcdef";
+	idx = 0;
+	while (idx < (unsigned int)(sizeof(address)))
+		address[idx++] = '0';
+	idx = sizeof(address) - 1;
+	while (num > 0)
 	{
-		return ;
+		address[idx] = base[num % 16];
+		num = num / 16;
+		idx--;
 	}
-	
-	non_padd_print_hex(num / 16);
-	ch = int_to_hex(num % 16);
-	write(1, &ch, 1);
+	write(1, address, sizeof(address));
+	write(1, ":", 1);
 }
 
-int get_num_of_hex_digit(long int num)
+void	print_ascii(unsigned char *addr, unsigned int cnt)
 {
-	int cnt_hex_digit;
-
-	if (num == 0)
-	{
-		return 0;
-	}
-
-	return get_num_of_hex_digit( num / 16) + 1;
-}
-
-
-void zero_padding_print(int num)
-{
-	int idx;
+	unsigned int	idx;
+	unsigned char	ch;
 
 	idx = 0;
-	while( idx < num)
+	while (idx < cnt)
 	{
-		write(1, "0", 1);
+		ch = addr[idx];
+		if ((ch >= 32) && (ch <= 126))
+			write(1, &ch, 1);
+		else
+			write(1, ".", 1);
 		idx++;
 	}
 }
 
-void print_hex(long int num, int digits)
+void	*ft_print_memory(void *addr, unsigned int size)
 {
-	int num_of_zero_padding;
+	unsigned int	print_cnt;
+	unsigned char	*tmp_addr;
 
-	num_of_zero_padding = digits - get_num_of_hex_digit(num);
-
-	if( num_of_zero_padding > 0)
+	tmp_addr = (unsigned char *)addr;
+	print_cnt = size;
+	while (size > 0)
 	{
-		zero_padding_print(num_of_zero_padding);
-	}
-	non_padd_print_hex(num);
-}
-
-
-void print_asci(char ch)
-{
-	if( (ch >= 0 && ch <=31) || ch == 127)
-	{
-		write(1, ".", 1);
-	}
-	else
-	{
-		write(1, &ch, 1);
-	}
-
-}
-
-
-void *ft_print_memory(void *addr, unsigned int size)
-{
-
-	int zero_pad_cnt;
-	int num_of_digit;
-	int idx;
-	int hex_cnt;
-	int tmp_idx;
-	int pad_space;
-
-	if( size == 0)
-	{
-		return addr;
-	}
-
-	idx = 0;
-	pad_space = 0;
-	while( idx < size)
-	{
-		if( idx % 16 == 0)
-		{
-			print_hex((long int)addr + idx, 16);
-			write(1,": ",2);
-		}
-		
-		if( size - idx >= 16)
-		{
-			hex_cnt = 16;
-		}
+		print_address((unsigned long int)tmp_addr);
+		if (size >= 16)
+			print_cnt = 16;
 		else
-		{
-			hex_cnt = size - idx;
-		}
-
-		tmp_idx = 0;
-		while( tmp_idx < hex_cnt)
-		{
-			print_hex(*(char*)(addr+idx),2);
-			if( idx % 2 == 1)
-			{
-				write(1, " ", 1);
-			}
-			tmp_idx++;
-			idx++;
-		}
-		if((hex_cnt < 16) && (hex_cnt % 2 == 1))
-		{
-			pad_space = 1;
-			write(1, "   ", 3);
-			hex_cnt += pad_space;
-		}
-		
-		tmp_idx = 0;
-		if( hex_cnt < 16)
-		{
-			while( tmp_idx < (16 - hex_cnt))
-			{
-				write(1, "  ", 2);
-
-				if( tmp_idx % 2 == 1)
-				{
-					write(1, " ", 1);
-				}
-				tmp_idx++;
-			}
-		}
-
-		tmp_idx = 0;
-		idx = idx -(hex_cnt - pad_space);
-		while( tmp_idx < hex_cnt)
-		{
-			print_asci(*(char*)(addr+idx));
-			tmp_idx++;
-			idx++;
-		}
-		pad_space = 0;
+			print_cnt = size;
+		print_hex(tmp_addr, print_cnt);
+		print_ascii(tmp_addr, print_cnt);
+		tmp_addr += 16;
+		size -= print_cnt;
 		write(1, "\n", 1);
 	}
-	return addr;
-}
-
-
-int main(void)
-{
-	/*
-	char str[] = { 0x42, 0x6f, 0x6e, 0x6a, 0x6f, 0x75, 0x72, 0x20, 0x6c, 0x65, 0x73, 0x20, 0x61, 0x6d, 0x69, 0x6e, 0x63, 0x68, 0x65, 0x73, 0x09, 0x0a, 0x09, 0x63, 0x20, 0x20, 0x65, 0x73, 0x74, 0x20, 0x66, 0x6f, 0x75, 0x09, 0x74, 0x6f, 0x75, 0x74, 0x09, 0x63, 0x65, 0x20, 0x71, 0x75, 0x20, 0x6f, 0x6e, 0x20, 0x70, 0x65, 0x75, 0x74, 0x20, 0x66, 0x61, 0x69, 0x72, 0x65, 0x20, 0x61, 0x76, 0x65, 0x63, 0x09, 0x0a, 0x09, 0x70, 0x72, 0x69, 0x6e, 0x74, 0x5f, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x0a, 0x0a, 0x0a, 0x09, 0x6c, 0x6f, 0x6c, 0x2e, 0x6c, 0x6f, 0x6c, 0x0a, 0x20, 0x00 };
-	*/
-	char str[] = { 0x42, 0x6f, 0x6e, 0x6a, 0x6f, 0x75, 0x72, 0x20, 0x6c, 0x65, 0x73, 0x20, 0x61, 0x6d, 0x69, 0x6e, 0x63, 0x68, 0x00 };
-	
-	ft_print_memory(str,sizeof(str));
+	return (addr);
 }
