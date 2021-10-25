@@ -48,7 +48,7 @@ void fill_char_map_to_int_map(char **pchar_map,Mark *pmark,int **pint_map)
 }
 
 
-void print_map(Mark *pmark,int **pint_map)
+void test_print_map(Mark *pmark,int **pint_map)
 {
 	int	row_idx;
 	int	col_idx;
@@ -222,14 +222,14 @@ int	main(void)
 		return (-1);
 	
 	fill_char_map_to_int_map(pchar_map,&mark,pint_map);
-	print_map(&mark,pint_map);
+	test_print_map(&mark,pint_map);
 
 	printf("\n\n");
 	
 	max_value = cal_square(&mark, pint_map);
 	get_coordinate_max_square(&mark, pint_map, max_value, &max_square);
 	
-	print_map(&mark,pint_map);
+	test_print_map(&mark,pint_map);
 
 	printf("\n\n");
 	print_max_square(&mark, pchar_map, &max_square);
