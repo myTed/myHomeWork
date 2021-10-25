@@ -1,6 +1,8 @@
 #include "change_map.h"
 #include "cal_square.h"
-#include "mark.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 int **make_int_map(Mark *pmark)
 {

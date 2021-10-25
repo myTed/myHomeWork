@@ -1,8 +1,6 @@
 #ifndef CAL_SQUARE_H
 #define CAL_SQUARE_H
-#include <stdio.h>
 #include "mark.h"
-
 typedef struct coordinate
 {
 	int	start_row_idx;
