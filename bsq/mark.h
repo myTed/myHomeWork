@@ -1,5 +1,5 @@
 #ifndef MARK_H
-# define MARK_h
+# define MARK_H
 #include<stdbool.h>
 
 typedef struct mark

@@ -172,12 +172,12 @@ void print_max_square(Mark *pmark, char **pchar_map, t_coordinate *pmax_square)
 				&& (col_idx >= pmax_square->start_col_idx) && (col_idx <= pmax_square->end_col_idx))
 			{
 				write(1, &pmark->ch[OCCUPY_INDEX], 1);
-				write(1, " ", 1);
+				//write(1, " ", 1);
 			}
 			else
 			{
 				write(1, &pchar_map[row_idx][col_idx], 1);
-				write(1, " ", 1);
+				//write(1, " ", 1);
 			}
 			col_idx++;
 		}
@@ -187,7 +187,7 @@ void print_max_square(Mark *pmark, char **pchar_map, t_coordinate *pmax_square)
 }
 
 
-
+/*
 int	main(void)
 {
 
@@ -241,4 +241,4 @@ int	main(void)
 	free(pint_map);
 	return (0);
 }
-
+*/

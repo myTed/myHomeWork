@@ -1,0 +1,49 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CAL_SQUARE_H	cal_square.h	2;"	d
+CHANGE_MAP_H	change_map.h	2;"	d
+EMPTY_INDEX	change_map.h	3;"	d
+MAP_H	map.h	2;"	d
+MARK_h	mark.h	2;"	d
+Mark	mark.h	/^} Mark;$/;"	t	typeref:struct:mark
+OBSTACLE_INDEX	change_map.h	4;"	d
+OCCUPY_INDEX	change_map.h	5;"	d
+UTILS_H	utils.h	2;"	d
+cal_square	cal_square.c	/^int	cal_square(Mark *pmark,int **pint_map)$/;"	f
+ch	mark.h	/^	char ch[3];$/;"	m	struct:mark
+check_each_line	map.c	/^int check_each_line(char *str, Mark M)$/;"	f
+check_first_line	map.c	/^int check_first_line(int fd, Mark *M)$/;"	f
+check_map_file	map.c	/^int check_map_file(int fd, Mark *M)$/;"	f
+check_mark_file	mark.c	/^Mark *check_mark_file(int fd)$/;"	f
+check_whole_line	map.c	/^int check_whole_line(int fd, Mark M)$/;"	f
+cols	mark.h	/^	int cols;$/;"	m	struct:mark
+coordinate	cal_square.h	/^typedef struct coordinate$/;"	s
+end_col_idx	cal_square.h	/^	int	end_col_idx;$/;"	m	struct:coordinate
+end_row_idx	cal_square.h	/^	int end_row_idx;$/;"	m	struct:coordinate
+fill_char_map_to_int_map	change_map.c	/^void fill_char_map_to_int_map(char **pchar_map,Mark *pmark,int **pint_map)$/;"	f
+ft_strndup	utils.c	/^char *ft_strndup(char *src, int n)$/;"	f
+get_coordinate_max_square	cal_square.c	/^void get_coordinate_max_square(Mark *pmark, int **pint_map, int max_value, t_coordinate *pmax_square)$/;"	f
+get_map	map.c	/^char **get_map(char *filename, Mark M)$/;"	f
+get_mininum_value	cal_square.c	/^int get_mininum_value(int **pint_map,int row_idx,int col_idx)$/;"	f
+is_digit	utils.c	/^int is_digit(char c)$/;"	f
+is_mark	mark.c	/^int is_mark(char c, Mark M)$/;"	f
+is_possible_cal	cal_square.c	/^int	is_possible_cal(int row_idx,int col_idx)$/;"	f
+is_printable	utils.c	/^int is_printable(char c)$/;"	f
+main	main.c	/^int main(int argc, char **argv)$/;"	f
+make_int_map	change_map.c	/^int **make_int_map(Mark *pmark)$/;"	f
+mark	mark.h	/^typedef struct mark$/;"	s
+max_value	cal_square.h	/^	int	max_value;$/;"	m	struct:coordinate
+print_max_square	change_map.c	/^void print_max_square(Mark *pmark, char **pchar_map, t_coordinate *pmax_square)$/;"	f
+rows	mark.h	/^	int rows;$/;"	m	struct:mark
+start_col_idx	cal_square.h	/^	int	start_col_idx;$/;"	m	struct:coordinate
+start_row_idx	cal_square.h	/^	int	start_row_idx;$/;"	m	struct:coordinate
+t_coordinate	cal_square.h	/^}t_coordinate;$/;"	t	typeref:struct:coordinate
+test_copy_map	change_map.c	/^void test_copy_map(char *pchar_map, char *str)$/;"	f
+test_fill_char_map	change_map.c	/^void test_fill_char_map(Mark *pmark, char **pchar_map)$/;"	f
+test_make_char_map	change_map.c	/^char **test_make_char_map(Mark *pmark)$/;"	f
+test_print_char_map	change_map.c	/^void test_print_char_map(Mark *pmark,char **pchar_map)$/;"	f
+test_print_map	change_map.c	/^void test_print_map(Mark *pmark,int **pint_map)$/;"	f
