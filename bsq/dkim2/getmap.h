@@ -6,7 +6,7 @@
 /*   By: dkim2 <dkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 21:09:04 by dkim2             #+#    #+#             */
-/*   Updated: 2021/10/27 21:12:57 by dkim2            ###   ########.fr       */
+/*   Updated: 2021/10/28 00:27:42 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ char	**read_line_first2(int fd, t_mark M, char *first_row);
 
 int		read_lines_left(int fd, t_mark M, char ***map, char *buf);
 
-char	**getmap(int fd, char *buf);
+char	**getmap(int fd, char *buf, t_mark *p_mark);
 
 #endif

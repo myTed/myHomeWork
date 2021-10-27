@@ -6,7 +6,7 @@
 /*   By: dkim2 <dkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 21:08:33 by dkim2             #+#    #+#             */
-/*   Updated: 2021/10/27 21:33:46 by dkim2            ###   ########.fr       */
+/*   Updated: 2021/10/28 00:00:34 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*read_line_first(int fd, t_mark *M, char *buf)
 	return (first_row);
 }
 
-char	**read_line_first2(int fd, t_mark M, char *first_row)
+char	**read_line_first2(t_mark M, char *first_row)
 {
 	int		i;
 	char	**map;
@@ -121,24 +121,23 @@ int	read_lines_left(int fd, t_mark M, char ***map, char *buf)
 	return (1);
 }
 
-char	**getmap(int fd, char *buf)
+char	**getmap(int fd, char *buf, t_mark *t_mk)
 {
-	t_mark	t_mk;
 	char	*temp;
 	char	**map;
 	int		i;
 
-	t_mk.rows = 0;
-	t_mk.cols = 0;
-	if (!read_line_zero(fd, &t_mk, buf))
+	t_mk->rows = 0;
+	t_mk->cols = 0;
+	if (!read_line_zero(fd, t_mk, buf))
 		return (0);
-	temp = read_line_first(fd, &t_mk, buf);
+	temp = read_line_first(fd, t_mk, buf);
 	if (!temp)
 		return (0);
-	map = read_line_first2(fd, t_mk, temp);
+	map = read_line_first2(*t_mk, temp);
 	if (!map)
 		return (0);
-	if (!read_lines_left(fd, t_mk, &map, buf))
+	if (!read_lines_left(fd, *t_mk, &map, buf))
 	{
 		i = 0;
 		while (map[i] != NULL)

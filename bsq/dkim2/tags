@@ -1,0 +1,26 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+GETMAP_H	getmap.h	14;"	d
+UTILS_H	utils.h	14;"	d
+check_overlap	utils.c	/^int	check_overlap(char c1, char c2, char c3)$/;"	f
+clear_buffer	main.c	/^void	clear_buffer(int fd, char *buf)$/;"	f
+cols	utils.h	/^	int		cols;$/;"	m	struct:s_mark
+ft_append	utils.c	/^char	*ft_append(char *old, char c)$/;"	f
+getmap	getmap.c	/^char	**getmap(int fd, char *buf)$/;"	f
+is_digit	utils.c	/^int	is_digit(char c)$/;"	f
+is_mark	utils.c	/^int	is_mark(char c, t_mark M)$/;"	f
+is_printable	utils.c	/^int	is_printable(char c)$/;"	f
+main	main.c	/^int	main(int argc, char **argv)$/;"	f
+mark	utils.h	/^	char	mark[3];$/;"	m	struct:s_mark
+print_err	main.c	/^void	print_err(int fd, char *buf)$/;"	f
+read_line_first	getmap.c	/^char	*read_line_first(int fd, t_mark *M, char *buf)$/;"	f
+read_line_first2	getmap.c	/^char	**read_line_first2(int fd, t_mark M, char *first_row)$/;"	f
+read_line_zero	getmap.c	/^int	read_line_zero(int fd, t_mark *M, char *buf)$/;"	f
+read_lines_left	getmap.c	/^int	read_lines_left(int fd, t_mark M, char ***map, char *buf)$/;"	f
+rows	utils.h	/^	int		rows;$/;"	m	struct:s_mark
+s_mark	utils.h	/^typedef struct s_mark$/;"	s
+t_mark	utils.h	/^}	t_mark;$/;"	t	typeref:struct:s_mark
