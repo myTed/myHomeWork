@@ -1,9 +1,6 @@
+#include "common.h"
 #include "mark.h"
 #include "utils.h"
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <stdio.h>
 
 int is_mark(char c, Mark M)
 {
@@ -21,7 +18,10 @@ Mark *check_mark_file(int fd)
 	int i;
 	char c;
 
+	M = NULL;
 	M = malloc(sizeof(Mark));
+	if( M == NULL)
+		return NULL;
 	M->rows = 0;
 	read(fd, &c, 1);
 	while (is_digit(c))

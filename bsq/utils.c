@@ -1,7 +1,5 @@
 #include "utils.h"
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "common.h"
 
 int is_printable(char c)
 {

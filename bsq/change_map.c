@@ -1,8 +1,6 @@
 #include "change_map.h"
 #include "cal_square.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include "common.h"
 
 int **make_int_map(Mark *pmark)
 {
@@ -49,7 +47,7 @@ void fill_char_map_to_int_map(char **pchar_map,Mark *pmark,int **pint_map)
 	}
 }
 
-
+/*
 void test_print_map(Mark *pmark,int **pint_map)
 {
 	int	row_idx;
@@ -153,7 +151,7 @@ void test_print_char_map(Mark *pmark,char **pchar_map)
 		printf("\n");
 	}
 }
-
+*/
 
 
 void print_max_square(Mark *pmark, char **pchar_map, t_coordinate *pmax_square)
@@ -170,15 +168,9 @@ void print_max_square(Mark *pmark, char **pchar_map, t_coordinate *pmax_square)
 		{
 			if ((row_idx >= pmax_square->start_row_idx) && (row_idx <= pmax_square->end_row_idx)
 				&& (col_idx >= pmax_square->start_col_idx) && (col_idx <= pmax_square->end_col_idx))
-			{
 				write(1, &pmark->ch[OCCUPY_INDEX], 1);
-				//write(1, " ", 1);
-			}
 			else
-			{
 				write(1, &pchar_map[row_idx][col_idx], 1);
-				//write(1, " ", 1);
-			}
 			col_idx++;
 		}
 		write(1,"\n", 1);

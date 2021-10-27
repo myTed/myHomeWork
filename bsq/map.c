@@ -1,10 +1,7 @@
-#include <stdlib.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
+#include "common.h"
 #include "mark.h"
 #include "utils.h"
+#include "error.h"
 
 int check_first_line(int fd, Mark *M)
 {
@@ -44,6 +41,11 @@ int check_whole_line(int fd, Mark M)
 	while (i < M.rows)
 	{
 		temp_buf = malloc(M.cols + 2);
+		if (temp_buf == NULL)
+		{
+			write(2, MEMORY_ERROR_MSG, MEMORY_ERROR_MSG_LEN);
+			exit(1);
+		}
 		read(fd, temp_buf, M.cols + 1);
 		temp_buf[M.cols + 1] = '\0';
 		if (!check_each_line(temp_buf, M))
@@ -77,7 +79,10 @@ char **get_map(char *filename, Mark M)
 	int c;
 	char **charmap;
 
-	charmap = malloc(sizeof(char *) * M.rows);
+	charmap = malloc(sizeof(char *) * (M.rows + 1));
+	if (charmap == NULL)
+			return NULL;
+	charmap[M.rows] = 0;
 	c = 0;
 	fd = open(filename, O_RDONLY);
 	while (c != '\n')
@@ -86,6 +91,8 @@ char **get_map(char *filename, Mark M)
 	while(i < M.rows)
 	{
 		charmap[i] = malloc(M.cols + 1);
+		if (charmap[i] == NULL)
+			return NULL;
 		read(fd, charmap[i], M.cols + 1);
 		i++;
 	}

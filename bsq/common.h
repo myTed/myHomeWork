@@ -1,4 +1,18 @@
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   common.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/27 16:59:56 by kyolee            #+#    #+#             */
+/*   Updated: 2021/10/27 17:02:09 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#ifndef COMMON_H
+# define COMMON_H
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdlib.h>
+#endif
