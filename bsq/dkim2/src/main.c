@@ -6,7 +6,7 @@
 /*   By: dkim2 <dkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 21:04:06 by dkim2             #+#    #+#             */
-/*   Updated: 2021/10/28 08:14:47 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/10/28 09:38:09 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "common.h"
@@ -14,8 +14,8 @@
 #include "getmap.h"
 #include "change_map.h"
 #include "cal_square.h"
-#include "draw_map.h"
 #include "error.h"
+#include "draw_map.h"
 
 void	clear_buffer(char *buf)
 {

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "utils.h"
 #include "change_map.h"
+#include "cal_square.h"
 #include "error.h"
 
 void free_int_map(int **map)

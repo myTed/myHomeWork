@@ -6,12 +6,12 @@
 /*   By: dkim2 <dkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 21:04:21 by dkim2             #+#    #+#             */
-/*   Updated: 2021/10/27 21:15:58 by dkim2            ###   ########.fr       */
+/*   Updated: 2021/10/28 09:33:01 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
-#include <stdlib.h>
+#include "common.h"
 
 int	is_digit(char c)
 {

@@ -6,13 +6,11 @@
 /*   By: dkim2 <dkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 21:08:33 by dkim2             #+#    #+#             */
-/*   Updated: 2021/10/28 00:00:34 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/10/28 09:26:36 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
+#include "common.h"
 #include "utils.h"
 
 int	read_line_zero(int fd, t_mark *M, char *buf)
