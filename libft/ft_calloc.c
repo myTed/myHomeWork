@@ -6,15 +6,16 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 20:09:06 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/16 21:32:43 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/17 22:35:41 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <errno.h>
+/*
 #include <stdio.h>
-
-void*	ft_calloc(size_t count, size_t size)
+*/
+void	*ft_calloc(size_t count, size_t size)
 {
 	void	*tmp;
 	size_t	idx;
@@ -34,7 +35,7 @@ void*	ft_calloc(size_t count, size_t size)
 		errno = ENOMEM;
 	return (tmp);
 }
-
+/*
 int	main(void)
 {
 	char	*tmp;
@@ -49,3 +50,4 @@ int	main(void)
 	
 	free(tmp);
 }
+*/

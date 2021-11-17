@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:02:40 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/16 19:59:46 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/17 19:48:58 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -33,44 +33,64 @@ static int	is_minus_number(const char *str, int *idx)
 	int	is_minus;
 
 	tmp_idx = *idx;
-	if (str[tmp_idx] == '-')
-		is_minus = 1;
-	else
-		is_minus = 0;
-	tmp_idx++;
+	is_minus = 0;
+	if ((str[tmp_idx] == '-') || (str[tmp_idx] == '+'))
+	{
+		if (str[tmp_idx] == '-')
+			is_minus = 1;
+		tmp_idx++;
+	}
 	*idx = tmp_idx;
 	return (is_minus);
 }
 
-static int	get_number(const char *str, int *idx)
+static int	get_number(const char *str, int *idx, int *overflow)
 {
-	int	tmp_idx;
-	int	num;
+	int				tmp_idx;
+	long long int	num;
+	long long int	tmp_num;
 
 	tmp_idx = *idx;
 	num = 0;
 	while (str[tmp_idx] >= '0' && str[tmp_idx] <= '9')
 	{
-		num = (num * 10) + (str[tmp_idx] - '0');
+		tmp_num = (num * 10) + (str[tmp_idx] - '0');
 		tmp_idx++;
+		if (tmp_num < num)
+		{
+			*overflow = 1;
+		}
+		num = tmp_num;
 	}
-	return (num);
+	return ((int)num);
 }
 
 int	ft_atoi(const char *str)
 {
-	int	idx;
-	int	num;
-	int	minus_signed_value;
+	int				idx;
+	long long int	num;
+	int				minus_signed_value;
+	int				overflow;
 
 	idx = 0;
+	overflow = 0;
 	skip_white_space(str, &idx);
 	minus_signed_value = is_minus_number(str, &idx);
-	num = get_number(str, &idx);
-	if (minus_signed_value)
-		return (num * -1);
+	num = get_number(str, &idx, &overflow);
+	if (overflow)
+	{
+		if (minus_signed_value)
+			return (0);
+		else
+			return (-1);
+	}
 	else
-		return (num);
+	{
+		if (minus_signed_value)
+			return ((int)(num * -1));
+		else
+			return ((int)num);
+	}
 }
 /*
 int	main(int argc, char *argv[])
