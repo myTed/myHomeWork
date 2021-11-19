@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 00:31:37 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/18 19:59:36 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/19 14:41:54 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -48,7 +48,7 @@ static int	find_start_idx(char const *str, char const *set, int str_len)
 		if (is_duplicated(str[idx], set))
 			idx++;
 		else
-			break ;	
+			break ;
 	}
 	return (idx);
 }
@@ -56,7 +56,7 @@ static int	find_start_idx(char const *str, char const *set, int str_len)
 static int	find_end_idx(char const *str, char const *set, int str_len)
 {
 	int	idx;
-	
+
 	idx = 0;
 	while (idx < str_len)
 	{
@@ -70,7 +70,6 @@ static int	find_end_idx(char const *str, char const *set, int str_len)
 	return (str_len - 1 - idx);
 }
 
-
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	int		len;
@@ -83,7 +82,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	start_idx = find_start_idx(s1, set, len);
 	end_idx = find_end_idx(s1, set, len);
 	if (start_idx > len || end_idx < 0)
-		return malloc(0);
+		return (malloc(0));
 	str = NULL;
 	str = malloc(sizeof(char) * (end_idx - start_idx + 1));
 	if (str != NULL)
@@ -97,7 +96,6 @@ char	*ft_strtrim(char const *s1, char const *set)
 	}
 	return (str);
 }
-
 
 /*
 int	main(int argc, char *argv[])
