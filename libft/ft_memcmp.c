@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 01:18:13 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/12 13:52:20 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 19:54:58 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -14,6 +14,8 @@
 #include <string.h>
 #include <stdlib.h>
 */
+#include <stddef.h>
+
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
 	size_t				idx;

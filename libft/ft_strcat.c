@@ -6,14 +6,14 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 00:49:47 by kyolee            #+#    #+#             */
-/*   Updated: 2021/10/20 22:20:58 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 19:30:00 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
 #include <stdio.h>
 #include <string.h>
 */
-int	ft_strlen(char *src)
+static int	ft_strlen(char *src)
 {
 	int	idx;
 

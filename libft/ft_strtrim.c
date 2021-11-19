@@ -6,69 +6,100 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 00:31:37 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/18 03:03:42 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 19:59:36 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
+#include <stddef.h>
+/*
 #include <stdio.h>
-
-static int	is_duplicated(char ch, char const *str)
+*/
+static size_t	ft_strlen(const char *str)
 {
 	size_t	idx;
 
 	idx = 0;
 	while (str[idx] != 0)
+		idx++;
+	return (idx);
+}
+
+static int	is_duplicated(const char ch, char const *set)
+{
+	size_t	idx;
+
+	idx = 0;
+	while (set[idx] != 0)
 	{
-		if (ch == str[idx])
+		if (ch == set[idx])
 			return (1);
 		idx++;
 	}
 	return (0);
 }
 
-char	*str_cpy_without_duplicated(char *dest, char const *src, char const *set)
+static int	find_start_idx(char const *str, char const *set, int str_len)
 {
-	size_t	idx;
-	size_t	dest_idx;
+	int	idx;
 
 	idx = 0;
-	dest_idx = 0;
-	while (src[idx] != 0)
+	while (idx < str_len)
 	{
-		if (!is_duplicated(src[idx], set))
-		{
-			dest[dest_idx] = src[idx];
-			dest_idx++;
-		}
-		idx++;
+		if (is_duplicated(str[idx], set))
+			idx++;
+		else
+			break ;	
 	}
-	dest[dest_idx] = 0;
-	return (dest);
+	return (idx);
 }
+
+static int	find_end_idx(char const *str, char const *set, int str_len)
+{
+	int	idx;
+	
+	idx = 0;
+	while (idx < str_len)
+	{
+		if (is_duplicated(str[str_len - 1 - idx], set))
+		{
+			idx++;
+		}
+		else
+			break ;
+	}
+	return (str_len - 1 - idx);
+}
+
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t		str_len;
-	char		*str;
-	size_t		idx;
+	int		len;
+	int		start_idx;
+	int		end_idx;
+	int		idx;
+	char	*str;
 
-	str_len = 0;
-	idx = 0;
-	while (s1[idx] != 0)
-	{
-		if (!is_duplicated(s1[idx], set))
-			str_len++;
-		idx++;
-	}
+	len = ft_strlen(s1);
+	start_idx = find_start_idx(s1, set, len);
+	end_idx = find_end_idx(s1, set, len);
+	if (start_idx > len || end_idx < 0)
+		return malloc(0);
 	str = NULL;
-	str = (char *)malloc(sizeof(char) * (str_len + 1));
+	str = malloc(sizeof(char) * (end_idx - start_idx + 1));
 	if (str != NULL)
-		str = str_cpy_without_duplicated(str, s1, set);
+	{
+		idx = 0;
+		while (idx < end_idx - start_idx + 1)
+		{
+			str[idx] = s1[start_idx + idx];
+			idx++;
+		}
+	}
 	return (str);
 }
 
 
-
+/*
 int	main(int argc, char *argv[])
 {
 	char	*tmp;
@@ -81,3 +112,15 @@ int	main(int argc, char *argv[])
 	}
 	return (0);
 }
+*/
+/*
+int	main(void)
+{
+	char	*tmp;
+	if ((tmp = ft_strtrim("asdf",0)) != NULL)
+	{
+		printf("%s\n", tmp);
+	}
+	return (0);
+}
+*/

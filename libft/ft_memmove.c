@@ -6,13 +6,15 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:37:40 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/11 18:32:07 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 20:37:09 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
 #include <stdio.h>
 #include <string.h>
 */
+#include <stddef.h>
+
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
 	unsigned char		*tmp_dest;

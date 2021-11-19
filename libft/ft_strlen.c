@@ -6,16 +6,18 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:23:48 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/10 15:29:02 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 20:37:45 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
 #include <stdio.h>
 #include <string.h>
 */
-long unsigned int	ft_strlen(const char *s)
+#include <stddef.h>
+
+size_t	ft_strlen(const char *s)
 {
-	long unsigned int	idx;
+	size_t	idx;
 
 	idx = 0;
 	while (s[idx] != 0)

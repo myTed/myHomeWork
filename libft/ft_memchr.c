@@ -6,13 +6,15 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 01:03:43 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/12 01:17:11 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 19:54:10 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
 #include <stdio.h>
 #include <string.h>
 */
+#include <stddef.h>
+
 void	*ft_memchr(const void *s, int c, size_t n)
 {
 	size_t				idx;

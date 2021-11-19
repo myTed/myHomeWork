@@ -6,15 +6,15 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 21:34:33 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/11 23:19:32 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 20:00:57 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
 #include <stdio.h>
 #include <string.h>
-
-char	*ft_strchr();
-
+*/
+#include <stddef.h>
+/*
 int	main(int argc, char *argv[])
 {
 	char	*buff;
@@ -30,6 +30,7 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 */
+
 char	*ft_strchr(const char *s, int c)
 {
 	size_t	idx;
@@ -45,3 +46,12 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)&s[idx]);
 	return (0);
 }
+/*
+int	main(void)
+{
+	
+	printf("strchr   : %s\n",strchr(0, 'a'));
+	//printf("ft_strchr: %s\n",ft_strchr(0,'a'));
+	return (0);
+}
+*/

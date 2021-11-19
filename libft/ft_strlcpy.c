@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 13:36:31 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/11 21:01:16 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 20:37:33 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -14,6 +14,8 @@
 #include <string.h>
 #include <bsd/string.h>
 */
+#include <stddef.h>
+
 size_t	get_len_str(const char *str)
 {
 	size_t	idx;

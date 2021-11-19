@@ -6,13 +6,15 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 22:48:06 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/11 23:25:44 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 19:53:52 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
 #include <stdio.h>
 #include <string.h>
 */
+#include <stddef.h>
+
 char	*ft_strrchr(const char *s, int c)
 {
 	size_t		idx;

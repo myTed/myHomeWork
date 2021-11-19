@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 02:21:57 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/11 21:21:18 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 20:37:23 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -14,6 +14,8 @@
 #include <string.h>
 #include <bsd/string.h>
 */
+#include <stddef.h>
+
 size_t	ft_strlen(const char *src)
 {
 	unsigned int	idx;

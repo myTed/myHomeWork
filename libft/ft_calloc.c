@@ -6,12 +6,13 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 20:09:06 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/17 22:35:41 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/18 19:57:01 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <errno.h>
+#include <stddef.h>
 /*
 #include <stdio.h>
 */
