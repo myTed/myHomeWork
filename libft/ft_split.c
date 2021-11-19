@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 15:06:16 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/19 17:58:56 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/19 18:12:34 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -115,8 +115,9 @@ char **ft_split(char const *s, char c)
 				if (find_end_idx(s, c, &start_idx, &end_idx) == 0)
 					end_idx = ft_strlen(s) - 1;
 				str[cnt] = malloc(sizeof(char) * (end_idx - start_idx + 2));
-				ft_memcpy(str, s + start_idx, end_idx - start_idx + 1);
-				str[cnt++][end_idx - start_idx + 1] = 0;
+				ft_memcpy(str[cnt], s + start_idx, end_idx - start_idx + 1);
+				str[cnt][end_idx - start_idx + 1] = 0;
+				cnt++;
 				start_idx = end_idx + 1;
 			}
 			else
