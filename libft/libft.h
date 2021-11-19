@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:08:10 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/19 14:13:48 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/19 23:11:15 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H
@@ -39,4 +39,5 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
+char	**ft_split(char const *s, char c);
 #endif

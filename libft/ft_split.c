@@ -6,14 +6,15 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 15:06:16 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/19 18:12:34 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/19 23:53:55 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
 #include <stdlib.h>
 #include "libft.h"
+/*
 #include <stdio.h>
-
+*/
 size_t	get_word_cnt(char const *s, char c)
 {
 	size_t	idx;
@@ -27,7 +28,7 @@ size_t	get_word_cnt(char const *s, char c)
 	pre_find_delim = find_delim;
 	while (s[idx] != 0)
 	{
-		if(s[idx] == c)
+		if (s[idx] == c)
 			find_delim = 1;
 		else
 			find_delim = 0;
@@ -39,13 +40,15 @@ size_t	get_word_cnt(char const *s, char c)
 	return (word_cnt);
 }
 
-int	find_start_idx(char const *s, char c, int *pstart_idx)
+void	fill_start_end_idx(char const *s, char c, int *pos_arry)
 {
 	int		idx;
+	int		pos_idx;
 	int		find_delim;
 	int		prev_find_delim;
 
-	idx = *pstart_idx;
+	idx = 0;
+	pos_idx = 0;
 	find_delim = 1;
 	prev_find_delim = find_delim;
 	while (s[idx] != 0)
@@ -54,93 +57,86 @@ int	find_start_idx(char const *s, char c, int *pstart_idx)
 			find_delim = 1;
 		else
 			find_delim = 0;
-		if (prev_find_delim == 1 && find_delim == 0)
-		{
-			*pstart_idx = idx;
-			return (1);
-		}
+		if ((prev_find_delim == 1) && (find_delim == 0))
+			pos_arry[pos_idx++] = idx;
+		if ((prev_find_delim == 0) && (find_delim == 1))
+			pos_arry[pos_idx++] = idx - 1;
 		prev_find_delim = find_delim;
 		idx++;
 	}
-	return (0);
+	if (prev_find_delim == 0)
+		pos_arry[pos_idx++] = idx - 1;
 }
 
-
-int	find_end_idx(char const *s, char c, int *pstart_idx, int *pend_idx)
+void	free_split(char **str, int cnt)
 {
+	int	idx;
+
+	idx = 0;
+	while (idx < cnt)
+		free(str[idx]);
+	free(str);
+}
+
+char	**make_word_arry(char const *s, int *p_arry, int word_cnt)
+{
+	char	**str;
 	int		idx;
-	int		find_delim;
-	int		prev_find_delim;
+	int		pidx;
 
-	idx = *pstart_idx;
-	find_delim = 1;
-	prev_find_delim = find_delim;
-	while (s[idx] != 0)
+	str = malloc(sizeof(char *) * (word_cnt + 1));
+	if (str == NULL)
+		return (NULL);
+	str[word_cnt] = 0;
+	idx = 0;
+	pidx = 0;
+	while (idx < word_cnt)
 	{
-		if (s[idx] == c)
-			find_delim = 1;
-		else
-			find_delim = 0;
-		if (prev_find_delim == 0 && find_delim == 1)
+		str[idx] = malloc(sizeof(char) * (p_arry[pidx + 1] - p_arry[pidx] + 2));
+		if (str[idx] == NULL)
 		{
-			*pend_idx = idx - 1;
-			return (1);
+			free_split(str, idx);
+			return (NULL);
 		}
-		prev_find_delim = find_delim;
+		ft_memcpy(str[idx], s + p_arry[pidx], \
+			p_arry[pidx + 1] - p_arry[pidx] + 1);
+		str[idx][p_arry[pidx + 1] - p_arry[pidx] + 1] = 0;
 		idx++;
-	}
-	return (0);
-}
-
-char **ft_split(char const *s, char c)
-{
-	size_t	word_cnt;
-	char 	**str;
-	int		cnt;
-	int		start_idx;
-	int		end_idx;
-
-	word_cnt = get_word_cnt(s, c);
-	str = (char **)malloc(sizeof(char*) * (word_cnt + 1));
-	if (str != NULL)
-	{
-		str[word_cnt] = 0;
-		start_idx = 0;
-		end_idx = 0;
-		cnt = 0;
-		while (1)
-		{
-			if (find_start_idx(s, c, &start_idx) != 0)
-			{
-				if (find_end_idx(s, c, &start_idx, &end_idx) == 0)
-					end_idx = ft_strlen(s) - 1;
-				str[cnt] = malloc(sizeof(char) * (end_idx - start_idx + 2));
-				ft_memcpy(str[cnt], s + start_idx, end_idx - start_idx + 1);
-				str[cnt][end_idx - start_idx + 1] = 0;
-				cnt++;
-				start_idx = end_idx + 1;
-			}
-			else
-				break ;
-		}
+		pidx += 2;
 	}
 	return (str);
 }
 
+char	**ft_split(char const *s, char c)
+{
+	char	**str;
+	int		*pos_idx_arry;
+	int		word_cnt;
+
+	word_cnt = get_word_cnt(s, c);
+	pos_idx_arry = malloc(sizeof(int) * (word_cnt * 2));
+	if (pos_idx_arry == NULL)
+		return (NULL);
+	fill_start_end_idx(s, c, pos_idx_arry);
+	str = make_word_arry(s, pos_idx_arry, word_cnt);
+	free(pos_idx_arry);
+	return (str);
+}
+/*
 int	main(int argc, char *argv[])
 {
 	char	**str;
 	int		idx;
 
 	if (argc != 3)
-		return (0);	
-	str = ft_split(argv[1],argv[2][0]);
+		return (0);
+	str = ft_split(argv[1], argv[2][0]);
 	idx = 0;
 	while (str[idx] != 0)
 	{
-		printf("%s\n",str[idx]);
+		printf("%s\n", str[idx]);
 		idx++;
 	}
-	//printf("%ld\n",get_word_cnt(argv[1],argv[2][0]));
 	return (0);
 }
+*/
