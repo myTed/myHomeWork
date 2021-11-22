@@ -6,7 +6,7 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/18 20:15:15 by kyolee            #+#    #+#              #
-#    Updated: 2021/11/19 23:05:14 by kyolee           ###   ########.fr        #
+#    Updated: 2021/11/22 18:24:38 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,10 @@ SRCS=ft_atoi.c     ft_isascii.c  ft_memcpy.c   ft_strdup.c   ft_strncmp.c  ft_to
 	 ft_calloc.c   ft_isprint.c  ft_memset.c   ft_strlcat.c  ft_strrchr.c\
 	 ft_isalnum.c  ft_memchr.c   ft_strcat.c   ft_strlcpy.c  ft_strtrim.c\
 	 ft_isalpha.c  ft_memcmp.c   ft_strchr.c   ft_strlen.c   ft_substr.c\
-	 ft_split.c
+	 ft_split.c    ft_itoa.c     ft_strmapi.c  ft_striteri.c ft_putchar_fd.c\
+	 ft_putstr_fd.c\
+	 ft_putendl_fd.c\
+	 ft_putnbr_fd.c
 
 OBJECTS=$(patsubst %.c,%.o,$(SRCS))
 NAME=libft.a
