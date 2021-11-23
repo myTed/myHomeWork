@@ -6,7 +6,7 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/18 20:15:15 by kyolee            #+#    #+#              #
-#    Updated: 2021/11/22 18:24:38 by kyolee           ###   ########.fr        #
+#    Updated: 2021/11/23 11:10:43 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,5 +42,5 @@ fclean:clean
 
 re:fclean all
 
-.PHONY:
+.PHONY: 
 	clean fclean all re
