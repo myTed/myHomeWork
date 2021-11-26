@@ -6,24 +6,14 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 00:31:37 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/19 14:41:54 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/26 20:47:12 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
-#include <stddef.h>
+#include "libft.h"
 /*
 #include <stdio.h>
 */
-static size_t	ft_strlen(const char *str)
-{
-	size_t	idx;
-
-	idx = 0;
-	while (str[idx] != 0)
-		idx++;
-	return (idx);
-}
-
 static int	is_duplicated(const char ch, char const *set)
 {
 	size_t	idx;
@@ -72,28 +62,29 @@ static int	find_end_idx(char const *str, char const *set, int str_len)
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	int		len;
 	int		start_idx;
 	int		end_idx;
 	int		idx;
 	char	*str;
 
-	len = ft_strlen(s1);
-	start_idx = find_start_idx(s1, set, len);
-	end_idx = find_end_idx(s1, set, len);
-	if (start_idx > len || end_idx < 0)
+	if (s1 == 0)
+		return (0);
+	if (set == 0)
+		return (ft_strdup(s1));
+	start_idx = find_start_idx(s1, set, (int)ft_strlen(s1));
+	end_idx = find_end_idx(s1, set, (int)ft_strlen(s1));
+	if (start_idx > (int)ft_strlen(s1) || end_idx < 0)
 		return (malloc(0));
-	str = NULL;
-	str = malloc(sizeof(char) * (end_idx - start_idx + 1));
-	if (str != NULL)
+	str = malloc(sizeof(char) * (end_idx - start_idx + 2));
+	if (str == NULL)
+		return (0);
+	idx = 0;
+	while (idx < end_idx - start_idx + 1)
 	{
-		idx = 0;
-		while (idx < end_idx - start_idx + 1)
-		{
-			str[idx] = s1[start_idx + idx];
-			idx++;
-		}
+		str[idx] = s1[start_idx + idx];
+		idx++;
 	}
+	str[idx] = 0;
 	return (str);
 }
 

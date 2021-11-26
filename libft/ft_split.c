@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 15:06:16 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/19 23:53:55 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/26 20:46:49 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -113,6 +113,8 @@ char	**ft_split(char const *s, char c)
 	int		*pos_idx_arry;
 	int		word_cnt;
 
+	if (s == 0)
+		return (0);
 	word_cnt = get_word_cnt(s, c);
 	pos_idx_arry = malloc(sizeof(int) * (word_cnt * 2));
 	if (pos_idx_arry == NULL)

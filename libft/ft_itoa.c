@@ -6,13 +6,13 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 12:22:05 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/22 14:19:22 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/26 21:21:47 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
-#define MAX_INT_STR_LEN 11
 /*
 #include <stdio.h>
+#include <string.h>
 */
 int	fill_number(char *str, int n, int *pis_negative)
 {
@@ -35,6 +35,21 @@ int	fill_number(char *str, int n, int *pis_negative)
 	return (++idx);
 }
 
+static int	len_digits(int n)
+{
+	int	cnt;
+
+	cnt = 1;
+	while (n / 10 != 0)
+	{
+		n /= 10;
+		cnt++;
+	}
+	if (n < 0)
+		cnt++;
+	return (cnt);
+}
+
 char	*ft_itoa(int n)
 {
 	char		*str;
@@ -43,7 +58,7 @@ char	*ft_itoa(int n)
 
 	idx = 0;
 	is_negative = 0;
-	str = malloc(sizeof(char) * (MAX_INT_STR_LEN + 1));
+	str = malloc(sizeof(char) * (len_digits(n) + 1));
 	if (str == NULL)
 		return (NULL);
 	idx = fill_number(str, n, &is_negative);
@@ -58,5 +73,6 @@ int	main(int argc, char *argv[])
 		return (0);
 	num = atoi(argv[1]);
 	printf("%s\n",ft_itoa(num));
+	printf("%ld\n",strlen(ft_itoa(num)));
 }
 */

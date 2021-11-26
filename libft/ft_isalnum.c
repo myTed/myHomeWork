@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 14:10:27 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/26 04:16:37 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/26 21:20:13 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 static int	ft_isalpha(int c)
 {
-
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		return (1024);
 	else
@@ -24,7 +23,6 @@ static int	ft_isalpha(int c)
 
 static int	ft_isdigit(int c)
 {
-
 	if (c >= '0' && c <= '9')
 		return (2048);
 	else
@@ -41,17 +39,16 @@ int	ft_isalnum(int c)
 
 int	main(void)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 530)
 	{
 		printf("%d : ft_isalnum %d , isalnum %d,\
-				ft_isalpha %d isalpha %d ft_isdigit %d isdigit %d\n",\
-			   	i, ft_isalnum(i), isalnum(i),\
+				ft_isalpha %d isalpha %d ft_isdigit %d isdigit %d\n", \
+			   	i, ft_isalnum(i), isalnum(i), \
 				ft_isalpha(i), isalpha(i), ft_isdigit(i), isdigit(i));
 		i++;
 	}
 	return (0);
 }
-

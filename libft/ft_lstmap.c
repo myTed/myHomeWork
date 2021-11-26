@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 11:07:02 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/24 14:46:03 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/26 21:45:12 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -30,7 +30,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	t_list	*start;
 	t_list	*tmp;
 
-	if (lst == 0 || f == 0 || del == 0)
+	if (lst == 0 || f == 0)
 		return (0);
 	start = ft_lstnew(f(lst->content));
 	if (start != 0)

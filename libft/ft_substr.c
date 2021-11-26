@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 23:12:05 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/24 17:01:34 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/26 16:37:44 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -30,11 +30,13 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	str_len;
 	size_t	idx;
 
+	if (len == 0 || s == 0)
+		return (malloc(0));
 	str_len = ft_strlen(s);
-	if ((str_len <= start) || (len == 0) || (s == 0))
+	if (str_len <= start)
 		return (malloc(0));
 	str = NULL;
-	str = (char *)malloc(sizeof(char) * len);
+	str = (char *)malloc(sizeof(char) * (len + 1));
 	if (str != NULL)
 	{
 		idx = 0;
@@ -48,6 +50,15 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (str);
 }
 
+/*
+int	main(void)
+{
+	char	*str = "i just wnat this part ##########";
+	size_t	size = 10;
+
+	printf("%s\n",ft_substr(NULL, 0, size));
+}
+*/
 /*
 int	main(int argc, char *argv[])
 {

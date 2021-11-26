@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 01:18:13 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/18 19:54:58 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/26 16:14:33 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -27,10 +27,8 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 	src2 = s2;
 	while (idx < n)
 	{
-		if (src1[idx] > src2[idx])
-			return (1);
-		else if (src1[idx] < src2[idx])
-			return (-1);
+		if (src1[idx] != src2[idx])
+			return (src1[idx] - src2[idx]);
 		else
 			idx++;
 	}
@@ -38,11 +36,22 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 }
 
 /*
-int	main(int argc, char *argv[])
+int	main(void)
 {
 	if (argc != 4)
 		return 0;
-	printf("%d\n",ft_memcmp(argv[1], argv[2], atoi(argv[3])));
-	printf("%d\n",memcmp(argv[1], argv[2], atoi(argv[3])));
+	//printf("1\n");
+	//ft_memcmp(0,0,1);
+	//printf("2\n");
+	//ft_memcmp(0,0,0);
+	//printf("%d\n",ft_memcmp(argv[1], argv[2], atoi(argv[3])));
+	//printf("%d\n",memcmp(argv[1], argv[2], atoi(argv[3])));
+	char	*s1 ="\xff\xaa\xde\xffMACOSX\xff";
+	char	*s2 ="\xff\xaa\xde\x02";
+	size_t	size = 8;
+
+	printf("%d\n", memcmp(s1, s2, size));
+	printf("%d\n", ft_memcmp(s1, s2, size));
+	
 }
 */
