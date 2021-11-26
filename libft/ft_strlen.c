@@ -6,14 +6,14 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:23:48 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/18 20:37:45 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/24 18:43:28 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
 #include <stdio.h>
 #include <string.h>
 */
-#include <stddef.h>
+#include "libft.h"
 
 size_t	ft_strlen(const char *s)
 {

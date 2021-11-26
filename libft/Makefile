@@ -6,7 +6,7 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/18 20:15:15 by kyolee            #+#    #+#              #
-#    Updated: 2021/11/23 11:10:43 by kyolee           ###   ########.fr        #
+#    Updated: 2021/11/24 19:00:36 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,16 @@ SRCS=ft_atoi.c     ft_isascii.c  ft_memcpy.c   ft_strdup.c   ft_strncmp.c  ft_to
 	 ft_putendl_fd.c\
 	 ft_putnbr_fd.c
 
-OBJECTS=$(patsubst %.c,%.o,$(SRCS))
+BONUS_SRCS=ft_lstnew.c		ft_lstadd_front.c	ft_lstsize.c	ft_lstlast.c\
+		   ft_lstadd_back.c	ft_lstdelone.c		ft_lstclear.c	ft_lstiter.c\
+		   ft_lstmap.c
+
+ifeq ($(BONUS), 1)
+	OBJECTS=$(patsubst %.c, %.o, $(SRCS) $(BONUS_SRCS))
+else
+	OBJECTS=$(patsubst %.c, %.o, $(SRCS))
+endif
+
 NAME=libft.a
 
 all:$(NAME)
@@ -34,6 +43,9 @@ $(NAME):$(OBJECTS)
 %.o:%.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
+bonus:
+	make BONUS=1
+
 clean:
 	rm -rf *.o
 
@@ -42,5 +54,7 @@ fclean:clean
 
 re:fclean all
 
-.PHONY: 
-	clean fclean all re
+so:
+	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRCS) $(BONUS_SRCS)
+	$(CC) -nostartfiles -shared -o libft.so *.o
+.PHONY: clean fclean all re bonus

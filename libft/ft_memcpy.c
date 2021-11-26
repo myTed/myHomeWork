@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:23:56 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/18 20:35:50 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/24 22:09:58 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -22,11 +22,25 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	idx = 0;
 	while (idx < n)
 	{
+		if ((dest == 0) && (src == 0))
+			return (0);
 		*((unsigned char *)dest + idx) = *((const unsigned char *)src + idx);
 		idx++;
 	}
 	return (dest);
 }
+/*
+int	main(void)
+{
+	char	dest[10];
+	//printf("%s\n",(char *)memcpy(0,"abc",0));
+	
+	//printf("%s\n",(char *)memcpy(0, 0, 3));
+	printf("std: %s\n",(char *)memcpy(dest,0,3));
+	printf("ft : %s\n",(char *)ft_memcpy(dest,0,3));	
+	return (0);
+}
+*/
 
 /*
 int	main(int argc, char *argv[])
@@ -42,3 +56,4 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 */
+

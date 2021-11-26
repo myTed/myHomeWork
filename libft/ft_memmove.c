@@ -6,29 +6,25 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:37:40 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/18 20:37:09 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/26 03:39:11 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-/*
+
 #include <stdio.h>
 #include <string.h>
-*/
+/*
 #include <stddef.h>
-
+*/
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	unsigned char		*tmp_dest;
-	const unsigned char	*tmp_src;
 	size_t				idx;
 
 	idx = 0;
-	tmp_dest = dest;
-	tmp_src = src;
-	if (tmp_dest < tmp_src)
+	if ((char *)dest < (const char *)src)
 	{
 		while (idx < n)
 		{
-			tmp_dest[idx] = tmp_src[idx];
+			*((char *)dest + idx) = *((const char *)src + idx);
 			idx++;
 		}
 	}
@@ -36,7 +32,10 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	{
 		while (idx < n)
 		{
-			tmp_dest[n - 1 - idx] = tmp_src[n - 1 - idx];
+			if ((dest == 0) && (src == 0))
+				return (0);
+			*((char *)dest + (n - 1 - idx)) = *((const char *)src + \
+							(n - 1 - idx));
 			idx++;
 		}
 	}
@@ -49,12 +48,15 @@ int	main(void)
 	char	str[] = "memmove can be very useful......";
 	char	str2[]= "memmove can be very useful......";
 	char	str3[]= "1234567890";
-	ft_memmove(str + 20, str + 15, 11);
-	memmove(str2 + 20, str2 + 15, 11);
-	ft_memmove(str3+1, str3, 9);
+	
+	ft_memmove(0, 0, 5);
+	memmove(NULL, NULL, 5);
+	//ft_memmove(str3+1, str3, 9);
+	
 	printf("%s\n",str);
 	printf("%s\n",str2);
 	printf("%s\n",str3);
+	
 	return (0);
 }
 */
