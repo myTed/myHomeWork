@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 02:21:57 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/28 23:26:00 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/28 23:59:20 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -30,7 +30,8 @@ size_t	ft_strlcat(char *dest, const char *src, size_t size)
 		dest[dst_len + idx] = src[idx];
 		idx++;
 	}
-	dest[dst_len + idx] = 0;
+	if (idx != 0)
+		dest[dst_len + idx] = 0;
 	if (size < dst_len)
 		return (src_len + size);
 	else

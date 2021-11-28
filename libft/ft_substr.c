@@ -6,23 +6,14 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 23:12:05 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/26 16:37:44 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/29 00:26:54 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
-#include <stddef.h>
+#include "libft.h"
 /*
 #include <stdio.h>
 */
-static size_t	ft_strlen(const char *s)
-{
-	size_t	idx;
-
-	idx = 0;
-	while (s[idx] != 0)
-		idx++;
-	return (idx);
-}
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -31,10 +22,10 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	idx;
 
 	if (len == 0 || s == 0)
-		return (malloc(0));
+		return (ft_strdup(""));
 	str_len = ft_strlen(s);
 	if (str_len <= start)
-		return (malloc(0));
+		return (ft_strdup(""));
 	str = NULL;
 	str = (char *)malloc(sizeof(char) * (len + 1));
 	if (str != NULL)
@@ -56,7 +47,8 @@ int	main(void)
 	char	*str = "i just wnat this part ##########";
 	size_t	size = 10;
 
-	printf("%s\n",ft_substr(NULL, 0, size));
+	printf("%s\n",NULL);
+	//printf("%s\n",ft_substr(NULL, 0, size));
 }
 */
 /*

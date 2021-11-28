@@ -6,7 +6,7 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/18 20:15:15 by kyolee            #+#    #+#              #
-#    Updated: 2021/11/26 21:59:09 by kyolee           ###   ########.fr        #
+#    Updated: 2021/11/29 00:46:17 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,4 @@ fclean:clean
 
 re:fclean all
 
-#so:
-#	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRCS) $(BONUS_SRCS)
-#	$(CC) -nostartfiles -shared -o libft.so *.o
 .PHONY: clean fclean all re bonus

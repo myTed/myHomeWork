@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 00:31:37 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/26 20:47:12 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/29 00:39:05 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -74,7 +74,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	start_idx = find_start_idx(s1, set, (int)ft_strlen(s1));
 	end_idx = find_end_idx(s1, set, (int)ft_strlen(s1));
 	if (start_idx > (int)ft_strlen(s1) || end_idx < 0)
-		return (malloc(0));
+		return (ft_strdup(""));
 	str = malloc(sizeof(char) * (end_idx - start_idx + 2));
 	if (str == NULL)
 		return (0);
@@ -87,7 +87,14 @@ char	*ft_strtrim(char const *s1, char const *set)
 	str[idx] = 0;
 	return (str);
 }
-
+/*
+int	main(void)
+{
+	char s1[] = "           ";
+	printf("%s\n", ft_strtrim(s1, " "));
+	return (0);
+}
+*/
 /*
 int	main(int argc, char *argv[])
 {
