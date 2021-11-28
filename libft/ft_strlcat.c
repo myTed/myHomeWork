@@ -6,13 +6,13 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 02:21:57 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/24 18:42:51 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/28 23:26:00 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
 #include <stdio.h>
 #include <string.h>
-#include <bsd/string.h>
+#include <unistd.h>
 */
 #include "libft.h"
 
@@ -39,12 +39,16 @@ size_t	ft_strlcat(char *dest, const char *src, size_t size)
 /*
 int	main(void)
 {
-	char dest1[20] = "ajsdkf";
-	char dest2[20] = "ajsdkf";
-	char src[20] = "AAAA";
-	printf("strlcat    :%ld\n",strlcat(dest1,src,5));
-	printf("%s\n",dest1);	
-	printf("ft_strlcat :%ld\n",ft_strlcat(dest2,src,5));
-	printf("%s\n",dest2);
+	char	*dest;
+	char 	dest1[15];
+	//char dest2[20] = "ajsdkf";
+	//char src[20] = "AAAA";
+	printf("%ld\n",sizeof(*dest));
+	memset(dest1, 'r', 15);
+	printf("strlcat    :%ld\n",ft_strlcat(dest1,"lorem ipsum dolor sit amet", 5));
+	write(1, dest1, 15);
+	//printf("%s\n",dest1);	
+	//printf("ft_strlcat :%ld\n",ft_strlcat(dest1,src,-1));
+	//printf("%s\n",dest2);
 }
 */
