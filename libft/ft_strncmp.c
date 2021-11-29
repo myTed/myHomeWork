@@ -6,13 +6,14 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 00:01:09 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/18 21:18:59 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/29 19:01:09 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
+/*
 #include <stdio.h>
 #include <string.h>
-
+*/
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	idx;

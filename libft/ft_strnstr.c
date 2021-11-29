@@ -6,27 +6,15 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 01:47:49 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/19 14:38:54 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/29 19:36:55 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+/*
 #include <stdio.h>
-//#include <bsd/string.h>
 #include <string.h>
-
 #include <stddef.h>
-
-static size_t	ft_strlen(const char *str)
-{
-	size_t	idx;
-
-	idx = 0;
-	while (str[idx] != 0)
-	{
-		idx++;
-	}
-	return (idx);
-}
+*/
+#include "libft.h"
 
 static size_t	check_equal(
 	const char *big,
@@ -58,7 +46,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	{
 		if (check_equal(&big[idx], little, little_len) != 0)
 		{
-			if (idx + little_len < len + 1)
+			if (idx + little_len - 1 < len)
 			{
 				return ((char *)&big[idx]);
 			}
@@ -68,6 +56,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	}
 	return (0);
 }
+
 /*
 int	main(void)
 {
