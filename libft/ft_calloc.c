@@ -6,12 +6,11 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 20:09:06 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/18 19:57:01 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/29 14:40:11 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <errno.h>
 #include <stddef.h>
 /*
 #include <stdio.h>
@@ -32,8 +31,6 @@ void	*ft_calloc(size_t count, size_t size)
 			idx++;
 		}
 	}
-	else
-		errno = ENOMEM;
 	return (tmp);
 }
 /*

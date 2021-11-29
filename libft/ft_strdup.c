@@ -6,11 +6,10 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 22:36:02 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/18 19:57:45 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/11/29 14:40:47 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
-#include <errno.h>
 #include <stddef.h>
 /*
 #include <string.h>
@@ -43,8 +42,6 @@ char	*ft_strdup(const char *s)
 		}
 		str[idx] = 0;
 	}
-	else
-		errno = ENOMEM;
 	return (str);
 }
 
