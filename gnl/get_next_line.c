@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 16:45:15 by kyolee            #+#    #+#             */
-/*   Updated: 2021/12/16 00:26:06 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/12/16 20:50:10 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include "get_next_line.h"
-/*
+
 #include <stdio.h>
-*/
+
 static void	add_buff_to_list(t_list **list, char *read_buff, int read_len)
 {
 	char	*tmp;
@@ -102,10 +102,22 @@ static void	make_list_for_one_line(
 	size_t	len;
 
 	is_found_line = 0;
+	len = 0;
 	while (is_found_line == 0)
 	{
 		read_cnt = read(fd, buff, BUFFER_SIZE);
-		if (read_cnt <= 0)
+		if (read_cnt == 0)
+		{
+			if (*lst && (len == 0))
+			{
+				buff = (*lst)->content;
+				read_cnt = (*lst)->len;
+				pline->total_cur_len = 0;
+			}
+			else
+				break ;
+		}
+		if (read_cnt < 0)
 			break ;
 		pos_line = get_pos_newline_in_buffer(buff, read_cnt, &is_found_line);
 		if (is_found_line)
@@ -152,27 +164,34 @@ char	*get_next_line(int fd)
 	return (str);
 }
 
-/*
 int	main(void)
 {
 	int		fd;
 	char	*str;
-	
+	char	*buff;
+	int		read_cnt;
 	fd = 0;
-	
-	fd = open("aaa.txt", O_RDONLY);	
+		
+	fd = open("ccc.txt", O_RDONLY);	
 	if (fd == -1)
 		return (-1);
 
+	buff = malloc(sizeof(char)*BUFFER_SIZE);
+	while(1)
+	{
+		read_cnt = read(fd, buff, BUFFER_SIZE);
+		printf("%d\n", read_cnt);
+		sleep(1);
+	}
+	/*	
 	while ((str = get_next_line(fd)) != 0)
 	{
 		printf("%s",str);
 		fflush(stdout);
 		free(str);
 	}
-	
+*/	
 	if (fd)
 		close(fd);
 	return (0);
 }
-*/
