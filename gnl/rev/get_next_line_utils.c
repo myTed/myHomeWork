@@ -6,14 +6,14 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 23:00:16 by kyolee            #+#    #+#             */
-/*   Updated: 2021/12/25 16:21:39 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/12/29 21:48:13 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdlib.h>
-/*
-t_list	*ft_lstnew(void **content)
+
+t_list	*ft_lstnew(void *content, size_t len, int is_newline)
 {
 	t_list	*new;
 
@@ -21,6 +21,9 @@ t_list	*ft_lstnew(void **content)
 	if (new == NULL)
 		return (NULL);
 	new->content = content;
+	new->len = len;
+	new->is_newline = is_newline;
+	new->ready_to_free = 0;
 	new->next = NULL;
 	return (new);
 }
@@ -42,23 +45,31 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	}
 }
 
-void	ft_lstclear(t_list **lst)
+void	delete_list(t_list **pplist, int error)
 {
-	t_list	*cur_pos;
-	t_list	*del_pos;
+	t_list	*del;
 
-	if (lst == 0)
-		return ;
-	cur_pos = *lst;
-	while (cur_pos != 0)
+	if (error == MEM_ALLOC_ERROR)
 	{
-		del_pos = cur_pos;
-		cur_pos = cur_pos->next;
-		//free(del_pos->content);
-		free(del_pos);
+		while ((*pplist != NULL))
+		{
+			del = *pplist;
+			*pplist = (*pplist)->next;
+			free(del->content);
+			free(del);
+		}
 	}
-	*lst = 0;
+	else
+	{
+		while ((*pplist != NULL) && ((*pplist)->ready_to_free))
+		{
+			del = *pplist;
+			*pplist = (*pplist)->next;
+			free(del);
+		}
+	}
 }
+
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	size_t	idx;
@@ -73,24 +84,17 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
-int	get_pos_newline_in_buffer(
-	char *buff,
-	size_t size,
-	int *is_found_newline
-){
-	size_t	idx;
+
+int	is_found_newline(char *buff, ssize_t size)
+{
+	ssize_t	idx;
 
 	idx = 0;
 	while (idx < size)
 	{
 		if (buff[idx] == '\n')
-		{
-			*is_found_newline = 1;
-			return (idx);
-		}
+			return (1);
 		idx++;
 	}
-	*is_found_newline = 0;
 	return (0);
 }
-*/

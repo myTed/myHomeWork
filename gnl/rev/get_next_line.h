@@ -6,56 +6,34 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 23:14:46 by kyolee            #+#    #+#             */
-/*   Updated: 2021/12/25 00:20:50 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/12/29 21:19:38 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-
 # include <stddef.h>
 # include <sys/types.h>
+# define MEM_ALLOC_ERROR	-1
+# define READ_ERROR			-2
+# define NON_ERROR			0
 
-typedef struct s_endline
-{
-	char	*str;
-	size_t	str_size;
-} t_endline;
-
-typedef struct s_linearry
-{
-	t_endline	*p_endline;
-	size_t		endline_size;
-} t_endline_arry;
-/*
 typedef struct s_list
 {
-	void			**content;
-	ssize_t			cur_str_idx;
-	size_t			need_to_concat_idx;
-	size_t			str_cnt;
+	void			*content;
+	size_t			len;
+	size_t			is_newline;
+	size_t			ready_to_free;
 	struct s_list	*next;
 }	t_list;
 
-typedef struct s_line_info
-{
-	size_t	total_cur_len;
-	size_t	after_new_len;
-	char	*after_new_str;
-}	t_line_info;
-*/
-/*
-t_list	*ft_lstnew(void **content);
+t_list	*ft_lstnew(void *content, size_t len, int is_newline);
 void	ft_lstadd_back(t_list **lst, t_list *new);
-void	ft_lstclear(t_list **lst);
-
 void	*ft_memcpy(void *dest, const void *src, size_t n);
-
-int		get_pos_newline_in_buffer(
-			char *buff,
-			size_t size,
-			int *is_found_newline
-			);
-*/
+int		is_found_newline(char *buff, ssize_t size);
+void	delete_list(t_list **pplist, int error);
+int		concat_line(t_list **pplist, char **pnew_line, size_t new_len);
+int		make_newline(t_list **pplist, char **pnew_line, size_t new_len);
+int		make_list(int fd, t_list **plist, char *buff);
+int		add_list(t_list	**pplist, char *buff, ssize_t size);
 char	*get_next_line(int fd);
-void	ft_memcpy(void *dest, const void *src, size_t n);
 #endif

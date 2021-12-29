@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 16:45:15 by kyolee            #+#    #+#             */
-/*   Updated: 2021/12/28 02:03:33 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/12/30 00:26:04 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,225 +19,134 @@
 
 #include <stdio.h>
 
-
-
-
-/*
-char	*ft_read_line(int fd, char *buff, char **buff_newline, ssize_t *newline_len)
+int	add_list(t_list	**pplist, char *buff, ssize_t size)
 {
-	ssize_t	read_cnt;
+	ssize_t	idx;
+	size_t	start_idx;
 	char	*tmp;
 
-	read_cnt = read(fd, buff, BUFFER_SIZE);
-	*newline_len += read_cnt;
-	tmp = malloc(sizeof(char) * (*newline_len));
-	if (tmp == 0)
-		return (0);
-	ft_memcpy(tmp, *buff_newline, *newline_len - read_cnt);
-	ft_memcpy(tmp + *newline_len - read_cnt, buff, read_cnt);
-	free(*buff_newline);
-	*buff_newline = tmp;
-	if (!is_found_newline(buff, read_cnt))
-	{
-		if (!ft_read_line(fd, buff, buff_newline, newline_len))
-		{
-			free(*buff_newline);
-			return (0);
-		}
-	}
-	return (*buff_newline);
-}
-*/
-
-size_t	ft_strlen(char *str)
-{
-	size_t	idx;
-
-	if (str == 0)
-		return (0);
 	idx = 0;
-	while (str[idx] != 0)
-		idx++;
-	return (idx);
-}
-
-
-int	is_need_to_split(char *buff, size_t size)
-{
-	size_t	idx;
-
-	idx = 0;
+	start_idx = idx;
 	while (idx < size)
 	{
-		if ((buff[idx] == '\n') && (idx < size - 1))
-			return (1);
+		if ((buff[idx] == '\n') || (idx == size - 1))
+		{
+			tmp = malloc(sizeof(char) * (idx - start_idx + 1));
+			if (tmp == 0)
+				return (MEM_ALLOC_ERROR);
+			ft_memcpy(tmp, buff + start_idx, idx - start_idx + 1);
+			ft_lstadd_back(pplist,
+				ft_lstnew(tmp, idx - start_idx + 1, (buff[idx] == '\n')));
+			start_idx = idx + 1;
+		}
 		idx++;
 	}
 	return (0);
 }
 
-int get_pos_newline(char *buff, size_t buff_size)
+int	concat_line(t_list **pplist, char **pnew_line, size_t new_len)
 {
-	size_t idx;
-	
-	idx = 0;
-	while (idx < buff_size)
+	int		start_idx;
+	t_list	*ptmp;
+
+	*pnew_line = malloc(sizeof(char) * new_len + 1);
+	if (*pnew_line == 0)
+		return (MEM_ALLOC_ERROR);
+	ptmp = *pplist;
+	start_idx = 0;
+	while ((ptmp != NULL) && (!ptmp->is_newline))
 	{
-		if (buff[idx] == '\n')
-			return (idx);
-		idx++;
+		ft_memcpy(*pnew_line + start_idx, ptmp->content, ptmp->len);
+		start_idx += ptmp->len;
+		free(ptmp->content);
+		ptmp->ready_to_free = 1;
+		ptmp = ptmp->next;
 	}
+	if (ptmp != NULL)
+	{
+		ft_memcpy(*pnew_line + start_idx, ptmp->content, ptmp->len);
+		free(ptmp->content);
+		ptmp->ready_to_free = 1;
+		ptmp = ptmp->next;
+	}
+	(*pnew_line)[new_len] = 0;
 	return (0);
 }
 
-
-
-void ft_memcpy(void *dest, const void *src, size_t size)
+int	make_newline(t_list **pplist, char **pnew_line, size_t new_len)
 {
-	size_t	idx;
+	t_list	*ptmp;
 
-	if (dest == 0 || src == 0 || size == 0)
-		return ;
-	idx = 0;
-	while (idx < size)
+	ptmp = *pplist;
+	if (ptmp->is_newline)
 	{
-		*((char *)dest + idx) = *((const char *)src + idx);
-		idx++;
-	}
-}
-
-
-char	*split_line(char *read_buff, char **buff, size_t size)
-{
-	size_t	idx;
-	char	*return_line;
-	char	*tmp;
-
-	idx = get_pos_newline(*buff, size);
-	return_line = malloc(sizeof(char) * (idx + 2));
-	ft_memcpy(return_line, *buff, idx + 1);
-	return_line[idx + 1] = 0;
-	tmp = malloc(sizeof(char) * (size - idx));
-	ft_memcpy(tmp, *buff + idx + 1, (size - idx - 1));
-	tmp[size - idx - 1] = 0;
-	if (read_buff != *buff)
-		free(*buff);
-	*buff = tmp;
-	return (return_line);
-}
-
-char	*merge_line(char *src1, int	size1, char *src2, int size2)
-{
-	char *buff;
-	
-	if ((size1 == 0) && (size2 == 0))
+		*pnew_line = malloc(sizeof(char) * ptmp->len + 1);
+		if (*pnew_line == 0)
+			return (MEM_ALLOC_ERROR);
+		ft_memcpy(*pnew_line, ptmp->content, ptmp->len);
+		(*pnew_line)[ptmp->len] = 0;
+		free(ptmp->content);
+		ptmp->ready_to_free = 1;
 		return (0);
-	buff = malloc(sizeof(char) * (size1 + size2 + 1));
-	if (buff == 0)
-		return (0);
-	ft_memcpy(buff, src1, size1 );
-	ft_memcpy(buff + size1, src2, size2);
-	buff[size1 + size2] = 0;
-	free(src1);
-	return (buff);
-}
-
-char	*ft_read_line(int fd, char *buff, char **remain, size_t remain_size)
-{
-	ssize_t	read_cnt;
-	char	*return_line;
-
-	read_cnt = read(fd, buff, BUFFER_SIZE);
-	if (read_cnt < 0)
-		return (0);
-	if (read_cnt == 0 && *remain == 0)
-		return (0);
-	else if (read_cnt == 0 && *remain != 0)
-	{	
-		if (is_need_to_split(*remain, remain_size))
-		{
-			return_line = split_line(buff, remain, remain_size);
-			return (return_line);
-		}
-		else
-		{
-			return_line = *remain;
-			*remain = 0;
-			return (return_line);
-		}
-	}
-	else if (read_cnt != 0 && *remain == 0)
-	{
-		if (is_need_to_split(buff, read_cnt))
-		{
-			return_line = split_line(buff, &buff, read_cnt);
-			*remain = merge_line(buff, ft_strlen(buff), *remain, 0);
-			return (return_line);
-		}
-		else
-		{
-			*remain = merge_line(*remain, 0, buff, read_cnt);
-			remain_size = read_cnt;
-			if (buff[read_cnt - 1] == '\n')
-			{
-				return_line = *remain;
-				*remain = 0;
-				return (return_line);
-			}
-			else
-				return (ft_read_line(fd, buff, remain, remain_size));
-		}
 	}
 	else
 	{
-		*remain = merge_line(*remain, remain_size, buff, read_cnt);
-		remain_size = read_cnt + remain_size;
-
-		if (is_need_to_split(*remain, remain_size))
+		while ((ptmp != NULL) && (!ptmp->is_newline))
 		{
-			return_line = split_line(buff, remain, remain_size);
-			return (return_line);
+			new_len += ptmp->len;
+			ptmp = ptmp->next;
 		}
-		else 
-		{
-			if ((*remain)[remain_size - 1] == '\n')
-			{
-				return_line = *remain;
-				*remain = 0;
-				return (return_line);
-			}
-			else
-				return (ft_read_line(fd, buff, remain, remain_size));
-		}
+		if (ptmp != NULL)
+			new_len += ptmp->len;
+		return (concat_line(pplist, pnew_line, new_len));
 	}
 }
 
-/*
-void save_lines(t_endline_arry *parry, char *str, size_t size)
+int	make_list(int fd, t_list **plist, char *buff)
 {
-	t_endline endline;
+	ssize_t	read_cnt;
 
-
+	read_cnt = -1;
+	while (read_cnt != 0)
+	{
+		read_cnt = read(fd, buff, BUFFER_SIZE);
+		if (read_cnt < 0)
+			return (READ_ERROR);
+		else if ((read_cnt == 0) && (*plist == 0))
+			return (1);
+		else
+		{
+			if (add_list(plist, buff, read_cnt) == MEM_ALLOC_ERROR)
+				return (MEM_ALLOC_ERROR);
+		}
+		if (is_found_newline(buff, read_cnt))
+			break ;
+	}
+	return (0);
 }
-*/
-
 
 char	*get_next_line(int fd)
 {
-	static char 	*str;
-	char 			*buff;
-	char			*new_line;
-	//static 	t_endline_arry endline_arry;
+	char			*buff;
+	static t_list	*plist;
+	char			*line;
+	int				error;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
 	buff = malloc(sizeof(char) * BUFFER_SIZE);
 	if (buff == 0)
 		return (0);
-	new_line = ft_read_line(fd, buff, &str, ft_strlen(str));
+	error = make_list(fd, &plist, buff);
+	line = 0;
+	if (error == NON_ERROR)
+		error = make_newline(&plist, &line, 0);
+	delete_list(&plist, error);
 	free(buff);
-	//save_lines(&endline_arry, str, str_size);
-	return (new_line);
+	return (line);
 }
 
+/*
 int	main(void)
 {
 	int		fd;
@@ -245,11 +154,11 @@ int	main(void)
 	//int		read_cnt;
 	char	*str;
 	fd = 0;
-	/*			
-	fd = open("aaa.txt", O_RDONLY);	
+							
+	fd = open("bbb.txt", O_RDONLY);	
 	if (fd == -1)
 		return (-1);
-	*/
+	
 	while ((str = get_next_line(fd)) != 0)
 	{
 		printf("%s",str);
@@ -257,9 +166,8 @@ int	main(void)
 		free(str);
 	}
 
-	
 	if (fd)
 		close(fd);
 	return (0);
 }
-
+*/
