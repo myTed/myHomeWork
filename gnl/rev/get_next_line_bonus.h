@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 23:14:46 by kyolee            #+#    #+#             */
-/*   Updated: 2022/01/07 00:24:49 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/01/09 20:56:59 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef GET_NEXT_LINE_BONUS_H
@@ -56,6 +56,6 @@ char	*ft_strdup(const char *s, size_t size);
 int		is_found_enter(char *s, size_t size);
 int		init_read_info_arr(t_read *pread_info);
 char	*make_line(char **cur);
-int		save_read_info_arr(t_read *pinfo, int fd, char *prev, char *line);
+int		save_read_info_arr(t_read *pinfo, int fd, char **prev, char *line);
 char	*get_next_line(int fd);
 #endif

@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 16:45:15 by kyolee            #+#    #+#             */
-/*   Updated: 2022/01/06 23:50:51 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/01/09 21:43:48 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,18 @@ char	*ft_read_line(
 		prev = pread->parr[idx].prev;
 	idx = 0;
 	if (prev != 0)
-	{
 		while (prev[idx] != 0)
 			idx++;
-	}
 	if (repeat_read(fd, buff, buff_max_len, &read_cnt) < 0)
-		line = 0;
+		return (0);
 	else
 		line = ft_strjoin(prev, *buff, idx, read_cnt);
-	free(prev);
+	if (line)
+		free(prev);
 	return (line);
 }
 
-char	*make_line(char **cur)
+char	*make_line_after_enter(char **cur)
 {
 	char	*prev;
 	size_t	idx;
@@ -112,10 +111,12 @@ char	*make_line(char **cur)
 	return (prev);
 }
 
-int	save_read_info_arr(t_read *pinfo, int fd, char *prev, char *line)
+int	save_read_info_arr(t_read *pinfo, int fd, char **prev, char *line)
 {
 	size_t	idx;
 
+	if (line == 0)
+		return (0);
 	idx = 0;
 	while ((idx < pinfo->arr_cur_len) && (pinfo->parr)[idx].fd != fd)
 		idx++;
@@ -125,9 +126,7 @@ int	save_read_info_arr(t_read *pinfo, int fd, char *prev, char *line)
 		if (expand_buff((char **)&(pinfo->parr), idx, idx,
 				sizeof(t_fd_arr) * FD_BUF_MAX) == 0)
 		{
-			idx = 0;
-			while (idx < pinfo->arr_cur_len)
-				free((pinfo->parr)[idx++].prev);
+			free(*prev);
 			free(line);
 			return (-1);
 		}
@@ -135,7 +134,7 @@ int	save_read_info_arr(t_read *pinfo, int fd, char *prev, char *line)
 		pinfo->arr_max += FD_BUF_MAX;
 	}
 	(pinfo->parr)[idx].fd = fd;
-	(pinfo->parr)[idx].prev = prev;
+	(pinfo->parr)[idx].prev = *prev;
 	if (idx == pinfo->arr_cur_len)
 		pinfo->arr_cur_len++;
 	return (0);
@@ -161,10 +160,10 @@ char	*get_next_line(int fd)
 		if (init_read_info_arr(&read_info) < 0)
 			return (0);
 	line = ft_read_line(fd, &buff, &read_info, read_buff_len);
-	prev = make_line(&line);
-	if (save_read_info_arr(&read_info, fd, prev, line) < 0)
-		line = 0;
 	free(buff);
+	prev = make_line_after_enter(&line);
+	if (save_read_info_arr(&read_info, fd, &prev, line) < 0)
+		return (0);
 	return (line);
 }
 
@@ -176,7 +175,7 @@ int	main(void)
 	
 	fd = 0;
 	
-	fd = open("fff.txt", O_RDONLY);
+	fd = open("abc.txt", O_RDONLY);
 	if (fd == -1)
 		return (-1);
 
