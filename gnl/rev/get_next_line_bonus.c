@@ -1,100 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/12 00:24:09 by kyolee            #+#    #+#             */
+/*   Updated: 2022/01/12 00:47:27 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+/*
 #include <stdio.h>
-
+*/
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
-typedef struct s_list
-{
-	int				fd;
-	char			*left;
-	size_t			left_len;
-	struct s_list	*next;
-} t_list;
-
-
-t_list  *ft_lstnew(int fd, void *str, size_t str_len)
-{
-	t_list  *new;
-
-	new = (t_list *)malloc(sizeof(t_list));
-	if (new == NULL)
-		return (NULL);
-	new->fd = fd;
-	new->left = str;
-	new->left_len = str_len;
-	new->next = NULL;
-	return (new);
-}
-
-void    ft_lstadd_back(t_list **lst, t_list *new)
-{
-	t_list  *end;
-
-	if (new == NULL || lst == NULL)
-		return ;
-	if (*lst == NULL)
-		*lst = new;
-	else
-	{
-		end = *lst;
-		while (end->next != NULL)
-			end = end->next;
-		end->next = new;
-	}
-}
-
-
-void    *ft_memcpy(void *dest, const void *src, size_t n)
-{
-	size_t  idx;
-
-	idx = 0;
-	while (idx < n)
-	{
-		if ((dest == 0) && (src == 0))
-		return (0);
-		*((unsigned char *)dest + idx) = *((const unsigned char *)src + idx);
-		idx++;
-	}
-	return (dest);
-}
-
-
-size_t	ft_strlen(void *src)
-{
-	size_t	idx;
-	idx = 0;
-	if (src == 0)
-		return (0);
-	while (((char*)src)[idx] != 0)
-		idx++;
-	return (idx);
-}
-
-char    *ft_strjoin(char const *s1, char const *s2, size_t s1_len, size_t s2_len)
-{
-	char    *str;
-
-	if ((s1 == 0 && s2 == 0))
-			return (NULL);
-	if (s1_len == 0 && s2_len == 0)
-			return (NULL);
-	str = NULL;
-	str = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
-	if (str != NULL)
-	{
-		if (s1)
-			ft_memcpy(str, s1, s1_len);
-		if (s2)
-			ft_memcpy(str + s1_len, s2, s2_len);
-		str[s1_len + s2_len] = 0;
-	}
-	return (str);
-}
-
+#include "get_next_line_bonus.h"
 
 int	is_found_chr(const char *s, int c, size_t len)
 {
@@ -110,20 +33,18 @@ int	is_found_chr(const char *s, int c, size_t len)
 	return (0);
 }
 
-
-
 int	read_line(int fd, char *buff, char **pstr)
 {
 	ssize_t	read_cnt;
 	ssize_t	tmp_cnt;
 	char	*tmp;
-	
+
 	tmp_cnt = 0;
 	while (1)
 	{
 		read_cnt = read(fd, buff, BUFFER_SIZE);
 		if (read_cnt == 0)
-			break;
+			break ;
 		if (read_cnt < 0)
 			return (-1);
 		tmp = ft_strjoin(*pstr, buff, tmp_cnt, read_cnt);
@@ -132,36 +53,10 @@ int	read_line(int fd, char *buff, char **pstr)
 		free(*pstr);
 		*pstr = tmp;
 		if (is_found_chr(*pstr, '\n', tmp_cnt + read_cnt))
-			break;
+			break ;
 		tmp_cnt += read_cnt;
 	}
 	return (0);
-}
-
-void	ft_lstdel(t_list **lst, int	fd)
-{
-	t_list	*cur;
-	t_list	*prev;
-
-	cur = *lst;
-	prev = cur;
-	if (lst == 0)
-		return ;
-	while (cur != 0)
-	{
-		if (cur->fd == fd)
-		{	
-			if (prev == cur)
-				*lst = cur->next;
-			else
-				prev->next = cur->next;
-			free(cur->left);
-			free(cur);
-			return ;
-		}
-		prev = cur;
-		cur = cur->next;
-	}
 }
 
 int	add_prev_line(int fd, char **pline, t_list **pplist)
@@ -170,10 +65,9 @@ int	add_prev_line(int fd, char **pline, t_list **pplist)
 	size_t	line_len;
 	t_list	*plist;
 
+	line_len = 0;
 	if (*pline != 0)
 		line_len = ft_strlen(*pline);
-	else
-		line_len = 0;
 	plist = *pplist;
 	while (plist != NULL)
 	{
@@ -185,7 +79,7 @@ int	add_prev_line(int fd, char **pline, t_list **pplist)
 			ft_lstdel(pplist, fd);
 			free(*pline);
 			*pline = tmp;
-			break;
+			break ;
 		}
 		plist = plist->next;
 	}
@@ -194,7 +88,6 @@ int	add_prev_line(int fd, char **pline, t_list **pplist)
 
 int	save_line(int fd, char **pline, t_list **pplist)
 {
-	size_t	idx;
 	size_t	line_len;
 	size_t	enter_pos;
 	char	*tmp;
@@ -203,22 +96,20 @@ int	save_line(int fd, char **pline, t_list **pplist)
 	if (*pline == 0)
 		return (0);
 	line_len = ft_strlen(*pline);
-	if (is_found_chr(*pline, '\n', line_len -1) == 0)
+	if (is_found_chr(*pline, '\n', line_len - 1) == 0)
 		return (0);
-	idx = 0;
-	while ((*pline)[idx] != 0)
-	{
-		if ((*pline)[idx] == '\n')
-			break;
-		idx++;
-	}
-	enter_pos = idx;
+	enter_pos = 0;
+	while ((*pline)[enter_pos] != '\n')
+		enter_pos++;
 	tmp = ft_strjoin(&(*pline)[enter_pos + 1], 0, line_len - enter_pos - 1, 0);
 	if (tmp == 0)
 		return (-1);
 	new_lst = ft_lstnew(fd, tmp, line_len - enter_pos - 1);
 	if (new_lst == 0)
+	{
+		free(tmp);
 		return (-1);
+	}
 	ft_lstadd_back(pplist, new_lst);
 	(*pline)[enter_pos + 1] = 0;
 	return (0);
@@ -229,6 +120,7 @@ char	*get_next_line(int fd)
 	char			*buff;
 	char			*line;
 	static t_list	*plist;
+	int				error;
 
 	if (fd < 0)
 		return (0);
@@ -236,27 +128,20 @@ char	*get_next_line(int fd)
 	if (buff == 0)
 		return (0);
 	line = 0;
+	error = 0;
 	if (read_line(fd, buff, &line) < 0)
+		error = 1;
+	if (!error && (add_prev_line(fd, &line, &plist) < 0))
+		error = 1;
+	if (!error && (save_line(fd, &line, &plist) < 0))
+		error = 1;
+	if (error)
 	{
-		free(buff);
-		return (0);
-	}
-	if (add_prev_line(fd, &line, &plist) < 0)
-	{
-		free(buff);
 		free(line);
-		return (0);
-	}
-	if (save_line(fd, &line, &plist) < 0)
-	{
-		free(buff);
-		free(line);
+		line = 0;
 	}
 	free(buff);
 	return (line);
-	//2. 기존에 읽은 것과 합치기 (searching + 합치기)
-	//3. 합친 것 나누기
-	//4. 나눌것이 있으면 저장. 아니면 삭제
 }
 /*
 int	main(void)

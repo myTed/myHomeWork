@@ -6,36 +6,35 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 23:14:46 by kyolee            #+#    #+#             */
-/*   Updated: 2022/01/11 17:40:23 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/01/12 00:42:18 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
 # include <stddef.h>
 # include <sys/types.h>
-/*
-# define MEM_ALLOC_ERROR	-1
-# define READ_ERROR			-2
-# define NON_ERROR			0
 
 typedef struct s_list
 {
-	void			*content;
-	size_t			len;
-	size_t			is_newline;
-	size_t			ready_to_free;
+	int				fd;
+	char			*left;
+	size_t			left_len;
 	struct s_list	*next;
 }	t_list;
 
-t_list	*ft_lstnew(void *content, size_t len, int is_newline);
+int		is_found_chr(const char *s, int c, size_t len);
+int		read_line(int fd, char *buff, char **pstr);
+int		add_prev_line(int fd, char **pline, t_list **pplist);
+int		save_line(int fd, char **pline, t_list **pplist);
+t_list	*ft_lstnew(int fd, void *str, size_t str_len);
 void	ft_lstadd_back(t_list **lst, t_list *new);
-void	*ft_memcpy(void *dest, const void *src, size_t n);
-int		is_found_newline(char *buff, ssize_t size);
-void	delete_list(t_list **pplist, int error);
-int		concat_line(t_list **pplist, char **pnew_line, size_t new_len);
-int		make_newline(t_list **pplist, char **pnew_line, size_t new_len);
-int		make_list(int fd, t_list **plist, char *buff);
-int		add_list(t_list	**pplist, char *buff, ssize_t size);
-*/
+void	ft_lstdel(t_list **lst, int fd);
+size_t	ft_strlen(void *src);
+char	*ft_strjoin(
+			char const *s1,
+			char const *s2,
+			size_t s1_len,
+			size_t s2_len
+			);
 char	*get_next_line(int fd);
 #endif
