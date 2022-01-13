@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 23:14:46 by kyolee            #+#    #+#             */
-/*   Updated: 2021/12/29 21:19:38 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:07:05 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef GET_NEXT_LINE_H
@@ -27,7 +27,7 @@ typedef struct s_list
 }	t_list;
 
 t_list	*ft_lstnew(void *content, size_t len, int is_newline);
-void	ft_lstadd_back(t_list **lst, t_list *new);
+int		ft_lstadd_back(t_list **lst, t_list *new);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 int		is_found_newline(char *buff, ssize_t size);
 void	delete_list(t_list **pplist, int error);

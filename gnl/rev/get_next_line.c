@@ -6,222 +6,151 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 16:45:15 by kyolee            #+#    #+#             */
-/*   Updated: 2022/01/03 21:18:09 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/12/30 02:27:05 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/types.h>
-#include <sys/stat.h>
+#include <sys/uio.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include <stdlib.h>
 #include "get_next_line.h"
-
+/*
 #include <stdio.h>
-#include <time.h>
-size_t	ft_strlen(const char *s)
+#include <fcntl.h>
+*/
+int	add_list(t_list	**pplist, char *buff, ssize_t size)
 {
-	size_t	idx;
-
-	if (s == 0)
-		return (0);
-	idx = 0;
-	while (s[idx] != 0)
-		idx++;
-	return (idx);
-}
-
-void ft_memcpy(char *dest, const char *src, size_t size)
-{
-	size_t			idx;
+	ssize_t	idx;
+	size_t	start_idx;
+	char	*tmp;
 
 	idx = 0;
+	start_idx = idx;
 	while (idx < size)
 	{
-		dest[idx] = src[idx];
-		idx++;
-	}
-}
-
-char	*ft_strdup(const char *s, size_t size)
-{
-	char	*str;
-	size_t	idx;
-
-	if (s == 0 || size == 0)
-		return (0);
-	str = NULL;
-	str = malloc(size + 1);
-	idx = 0;
-	if (str != NULL)
-	{
-		while (idx < size)
+		if ((buff[idx] == '\n') || (idx == size - 1))
 		{
-			str[idx] = s[idx];
-			idx++;
+			tmp = malloc(sizeof(char) * (idx - start_idx + 1));
+			if (tmp == 0)
+				return (MEM_ALLOC_ERROR);
+			ft_memcpy(tmp, buff + start_idx, idx - start_idx + 1);
+			if (ft_lstadd_back(pplist, ft_lstnew(tmp, idx - start_idx + 1,
+						(buff[idx] == '\n'))) == -1)
+			{
+				free(tmp);
+				return (MEM_ALLOC_ERROR);
+			}
+			start_idx = idx + 1;
 		}
-		str[idx] = 0;
-	}
-	return (str);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2, size_t s1_len, size_t s2_len)
-{
-	char	*str;
-
-	if ((s1 == 0) || (s2 == 0))
-	{
-		if (s1 == 0 && s2 == 0)
-			return (NULL);
-		else if (s1)
-			return (ft_strdup(s1, s1_len));
-		else
-			return (ft_strdup(s2, s2_len));
-	}
-	str = NULL;
-	str = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
-	if (str != NULL)
-	{
-		ft_memcpy(str, s1, s1_len);
-		ft_memcpy(str + s1_len, s2, s2_len);
-		str[s1_len + s2_len] = 0;
-	}
-	return (str);
-}
-
-
-int	is_found_enter(char *s, size_t size)
-{
-	size_t	idx;
-
-	idx = 0;
-	while (idx < size)
-	{
-		if (s[idx] == '\n')
-			return (1);
 		idx++;
 	}
 	return (0);
 }
 
-int	expand_buff(char **buff, size_t read_cnt, size_t cur_len, size_t plus_len)
+int	concat_line(t_list **pplist, char **pnew_line, size_t new_len)
 {
-	char	*new;
+	int		start_idx;
+	t_list	*ptmp;
 
-	new = malloc(sizeof(char) * (cur_len + plus_len));
-	if (new == 0)
-		return (0);
-	ft_memcpy(new, *buff, read_cnt);
-	free(*buff);
-	*buff = new;
-	return (1);
+	*pnew_line = malloc(sizeof(char) * new_len + 1);
+	if (*pnew_line == 0)
+		return (MEM_ALLOC_ERROR);
+	ptmp = *pplist;
+	start_idx = 0;
+	while ((ptmp != NULL) && (!ptmp->is_newline))
+	{
+		ft_memcpy(*pnew_line + start_idx, ptmp->content, ptmp->len);
+		start_idx += ptmp->len;
+		free(ptmp->content);
+		ptmp->ready_to_free = 1;
+		ptmp = ptmp->next;
+	}
+	if (ptmp != NULL)
+	{
+		ft_memcpy(*pnew_line + start_idx, ptmp->content, ptmp->len);
+		free(ptmp->content);
+		ptmp->ready_to_free = 1;
+		ptmp = ptmp->next;
+	}
+	(*pnew_line)[new_len] = 0;
+	return (0);
 }
 
+int	make_newline(t_list **pplist, char **pnew_line, size_t new_len)
+{
+	t_list	*ptmp;
 
+	ptmp = *pplist;
+	if (ptmp->is_newline)
+	{
+		*pnew_line = malloc(sizeof(char) * ptmp->len + 1);
+		if (*pnew_line == 0)
+			return (MEM_ALLOC_ERROR);
+		ft_memcpy(*pnew_line, ptmp->content, ptmp->len);
+		(*pnew_line)[ptmp->len] = 0;
+		free(ptmp->content);
+		ptmp->ready_to_free = 1;
+		return (0);
+	}
+	else
+	{
+		while ((ptmp != NULL) && (!ptmp->is_newline))
+		{
+			new_len += ptmp->len;
+			ptmp = ptmp->next;
+		}
+		if (ptmp != NULL)
+			new_len += ptmp->len;
+		return (concat_line(pplist, pnew_line, new_len));
+	}
+}
 
-ssize_t	repeat_read(int fd, char **buff, size_t init_buff_len, size_t *total_read)
+int	make_list(int fd, t_list **plist, char *buff)
 {
 	ssize_t	read_cnt;
-	size_t	buff_max_len;
 
-	read_cnt = 0;
-	buff_max_len = init_buff_len;
-	while (1)
+	read_cnt = -1;
+	while (read_cnt != 0)
 	{
-		read_cnt = read(fd, *buff + *total_read, BUFFER_SIZE);
-		if (read_cnt == 0)
-			return (0);
+		read_cnt = read(fd, buff, BUFFER_SIZE);
 		if (read_cnt < 0)
-			return (-1);
-		*total_read += read_cnt;
-		if (is_found_enter(*buff, *total_read))
-			return (0);
-		if (*total_read + BUFFER_SIZE > buff_max_len)
+			return (READ_ERROR);
+		else if ((read_cnt == 0) && (*plist == 0))
+			return (1);
+		else
 		{
-			if (expand_buff(buff, *total_read, buff_max_len, init_buff_len) == 0)
-				return (-1);
-			buff_max_len += init_buff_len;
+			if (add_list(plist, buff, read_cnt) == MEM_ALLOC_ERROR)
+				return (MEM_ALLOC_ERROR);
 		}
+		if (is_found_newline(buff, read_cnt))
+			break ;
 	}
+	return (0);
 }
-
-char	*ft_read_line(int fd, char **buff, char *prev, size_t buff_max_len)
-{
-	size_t	read_cnt;
-	char	*line;
-
-	read_cnt = 0;
-	if (repeat_read(fd, buff, buff_max_len, &read_cnt) < 0)
-		return (0);
-	line = ft_strjoin(prev, *buff, ft_strlen(prev), read_cnt);
-	if (line == 0)
-	{
-		free(prev);
-		return (0);
-	}
-	free(prev);
-	return (line);
-}
-
-char	*make_line(char **cur)
-{
-	char	*line;
-	char	*new_cur;
-	size_t	idx;
-	size_t	line_len;
-
-	if (*cur == 0)
-		return (0);
-	line = *cur;
-	idx = 0;
-	line_len = ft_strlen(line);
-	if (!is_found_enter(line, line_len))
-		return (0);
-	while(line[idx++] != '\n');
-	if (idx == line_len)
-		return (0);
-	else
-		new_cur = ft_strdup(line + idx, line_len - idx + 1);
-	if (new_cur == 0)
-	{
-		free(line);
-		*cur = 0;
-		return (0);
-	}
-	line[idx] = 0;
-	return (new_cur);
-}
-
-struct timespec begin;
-struct timespec end;
-
 
 char	*get_next_line(int fd)
 {
-	char 		*buff;
-	static char	*prev;
-	char		*line;
-	size_t		read_buff_len;
+	char			*buff;
+	static t_list	*plist;
+	char			*line;
+	int				error;
 
-	if ((fd < 0) || (BUFFER_SIZE <= 0))
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	if (BUFFER_SIZE < 100)
-		read_buff_len = 100;
-	else
-		read_buff_len = BUFFER_SIZE;
-	buff = malloc(sizeof(char) * read_buff_len);
+	buff = malloc(sizeof(char) * BUFFER_SIZE);
 	if (buff == 0)
 		return (0);
-	clock_gettime(CLOCK_MONOTONIC, &begin);
-	line = ft_read_line(fd, &buff, prev, read_buff_len);
-	//clock_gettime(CLOCK_MONOTONIC, &end);	
-	prev = make_line(&line);
+	error = make_list(fd, &plist, buff);
+	line = 0;
+	if (error == NON_ERROR)
+		error = make_newline(&plist, &line, 0);
+	delete_list(&plist, error);
 	free(buff);
-	clock_gettime(CLOCK_MONOTONIC, &end);
-	printf("elapsed time : %lf\n", (end.tv_sec - begin.tv_sec) + (end.tv_nsec - begin.tv_nsec) /1000000000.0); 
 	return (line);
 }
 
+/*
 int	main(void)
 {
 	int		fd;
@@ -229,83 +158,20 @@ int	main(void)
 	//int		read_cnt;
 	char	*str;
 	fd = 0;
-	/*									
-	fd = open("aaa.txt", O_RDONLY);	
+							
+	fd = open("bbb.txt", O_RDONLY);	
 	if (fd == -1)
 		return (-1);
-	*/
 	
-	clock_gettime(CLOCK_MONOTONIC, &begin);
 	while ((str = get_next_line(fd)) != 0)
 	{
-		clock_gettime(CLOCK_MONOTONIC, &end);
-		printf("elapsed time : %lf\n", (end.tv_sec - begin.tv_sec) + (end.tv_nsec - begin.tv_nsec) /1000000000.0); 
 		printf("%s",str);
 		fflush(stdout);
 		free(str);
 	}
+
 	if (fd)
 		close(fd);
 	return (0);
 }
-
-/*
-char	*ft_read_line(int fd, char *buff, char *prev, size_t prev_cnt)
-{
-	ssize_t	read_cnt;
-	char	*tmp;
-	char	*cur;
-	int		error;
-
-	error = 0;
-	tmp = 0;
-	read_cnt = -1;
-	while (read_cnt != 0 && error == 0)
-	{
-		read_cnt = ft_read(fd, buff, buff_size);
-		if (read_cnt == 0)
-			return (prev);
-		if (read_cnt < 0)
-		{
-			error = 1;
-			break;
-		}
-		tmp = ft_strdup(buff, read_cnt);
-		if (tmp == 0)
-		{
-			error = 1;
-			break;
-		}
-		else
-			cur = ft_strjoin(prev, tmp, prev_cnt, read_cnt);
-		if (cur == 0)
-		{
-			error = 1;
-			break;
-		}
-		else
-		{
-			if (prev)
-				free(tmp);
-			free(prev);
-			prev = cur;
-			prev_cnt += read_cnt;
-		}
-		if (is_found_enter(cur, prev_cnt) && error == 0)
-			break;
-	}
-	if (error)
-	{
-		if(tmp)
-			free(tmp);
-		if(prev)
-			free(prev);
-		return (0);
-	}
-	return (cur);
-}
 */
-
-
-
-

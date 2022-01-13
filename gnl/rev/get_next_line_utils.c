@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 23:00:16 by kyolee            #+#    #+#             */
-/*   Updated: 2021/12/29 21:48:13 by kyolee           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:05:05 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ t_list	*ft_lstnew(void *content, size_t len, int is_newline)
 	return (new);
 }
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+int	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*end;
 
 	if (new == NULL || lst == NULL)
-		return ;
+		return (-1);
 	if (*lst == NULL)
 		*lst = new;
 	else
@@ -43,13 +43,14 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 			end = end->next;
 		end->next = new;
 	}
+	return (0);
 }
 
 void	delete_list(t_list **pplist, int error)
 {
 	t_list	*del;
 
-	if (error == MEM_ALLOC_ERROR)
+	if (error == MEM_ALLOC_ERROR || error == READ_ERROR)
 	{
 		while ((*pplist != NULL))
 		{

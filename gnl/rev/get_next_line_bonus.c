@@ -6,16 +6,17 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 00:24:09 by kyolee            #+#    #+#             */
-/*   Updated: 2022/01/12 00:47:27 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/01/13 14:47:39 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
 #include <stdio.h>
+#include <sys/stat.h>
 */
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/stat.h>
+#include <sys/uio.h>
 #include <fcntl.h>
 #include "get_next_line_bonus.h"
 
