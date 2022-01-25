@@ -1,4 +1,4 @@
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
 #include "ft_printf.h"
@@ -183,7 +183,7 @@ int	ft_printf(const char *str, ...)
 	va_end(ap);
 	return (written_cnt);
 }
-
+/*
 int	main(void)
 {
 	char	*str1;
@@ -214,3 +214,4 @@ int	main(void)
 	//printf("%X\n", num2);
 	return (0);
 }
+*/
