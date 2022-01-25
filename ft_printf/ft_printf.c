@@ -1,6 +1,4 @@
 //#include <stdio.h>
-#include <stdarg.h>
-#include <unistd.h>
 #include "ft_printf.h"
 
 size_t	ft_strlen(const char *str)
