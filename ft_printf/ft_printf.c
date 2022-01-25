@@ -11,7 +11,6 @@ int	ft_printf(const char *str, ...)
 
 	init_func_arry(func_arry, MAX_PROCS_NUM);
 	add_type_proc(func_arry);
-
 	va_start(ap, str);
 	written_cnt = 0;
 	idx = 0;
@@ -24,18 +23,11 @@ int	ft_printf(const char *str, ...)
 			{
 				written_cnt += (*pfunc)(&ap);
 				idx++;
-			}
-			else
-			{
-				write(1, &str[idx], 1);
-				written_cnt++;
+				continue;
 			}
 		}
-		else
-		{
-			write(1, &str[idx], 1);
-			written_cnt++;
-		}
+		write(1, &str[idx], 1);
+		written_cnt++;
 		idx++;
 	}
 	va_end(ap);
