@@ -49,6 +49,7 @@ int	main(void)
 	char	ch;
 	int		num;
 	int		num2;
+	
 	str1 = "KKKK";
 	str2 = "AAAA";
 	ch = 'O';
@@ -66,6 +67,9 @@ int	main(void)
 	printf("==========================\n");
 	printf("%d\n",printf("%i", num));
 	printf("%d\n",printf("asjdklfj%s%%1123%s%c%s\n",str1, str2, ch, str1));
+	//printf("%s\n",(char*)0);
+	ft_printf("%s\n",(char*)0);
+	//printf("%s\n",(char*)0);
 	//printf("%u\n", num);
 	//printf("%p\n", &num);
 	//printf("%x\n", num);

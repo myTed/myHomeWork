@@ -108,12 +108,22 @@ int	type_p_printf(va_list *pap)
 {
 	size_t	tmp;
 	int		len;
+	int		sh_num;
 
 	tmp = va_arg(*pap, size_t);
 	write(1, "0x", 2);
 	len = 2;
 	if (tmp >> 32 != 0)
+	{
 		len += ft_putnbr(tmp >> 32, 1, 16, "0123456789abcdef");
+		sh_num = 28;
+		while ((!((unsigned int)tmp & (0xf << sh_num))) && (sh_num != 0))
+		{
+			write(1, "0", 1);
+			len++;
+			sh_num -= 4;
+		}
+	}
 	len += ft_putnbr(tmp, 1, 16, "0123456789abcdef");
 	return (len);
 }
