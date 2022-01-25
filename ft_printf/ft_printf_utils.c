@@ -46,6 +46,11 @@ int type_s_print(va_list *pap)
 	size_t	tmp_len;
 
 	tmp = va_arg(*pap, char *);
+	if (tmp == 0)
+	{
+		write(1,"(null)",6);
+		return (6);
+	}
 	tmp_len = ft_strlen(tmp);
 	write(1, tmp, tmp_len);
 	return (tmp_len);
