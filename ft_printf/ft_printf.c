@@ -22,7 +22,7 @@ int	ft_printf(const char *str, ...)
 			if (pfunc)
 			{
 				written_cnt += (*pfunc)(&ap);
-				idx++;
+				idx+=2;
 				continue;
 			}
 		}
