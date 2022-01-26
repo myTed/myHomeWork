@@ -26,8 +26,11 @@ int	ft_printf(const char *str, ...)
 				continue;
 			}
 		}
-		write(1, &str[idx], 1);
-		written_cnt++;
+		if (str[idx] != '%')
+		{
+			write(1, &str[idx], 1);
+			written_cnt++;
+		}
 		idx++;
 	}
 	va_end(ap);
@@ -66,6 +69,13 @@ int	main(void)
 	//printf("%p\n", &num);
 	//printf("%x\n", num);
 	//printf("%X\n", num2);
+	return (0);
+}
+*/
+/*
+int	main(void)
+{
+	ft_printf("%d\n",ft_printf("%"));
 	return (0);
 }
 */
