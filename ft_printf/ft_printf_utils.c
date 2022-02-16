@@ -58,10 +58,10 @@ int type_s_print(va_list *pap)
 
 int	type_c_printf(va_list *pap)
 {
-	char	tmp;
+	unsigned char	tmp;
 	size_t	tmp_len;
 
-	tmp = (char)va_arg(*pap, int);
+	tmp = (unsigned char)va_arg(*pap, int);
 	tmp_len = 1;
 	write(1, &tmp, tmp_len);
 	return (tmp_len);
@@ -141,6 +141,7 @@ void init_func_arry(int (**pfunc_arry)(va_list *), size_t len)
 	idx = 0;
 	while (idx < len)
 		pfunc_arry[idx++] = 0;
+	add_type_proc(pfunc_arry);
 }
 
 void add_type_proc(int (**pfunc_arry)(va_list *))

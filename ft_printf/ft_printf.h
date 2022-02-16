@@ -2,7 +2,8 @@
 #define FT_PRINTF_H
 # define MAX_PROCS_NUM	256
 # include <stdarg.h>
-# include <unistd.h>
+
+typedef int (*PFUNCARRY[MAX_PROC_NUM])(va_list *ap);
 size_t	ft_strlen(const char *str);
 int 	put_number_base(int n, int is_unsigned, int base, char *base_str);
 int		ft_putnbr(int n, int is_unsigned, int base, char *base_str);

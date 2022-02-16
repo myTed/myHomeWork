@@ -1,32 +1,44 @@
 //#include <stdio.h>
 #include "ft_printf.h"
 
+int	printf_type(PFUNC_ARRY func_arry, const char *str, int *pidx, int *pw_cnt)
+{
+	int	idx;
+	int	(*pfunc)(va_list *ap);
+	
+	idx = *pidx;
+	if (str[idx + 1] == 0)
+		return (-1);
+	pfunc = func_arry[str[idx + 1]];
+	if (pfunc == 0)
+		idx++;
+	else
+	{
+		*pw_cnt += (*pfunc)(&ap);
+		idx+=2;
+	}
+	*pidx = idx;
+	return (0);
+}
+
+
 int	ft_printf(const char *str, ...)
 {
 	va_list	ap;
 	int (*func_arry[MAX_PROCS_NUM])(va_list *ap);
-	int	(*pfunc)(va_list *ap);
 	int	written_cnt;
 	int	idx;
 
 	init_func_arry(func_arry, MAX_PROCS_NUM);
-	add_type_proc(func_arry);
 	va_start(ap, str);
 	written_cnt = 0;
 	idx = 0;
 	while (str[idx] != 0)
 	{
 		if (str[idx] == '%')
-		{
-			pfunc = func_arry[(unsigned const char)str[idx+1]];
-			if (pfunc)
-			{
-				written_cnt += (*pfunc)(&ap);
-				idx+=2;
-				continue;
-			}
-		}
-		if (str[idx] != '%')
+			if (printf_type(func_arry, str, &idx, &written_cnt) < 0)
+				break;
+		else
 		{
 			write(1, &str[idx], 1);
 			written_cnt++;
@@ -36,6 +48,25 @@ int	ft_printf(const char *str, ...)
 	va_end(ap);
 	return (written_cnt);
 }
+/*
+int	main(void)
+{
+	ft_printf("%%%\n");
+	printf("%%%\n");
+	printf("%\n");
+	printf("%%\n");
+	printf("%%%%\n");
+	
+	printf("=============\n");
+	ft_printf("%%%\n");
+	ft_printf("%\n");
+	ft_printf("%%\n");
+	ft_printf("%%%%\n");
+	ft_printf("%sasdjfkljksldf%d\n","kkkkk", 123);	
+	
+	return (0);
+}
+*/
 /*
 int	main(void)
 {
