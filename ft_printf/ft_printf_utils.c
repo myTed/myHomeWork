@@ -1,12 +1,13 @@
-//#include <stdio.h>
 #include "ft_printf.h"
+#include <unistd.h>
 
 size_t	ft_strlen(const char *str)
 {
 	size_t	idx;
 	idx = 0;
-	while (str[idx++] != 0);
-	return (idx - 1);
+	while (str[idx] != 0)
+		idx++;
+	return (idx);
 }
 
 int	put_number_base(int n, int is_unsigned, int base, char *base_str)
@@ -40,7 +41,7 @@ int    ft_putnbr(int n, int is_unsigned, int base, char *base_str)
 	return (len);
 }
 
-int type_s_print(va_list *pap)
+int type_s_printf(va_list *pap)
 {
 	char 	*tmp;
 	size_t	tmp_len;
@@ -135,25 +136,24 @@ int	type_percent_printf(va_list *pap)
 	return (1);
 }
 
-void init_func_arry(int (**pfunc_arry)(va_list *), size_t len)
+void init_func_arry(t_func *pfunc_arry)
 {
-	size_t	idx;
-	idx = 0;
-	while (idx < len)
-		pfunc_arry[idx++] = 0;
-	add_type_proc(pfunc_arry);
+	pfunc_arry[0].op = 's';
+	pfunc_arry[0].opfunc = type_s_printf;
+	pfunc_arry[1].op = 'c';
+	pfunc_arry[1].opfunc = type_c_printf;
+	pfunc_arry[2].op = 'p';
+	pfunc_arry[2].opfunc = type_p_printf;
+	pfunc_arry[3].op = 'd';
+	pfunc_arry[3].opfunc = type_d_printf;
+	pfunc_arry[4].op = 'i';
+	pfunc_arry[4].opfunc = type_d_printf;
+	pfunc_arry[5].op = 'u';
+	pfunc_arry[5].opfunc = type_u_printf;
+	pfunc_arry[6].op = 'x';
+	pfunc_arry[6].opfunc = type_x_printf;
+	pfunc_arry[7].op = 'X';
+	pfunc_arry[7].opfunc = type_X_printf;
+	pfunc_arry[8].op = '%';
+	pfunc_arry[8].opfunc = type_percent_printf;
 }
-
-void add_type_proc(int (**pfunc_arry)(va_list *))
-{
-	pfunc_arry['s'] = type_s_print;
-	pfunc_arry['c'] = type_c_printf;
-	pfunc_arry['p'] = type_p_printf;
-	pfunc_arry['d'] = type_d_printf;
-	pfunc_arry['i'] = type_d_printf;
-	pfunc_arry['u'] = type_u_printf;
-	pfunc_arry['x'] = type_x_printf;
-	pfunc_arry['X'] = type_X_printf;
-	pfunc_arry['%'] = type_percent_printf;
-}
-

@@ -1,53 +1,92 @@
-//#include <stdio.h>
+#include <stdio.h>
 #include "ft_printf.h"
+#include <unistd.h>
 
-int	printf_type(PFUNC_ARRY func_arry, const char *str, int *pidx, int *pw_cnt)
-{
-	int	idx;
-	int	(*pfunc)(va_list *ap);
-	
-	idx = *pidx;
-	if (str[idx + 1] == 0)
-		return (-1);
-	pfunc = func_arry[str[idx + 1]];
-	if (pfunc == 0)
-		idx++;
-	else
-	{
-		*pw_cnt += (*pfunc)(&ap);
-		idx+=2;
-	}
-	*pidx = idx;
-	return (0);
-}
+static int	print_type(
+				t_func *pfunc_arry,
+				va_list *pap,
+				const char ch, 
+				int *pw_cnt
+			){
 
-
-int	ft_printf(const char *str, ...)
-{
-	va_list	ap;
-	int (*func_arry[MAX_PROCS_NUM])(va_list *ap);
-	int	written_cnt;
 	int	idx;
 
-	init_func_arry(func_arry, MAX_PROCS_NUM);
-	va_start(ap, str);
-	written_cnt = 0;
+	if (ch <= 0)
+		return (-2);
 	idx = 0;
-	while (str[idx] != 0)
+	while (idx < MAX_OPTION_NUM)
 	{
-		if (str[idx] == '%')
-			if (printf_type(func_arry, str, &idx, &written_cnt) < 0)
-				break;
-		else
+		if (pfunc_arry[idx].op == ch)
 		{
-			write(1, &str[idx], 1);
-			written_cnt++;
+			*pw_cnt = (pfunc_arry[idx].opfunc)(pap);
+			return (0);
 		}
 		idx++;
 	}
-	va_end(ap);
-	return (written_cnt);
+	return (-1);
 }
+
+static int	print_not_type(const char ch, int *pw_cnt)
+{	
+	ssize_t	result;
+
+	result = write(1, &ch, 1);
+	if (result < 0)
+		return (-1);
+	(*pw_cnt)++;
+	return (0);
+}
+
+static int	print_arg(const char *str, t_func *pfunc_arry, va_list *pap)
+{
+	int	idx;
+	int	wr_cnt;
+	int	result;
+
+	idx = 0;
+	wr_cnt = 0;
+	while (str[idx] != 0)
+	{
+		if (str[idx] == '%')
+		{
+			result = print_type(pfunc_arry, pap, str[idx + 1], &wr_cnt);
+			if (result < -1)
+				break;
+			if (result == 0)
+				idx++;
+		}
+		else
+		{
+			if (print_not_type(str[idx], &wr_cnt) < 0) 
+				break;
+		}
+		idx++;
+	}
+	return (wr_cnt);
+}
+
+int	ft_printf(const char *str, ...)
+{
+	va_list		ap;
+	t_func		s_func_arry[MAX_OPTION_NUM];
+	int			wr_cnt;
+
+	init_func_arry(s_func_arry);
+	va_start(ap, str);
+	wr_cnt = print_arg(str, s_func_arry, &ap);
+	va_end(ap);
+	return (wr_cnt);
+}
+/*
+int	main(void)
+{
+	ft_printf("%saksld;fkl%sasdjkf%s\n","KKK","AAA", "KKK");
+	ft_printf("%\n");
+	ft_printf("%%\n");
+	ft_printf("%%%\n");
+	ft_printf("%%%%\n");
+}
+*/
 /*
 int	main(void)
 {
