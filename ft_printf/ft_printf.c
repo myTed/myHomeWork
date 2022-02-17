@@ -39,7 +39,7 @@ static int	print_type(
 	{
 		if (pfunc_arry[idx].op == ch)
 		{
-			*pw_cnt = (pfunc_arry[idx].opfunc)(pap);
+			*pw_cnt += (pfunc_arry[idx].opfunc)(pap);
 			return (0);
 		}
 		idx++;
@@ -98,7 +98,7 @@ int	ft_printf(const char *str, ...)
 	va_end(ap);
 	return (wr_cnt);
 }
-
+/*
 int	main(void)
 {
 	ft_printf("%saksld;fkl%sasdjkf%s\n","KKK","AAA", "KKK");
@@ -132,7 +132,7 @@ int	main(void)
 	ft_printf("MAX +u: %u\n", 9223372036854775807);
 	printf("MAX +u:%u\n",9223372036854775807);
 }
-
+*/
 /*
 int	main(void)
 {
