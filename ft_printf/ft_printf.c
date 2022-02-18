@@ -1,9 +1,10 @@
-#include <stdio.h>
 #include "ft_printf.h"
 #include <unistd.h>
 
-static void fill_func_arry(t_func *pfunc_arry)
+static int	fill_func_arry(t_func *pfunc_arry)
 {
+	if (pfunc_arry == 0)
+		return (-1);
 	pfunc_arry[0].op = 's';
 	pfunc_arry[0].opfunc = type_s_printf;
 	pfunc_arry[1].op = 'c';
@@ -22,24 +23,33 @@ static void fill_func_arry(t_func *pfunc_arry)
 	pfunc_arry[7].opfunc = type_X_printf;
 	pfunc_arry[8].op = '%';
 	pfunc_arry[8].opfunc = type_percent_printf;
+	return (0);
 }
 
 static int	print_type(
 				t_func *pfunc_arry,
 				va_list *pap,
-				const char ch, 
+				const char ch,
 				int *pw_cnt
 				){
 	int	idx;
+	int	tmp_cnt;
+	int	err_status;
 
-	if (ch <= 0)
+	if ((pfunc_arry == 0) || (pap == 0) || (pw_cnt == 0))
 		return (-2);
+	if (ch <= 0)
+		return (-1);
 	idx = 0;
 	while (idx < MAX_OPTION_NUM)
 	{
 		if (pfunc_arry[idx].op == ch)
 		{
-			*pw_cnt += (pfunc_arry[idx].opfunc)(pap);
+			err_status = 0;
+			tmp_cnt = (pfunc_arry[idx].opfunc)(pap, &err_status);
+			if ((tmp_cnt < 0) || err_status)
+				return (-2);
+			*pw_cnt += tmp_cnt;
 			return (0);
 		}
 		idx++;
@@ -51,39 +61,45 @@ static int	print_not_type(const char ch, int *pw_cnt)
 {	
 	ssize_t	result;
 
+	if (pw_cnt == 0)
+		return (-1);
 	result = write(1, &ch, 1);
 	if (result < 0)
 		return (-1);
-	(*pw_cnt)++;
+	*pw_cnt = result;
 	return (0);
 }
 
-static int	print_arg(const char *str, t_func *pfunc_arry, va_list *pap)
-{
+static int	print_arg(
+				const char *str,
+				t_func *pfunc_arry,
+				va_list *pap,
+				int *pwr_cnt
+				){
 	int	idx;
-	int	wr_cnt;
-	int	result;
+	int	err_status;
 
 	idx = 0;
-	wr_cnt = 0;
+	if ((str == 0) || (pfunc_arry == 0) || (pap == 0) || (pwr_cnt == 0))
+		return (-1);
 	while (str[idx] != 0)
 	{
 		if (str[idx] == '%')
 		{
-			result = print_type(pfunc_arry, pap, str[idx + 1], &wr_cnt);
-			if (result < -1)
-				break ;
-			if (result == 0)
+			err_status = print_type(pfunc_arry, pap, str[idx + 1], pwr_cnt);
+			if (err_status == 0)
 				idx++;
+			if (err_status == -2)
+				return (-1);
 		}
 		else
 		{
-			if (print_not_type(str[idx], &wr_cnt) < 0) 
-				break ;
+			if (print_not_type(str[idx], pwr_cnt) < 0)
+				return (-1);
 		}
 		idx++;
 	}
-	return (wr_cnt);
+	return (0);
 }
 
 int	ft_printf(const char *str, ...)
@@ -92,9 +108,12 @@ int	ft_printf(const char *str, ...)
 	t_func		s_func_arry[MAX_OPTION_NUM];
 	int			wr_cnt;
 
-	fill_func_arry(s_func_arry);
+	if (fill_func_arry(s_func_arry) < 0)
+		return (-1);
 	va_start(ap, str);
-	wr_cnt = print_arg(str, s_func_arry, &ap);
+	wr_cnt = 0;
+	if (print_arg(str, s_func_arry, &ap, &wr_cnt) < 0)
+		return (-1);
 	va_end(ap);
 	return (wr_cnt);
 }

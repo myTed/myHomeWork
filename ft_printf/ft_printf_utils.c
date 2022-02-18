@@ -4,95 +4,75 @@
 size_t	ft_strlen(const char *str)
 {
 	size_t	idx;
+
 	idx = 0;
 	while (str[idx] != 0)
 		idx++;
 	return (idx);
 }
-/*
-int	ft_putnbr(int n, int is_unsigned, int base, char *base_str)
-{
-	char    ch;
-	long	long_number;
+
+int	ft_putnbr(
+		unsigned long long_number,
+		int base,
+		char *base_str,
+		int *perr_status
+		){
+	char	ch;
 	int		len;
+	int		tmp_len;
 
-	len = 0;
-	if (n < 0)
-	{
-		if (is_unsigned)
-			long_number = ((unsigned long)(n) << 32) >> 32;
-		else
-			long_number = (long)n * -1;
-	}
-	else
-		long_number = n;
-	if (long_number / base != 0)
-		len = ft_putnbr(long_number / base, is_unsigned, base, base_str);
-	ch = base_str[(long_number % base)];
-	write(1, &ch, 1);
-	return (++len);
-}
-*/
-
-int	ft_putnbr(unsigned long long_number, int is_unsigned, int base, char *base_str)
-{
-	char    ch;
-	int		len;
-
+	if (base_str == 0)
+		return (-1);
+	if (perr_status == 0)
+		return (-2);
 	len = 0;
 	if (long_number / base != 0)
-		len = ft_putnbr(long_number / base, is_unsigned, base, base_str);
+		len = ft_putnbr(long_number / base, base, base_str, perr_status);
 	ch = base_str[(long_number % base)];
-	write(1, &ch, 1);
-	return (++len);
+	tmp_len = write(1, &ch, 1);
+	if (tmp_len < 0)
+		*perr_status = 1;
+	len += tmp_len;
+	return (len);
 }
 
-int	type_u_printf(va_list *pap)
+int	type_u_printf(va_list *pap, int *perr_status)
 {
 	unsigned int	tmp;
+
+	if ((pap == 0) || (perr_status == 0))
+		return (-1);
 	tmp = va_arg(*pap, unsigned int);
-	return (ft_putnbr(tmp, 1, 10, "0123456789"));
+	return (ft_putnbr(tmp, 10, "0123456789", perr_status));
 }
-/*
-int	type_p_printf(va_list *pap)
+
+int	type_p_printf(va_list *pap, int *perr_status)
 {
 	size_t	tmp;
-	int		len;
-	int		sh_num;
+	ssize_t	wr_cnt;
 
+	if ((pap == 0) || (perr_status == 0))
+		return (-1);
 	tmp = va_arg(*pap, size_t);
-	write(1, "0x", 2);
-	len = 2;
-	if (tmp >> 32 != 0)
+	wr_cnt = write(1, "0x", 2);
+	if (wr_cnt < 0)
 	{
-		len += ft_putnbr(tmp >> 32, 1, 16, "0123456789abcdef");
-		sh_num = 28;
-		while ((!((unsigned int)tmp & (0xf << sh_num))) && (sh_num != 0))
-		{
-			write(1, "0", 1);
-			len++;
-			sh_num -= 4;
-		}
+		*perr_status = -1;
+		return (wr_cnt);
 	}
-	len += ft_putnbr(tmp, 1, 16, "0123456789abcdef");
-	return (len);
-}
-*/
-int	type_p_printf(va_list *pap)
-{
-	size_t	tmp;
-	int		len;
-
-	tmp = va_arg(*pap, size_t);
-	write(1, "0x", 2);
-	len = 2;
-	len += ft_putnbr(tmp, 1, 16, "0123456789abcdef");
-	return (len);
+	wr_cnt += ft_putnbr(tmp, 16, "0123456789abcdef", perr_status);
+	return (wr_cnt);
 }
 
-int	type_percent_printf(va_list *pap)
+int	type_percent_printf(va_list *pap, int *perr_status)
 {
+	ssize_t	wr_cnt;
+
 	(void)(pap);
-	write(1, "%", 1);
-	return (1);
+	if (perr_status == 0)
+		return (-1);
+	wr_cnt = write(1, "%", 1);
+	if (wr_cnt < 0)
+		*perr_status = -1;
+	return (wr_cnt);
 }
