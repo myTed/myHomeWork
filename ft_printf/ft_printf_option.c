@@ -47,6 +47,7 @@ int	type_d_printf(va_list *pap, int *perr_status)
 
 	if ((pap == 0) || (perr_status == 0))
 		return (-1);
+	wr_cnt = 0;
 	tmp = va_arg(*pap, int);
 	if (tmp < 0)
 	{

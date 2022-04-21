@@ -66,7 +66,7 @@ static int	print_not_type(const char ch, int *pw_cnt)
 	result = write(1, &ch, 1);
 	if (result < 0)
 		return (-1);
-	*pw_cnt = result;
+	*pw_cnt += result;
 	return (0);
 }
 
@@ -117,6 +117,7 @@ int	ft_printf(const char *str, ...)
 	va_end(ap);
 	return (wr_cnt);
 }
+
 /*
 int	main(void)
 {
