@@ -6,13 +6,13 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:02:40 by kyolee            #+#    #+#             */
-/*   Updated: 2022/01/07 16:21:00 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/04/28 19:36:52 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+/*
 #include <stdlib.h>
 #include <stdio.h>
-
+*/
 static void	skip_white_space(const char *str, int *idx)
 {
 	int	tmp_idx;
@@ -92,7 +92,7 @@ int	ft_atoi(const char *str)
 			return ((int)num);
 	}
 }
-
+/*
 int	main(int argc, char *argv[])
 {
 	if (argc != 2)
@@ -101,3 +101,4 @@ int	main(int argc, char *argv[])
 	printf("ft_atoi  %d\n",ft_atoi(argv[1]));
 	return (0);
 }
+*/

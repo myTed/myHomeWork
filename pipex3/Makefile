@@ -6,14 +6,21 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/22 16:25:58 by kyolee            #+#    #+#              #
-#    Updated: 2022/04/28 05:36:05 by kyolee           ###   ########.fr        #
+#    Updated: 2022/04/28 20:30:05 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC=gcc
+CC=cc
 CFLAGS=-Wall -Wextra -Werror
-SRCS=ft_pipex.c
-BONUS_SRCS=ft_pipex_bonus.c	ft_pipex_utils_gnl.c ft_pipex_utils_gnl_utils.c
+
+SRCS=ft_pipex_main.c	ft_pipex_utils_gnl.c 	ft_pipex_utils_gnl_utils.c\
+	 ft_pipex_arg.c		ft_pipex_cmd.c 			ft_pipex_file.c\
+	 ft_pipex_fd.c		ft_pipex_exec.c
+
+BONUS_SRCS=ft_pipex_main_bonus.c	ft_pipex_utils_gnl_bonus.c 	ft_pipex_utils_gnl_utils_bonus.c\
+		   ft_pipex_arg_bonus.c		ft_pipex_cmd_bonus.c 		ft_pipex_file_bonus.c\
+		   ft_pipex_fd_bonus.c		ft_pipex_exec_bonus.c
+
 LIB_SRCS=./libft/libft.a
 MANDATORY_OBJS=$(patsubst %.c, %.o, $(SRCS))
 BONUS_OBJS=$(patsubst %.c, %.o, $(BONUS_SRCS))

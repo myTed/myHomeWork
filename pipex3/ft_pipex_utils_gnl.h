@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipex_utils_gnl.h                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
+/*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/15 23:14:46 by kyolee            #+#    #+#             */
-/*   Updated: 2022/04/28 03:31:52 by kyolee           ###   ########.fr       */
+/*   Created: 2022/04/28 20:00:07 by kyolee            #+#    #+#             */
+/*   Updated: 2022/04/28 20:00:08 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef GET_NEXT_LINE_BONUS_H
-# define GET_NEXT_LINE_BONUS_H
+
+#ifndef FT_PIPEX_UTILS_GNL_H
+# define FT_PIPEX_UTILS_GNL_H
 # include <stddef.h>
 # include <sys/types.h>
 # define GNL_BUFFER_SIZE 128

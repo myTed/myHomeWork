@@ -1,4 +1,22 @@
-#include "ft_pipex_bonus.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_pipex_file.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/28 19:59:12 by kyolee            #+#    #+#             */
+/*   Updated: 2022/04/28 20:28:56 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ft_pipex.h"
+#include "libft/libft.h"
+#include "ft_pipex_utils_gnl.h"
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 int	open_infile_for_read(t_arg_info *parg, int *pfd)
 {
@@ -28,7 +46,6 @@ int	open_infile_for_read(t_arg_info *parg, int *pfd)
 	return (0);
 }
 
-
 int	open_infile(t_arg_info *parg, int *pfd)
 {
 	int	result;
@@ -43,8 +60,6 @@ int	open_infile(t_arg_info *parg, int *pfd)
 	}
 	return (open_infile_for_read(parg, pfd));
 }
-
-
 
 int	open_outfile(t_arg_info *parg, int *pfd)
 {
@@ -66,8 +81,7 @@ int	open_outfile(t_arg_info *parg, int *pfd)
 	return (0);
 }
 
-
-int write_heredoc(int fd, t_arg_info *parg)
+int	write_heredoc(int fd, t_arg_info *parg)
 {
 	char	*buff;
 
@@ -80,18 +94,16 @@ int write_heredoc(int fd, t_arg_info *parg)
 		buff = get_next_line(0);
 		if (buff == 0)
 			return (-1);
-		if (ft_strncmp(
-				buff, parg->here_info.limiter,
+		if (ft_strncmp(buff, parg->here_info.limiter,
 				ft_strlen(buff) - 1) == 0)
-						break;
+			break ;
 		if (write(fd, buff, ft_strlen(buff)) < 0)
-			break;
+			break ;
 		free(buff);
 	}
 	free(buff);
 	return (0);
 }
-
 
 int	make_heredoc_file(t_arg_info *parg)
 {
@@ -114,4 +126,3 @@ int	make_heredoc_file(t_arg_info *parg)
 	close(fd);
 	return (0);
 }
-

@@ -6,11 +6,11 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 23:00:16 by kyolee            #+#    #+#             */
-/*   Updated: 2022/04/28 03:33:22 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/04/28 17:16:15 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_pipex_utils_gnl.h"
+#include "ft_pipex_utils_gnl_bonus.h"
 #include <stdlib.h>
 
 t_list_gnl	*ft_lstnew_gnl(int fd, void *str, size_t str_len)

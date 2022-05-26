@@ -1,15 +1,20 @@
-#include <stdio.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/wait.h>
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_pipex_main.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/28 19:59:22 by kyolee            #+#    #+#             */
+/*   Updated: 2022/04/28 20:29:08 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ft_pipex.h"
 #include "libft/libft.h"
-#include "ft_pipex_bonus.h"
-#include "ft_pipex_utils_gnl_bonus.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 int	malloc_pipe(int argc, t_fd *ptfds, t_arg_info *parg)
 {
@@ -31,7 +36,7 @@ int	malloc_pipe(int argc, t_fd *ptfds, t_arg_info *parg)
 	return (0);
 }
 
-int free_pipe(t_fd *ptfds)
+int	free_pipe(t_fd *ptfds)
 {
 	if (ptfds == 0)
 		return (-1);
@@ -76,7 +81,7 @@ int	is_valid_argc(int argc, char **argv, char *here_doc)
 		return (-1);
 	if (argv[1] != 0)
 	{
-		if(ft_strncmp(argv[1], here_doc, ft_strlen(here_doc) + 1) == 0)
+		if (ft_strncmp(argv[1], here_doc, ft_strlen(here_doc) + 1) == 0)
 		{
 			if (argc < 6)
 			{
@@ -96,10 +101,10 @@ int	is_valid_argc(int argc, char **argv, char *here_doc)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	t_fd 		fds;
+	t_fd		fds;
 	t_arg_info	arg_inform;
 	int			last_cmd_status;
-	
+
 	if (is_valid_argc(argc, argv, "here_doc") < 0)
 		return (1);
 	if (fill_arg_inform(argc, argv, envp, &arg_inform) != 0)

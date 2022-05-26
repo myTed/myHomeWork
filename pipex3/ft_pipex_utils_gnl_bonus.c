@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pipex_utils_gnl.c                               :+:      :+:    :+:   */
+/*   ft_pipex_utils_gnl_bonus.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
+/*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/12 00:24:09 by kyolee            #+#    #+#             */
-/*   Updated: 2022/04/28 03:30:23 by kyolee           ###   ########.fr       */
+/*   Created: 2022/04/28 19:42:00 by kyolee            #+#    #+#             */
+/*   Updated: 2022/04/28 19:42:06 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -20,7 +20,7 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <fcntl.h>
-#include "ft_pipex_utils_gnl.h"
+#include "ft_pipex_utils_gnl_bonus.h"
 
 int	is_found_chr(const char *s, int c, size_t len)
 {
@@ -76,7 +76,8 @@ int	add_prev_line(int fd, char **pline, t_list_gnl **pplist)
 	{
 		if (plist->fd == fd)
 		{
-			tmp = ft_strjoin_gnl(plist->left, *pline, plist->left_len, line_len);
+			tmp = ft_strjoin_gnl(plist->left, *pline,
+					plist->left_len, line_len);
 			if (tmp == 0)
 				return (-1);
 			ft_lstdel_gnl(pplist, fd);
@@ -92,7 +93,7 @@ int	add_prev_line(int fd, char **pline, t_list_gnl **pplist)
 int	save_line(int fd, char **pline, t_list_gnl **pplist)
 {
 	size_t		line_len;
-	size_t		enter_pos;
+	size_t		ent_pos;
 	char		*tmp;
 	t_list_gnl	*new_lst;
 
@@ -101,20 +102,20 @@ int	save_line(int fd, char **pline, t_list_gnl **pplist)
 	line_len = ft_strlen_gnl(*pline);
 	if (is_found_chr(*pline, '\n', line_len - 1) == 0)
 		return (0);
-	enter_pos = 0;
-	while ((*pline)[enter_pos] != '\n')
-		enter_pos++;
-	tmp = ft_strjoin_gnl(&(*pline)[enter_pos + 1], 0, line_len - enter_pos - 1, 0);
+	ent_pos = 0;
+	while ((*pline)[ent_pos] != '\n')
+		ent_pos++;
+	tmp = ft_strjoin_gnl(&(*pline)[ent_pos + 1], 0, line_len - ent_pos - 1, 0);
 	if (tmp == 0)
 		return (-1);
-	new_lst = ft_lstnew_gnl(fd, tmp, line_len - enter_pos - 1);
+	new_lst = ft_lstnew_gnl(fd, tmp, line_len - ent_pos - 1);
 	if (new_lst == 0)
 	{
 		free(tmp);
 		return (-1);
 	}
 	ft_lstadd_back_gnl(pplist, new_lst);
-	(*pline)[enter_pos + 1] = 0;
+	(*pline)[ent_pos + 1] = 0;
 	return (0);
 }
 
