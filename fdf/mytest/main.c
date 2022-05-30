@@ -1,42 +1,206 @@
 #include "../mlx.h"
 #include <stdio.h>
-<<<<<<< HEAD
 #include <unistd.h>
 #include <stdlib.h>
+#include "fdf.h"
+#include <math.h>
 
-#define ESC 65307
+#define ESC 		65307	
+#define END_ROL_X	65367	
+#define DEL_ROL_Y	65535
+#define PGDN_ROL_Z	65366
 
-typedef struct s_color{
-	unsigned int blue:8;
-	unsigned int green:8;
-	unsigned int red:8;
-	unsigned int zero:8;
-} t_color;
+int draw_line(t_img *pimg, int start_y, int start_x, int end_y, int end_x, t_color color);
 
-
-typedef struct s_mlx
+void rotate_x(int *px, int *py, int *pz, double angle)
 {
-	void *mlx_ptr;
-	void *win_ptr;
-	void *img_ptr;
-} t_mlx;
+	double		radian;
+	int			tmp_y;
 
-typedef struct s_img
+	radian = PI * angle / 180.0;
+	tmp_y = *py;
+
+	
+	*py = (int)((cos(radian) * (tmp_y)) - (sin(radian) * (*pz)));
+	*pz = (int)((sin(radian) * (tmp_y)) + (cos(radian) * (*pz)));
+	
+	*px = *px;
+}
+
+void rotate_y(int *px, int *py, int *pz, double angle)
 {
-	unsigned int	*addr;
-	int				bpp;
-	int				size_line;
-	int				endian;
-} t_img;
+	double		radian;
+	int			tmp_x;
 
+	radian = PI * angle / 180.0;
+	tmp_x = *px;
+
+	*px = (int)((cos(radian) * (tmp_x)) + (sin(radian) * (*pz)));
+	*pz = (int)((-sin(radian) * (tmp_x)) + (cos(radian) * (*pz)));
+	*py = *py;
+}
+
+void rotate_z(int *px, int *py, int *pz, double angle)
+{
+	double 	radian;
+	int		tmp_x;
+	
+	radian = PI * angle / 180.0;
+	tmp_x = *px;
+
+	*px = (int)((cos(radian) * (tmp_x)) - (sin(radian) * (*py)));
+	*py = (int)((sin(radian) * (tmp_x)) + (cos(radian) * (*py)));
+	*pz = *pz;
+}
+
+void set_color(t_map_info *pmap, t_view_cord *pvcord, t_color color)
+{
+	int	idx;
+
+	idx = 0;
+	while (idx < (pmap->width * pmap->height))
+	{
+		pvcord[idx].color = color;
+		idx++;
+	}
+}
+
+
+void draw_row(t_img *pimg, t_map_info *pmap, t_view_cord *pvcord)
+{
+	int col_idx;
+	int	width_idx;
+	int	idx;
+
+	col_idx = 0;
+	idx = 0;
+	while (col_idx < pmap->height)
+	{
+		width_idx = 0;
+		while (width_idx < pmap->width - 1)
+		{
+			draw_line(pimg, pvcord[idx].x, pvcord[idx].y, pvcord[idx +1].x, pvcord[idx + 1].y,
+							pvcord[idx].color);
+			idx++;
+			width_idx++;
+		}
+		idx++;
+		col_idx++;
+	}
+}
+
+void draw_col(t_img *pimg, t_map_info *pmap, t_view_cord *pvcord)
+{
+	int	col_idx;
+	int	width_idx;
+	int	tmp_idx;
+	int	idx;
+	
+	width_idx = 0;
+	col_idx = 0;
+	idx = 0;
+	tmp_idx = 0;
+	while (width_idx < pmap->width)
+	{
+		col_idx = 0;
+		while (col_idx < pmap->height -1)
+		{
+			draw_line(pimg, pvcord[idx].x, pvcord[idx].y, pvcord[idx + pmap->width].x, pvcord[idx + pmap->width].y, pvcord[idx].color);
+			idx += pmap->width;
+			col_idx++;
+		}
+		idx = ++tmp_idx;
+		width_idx++;
+	}	
+}
+
+int fill_view_cordinate(t_map_info *pmap, t_view_cord *pvcord)
+{
+	int	idx;
+	t_cordinate *pcord;
+
+	if ((pmap == 0) || (pvcord == 0))
+		return (-1);
+	pcord = pmap->pcord;
+	idx = 0;
+	while (idx < (pmap->width * pmap->height))
+	{
+		pvcord[idx].x = (pcord[idx].x - (pmap->width / 2 )) * SCREEN_DX;
+		pvcord[idx].y = (pcord[idx].y - (pmap->height / 2 )) * SCREEN_DY;
+		pvcord[idx].z = (pcord[idx].z * SCREEN_DZ);
+		idx++;
+	}
+	return (0);
+}
 
 int	key_event(int keycode, void *param)
 {
+	t_draw_info *pdi;
+	int	idx;
+	static int	angle;
+	t_color		color;
+
+	pdi = (t_draw_info *)param;
+
 	if (keycode == ESC)
 	{
-		mlx_destroy_window(((t_mlx *)param)->mlx_ptr, ((t_mlx *)param)->win_ptr);
+		mlx_destroy_window(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr);
 		exit(0);
 	}
+	else if (keycode == END_ROL_X)
+	{
+		idx = 0;
+		color.blue = 0;
+		color.green = 0;
+		color.red = 0;
+		set_color(pdi->pmap, pdi->pvcord, color);
+		draw_row(pdi->pimg, pdi->pmap, pdi->pvcord);
+		draw_col(pdi->pimg, pdi->pmap, pdi->pvcord);
+		mlx_put_image_to_window(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr, pdi->pmlx->img_ptr, 0, 0);
+		
+		angle += 5;
+		if (angle > 360)
+			angle = 0;
+		//fill_view_cordinate(pdi->pmap, pdi->pvcord);
+		idx = 0;
+		/*
+		while (idx < pdi->pmap->width * pdi->pmap->height)
+		{
+			pdi->pvcord[idx].x -= 1000;
+			pdi->pvcord[idx].y -= 1000;
+			idx++;
+		}
+		*/
+		idx = 0;
+		while (idx < pdi->pmap->width * pdi->pmap->height)
+		{
+			rotate_z(&(pdi->pmap->pcord[idx].x), &(pdi->pmap->pcord[idx].y), &(pdi->pmap->pcord[idx].z), angle);
+			idx++;
+		}
+		fill_view_cordinate(pdi->pmap, pdi->pvcord);
+		idx = 0;
+		while (idx < pdi->pmap->width * pdi->pmap->height)
+		{
+			pdi->pvcord[idx].x += 1000;
+			pdi->pvcord[idx].y += 1000;
+			idx++;
+		}
+		color.green = 255;
+		set_color(pdi->pmap, pdi->pvcord, color);
+		draw_row(pdi->pimg, pdi->pmap, pdi->pvcord);
+		draw_col(pdi->pimg, pdi->pmap, pdi->pvcord);
+		
+		mlx_put_image_to_window(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr, pdi->pmlx->img_ptr, 0, 0);
+	}
+	else if (keycode == DEL_ROL_Y)
+	{
+
+	}
+	else if (keycode == PGDN_ROL_Z)
+	{
+
+	}
+	
 	printf("keycode: %d\n", keycode);
 	return (0);
 }
@@ -83,74 +247,103 @@ int	set_pixel(t_img *pimg, int y, int x, t_color color)
 }
 
 
-int draw_line(t_mlx *pmlx, t_img *pimg, int start_y, int start_x, int end_y, int end_x);
-
 int	main(int argc, char *argv[])
 {
-	t_mlx min;
+	t_mlx 		min;
+	t_map_info 	map;
+	t_view_cord *pvcord;
+	t_color		color;
 
+	if (argc != 2)
+	{
+		perror("program filename");
+		return (-1);
+	}
 	min.mlx_ptr = mlx_init();
 	if (min.mlx_ptr == 0)
 	{
 		perror("can't open connection Xwinodw");
 		return (-1);
 	}
-	min.win_ptr = mlx_new_window(min.mlx_ptr, 600, 600, "first my Winodw for minilibX");
+	min.win_ptr = mlx_new_window(min.mlx_ptr, 2000, 2000, "first my Winodw for minilibX");
 	if (min.win_ptr == 0)
 	{
 		perror("can't create new window");
 		return (-1);
 	}
 
-	mlx_key_hook(min.win_ptr, key_event, &min);
 	mlx_mouse_hook(min.win_ptr, mouse_event, 0);
 	mlx_expose_hook(min.win_ptr, expose_event, &min);	
 	mlx_hook(min.win_ptr, 17, 0, close_event, &min);
 	
-	
-	min.img_ptr = mlx_new_image(min.mlx_ptr, 600, 600);
+	min.img_ptr = mlx_new_image(min.mlx_ptr, 2000, 2000);
 	if (min.img_ptr == 0)
 	{
 		perror("can't create new image");
 		return (-1);
 	}
-
-
-	t_color	col;
+	//t_color	col;
 	t_img	img;
-
 
 	img.addr = (unsigned int *)mlx_get_data_addr(min.img_ptr, &img.bpp, &img.size_line, &img.endian);
 	if (img.addr == 0)
 		return (-1);
 	printf("bpp : %d, size_line : %d, endian : %d\n", img.bpp, img.size_line, img.endian);
-	col.blue = 0;
-	col.green = 0;
-	col.red = 255;
-	col.zero = 0;
-	int x = 0;
-	int	y = 0;
-
 	
-	while (y < 400)
+	if (fill_map_data(argv[1], &map) < 0)
+		return (-1);
+	pvcord = malloc(sizeof(t_view_cord) * map.width * map.height);
+	if (pvcord == 0)
+		return (-1);
+	if (fill_view_cordinate(&map, pvcord) < 0)
+		return (-1);
+	int	idx = 0;
+	/*		
+	while (idx < map.width * map.height)
 	{
-		x = 0;
-		while (x < 400)
-		{
-			set_pixel(&img, y, x, col);
-			x++;
-		}
-		y++;
+		rotate_z(&pvcord[idx].x, &pvcord[idx].y, &pvcord[idx].z, 45);
+		idx++;
 	}
+	*/
+	idx = 0;
+	/*	
+	while (idx < map.width * map.height)
+	{
+		rotate_x(&pvcord[idx].x, &pvcord[idx].y, &pvcord[idx].z, 30);
+		idx++;
+	}
+	*/
+	idx = 0;
+	while (idx < map.width * map.height)
+	{
+		pvcord[idx].x += 1000;
+		pvcord[idx].y += 1000;
+		idx++;
+	}
+	t_draw_info draw_info;
+
+	draw_info.pimg = &img;
+	draw_info.pmap = &map;
+	draw_info.pvcord = pvcord;
+	draw_info.pmlx = &min;
 	
-	draw_line(&min, &img, atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4]));
-	//mlx_put_image_to_window(min.mlx_ptr, min.win_ptr, min.img_ptr, 0, 0);	
+	color.blue = 0;
+	color.green = 255;
+	color.red = 0;
+	set_color(&map, pvcord, color);
+	draw_row(&img, &map, pvcord);
+	draw_col(&img, &map, pvcord);	
+	
+	mlx_put_image_to_window(min.mlx_ptr, min.win_ptr, min.img_ptr, 0, 0);	
+	
+	mlx_key_hook(min.win_ptr, key_event, &draw_info);
 	mlx_loop(min.mlx_ptr);
 	return (0);
 }
 
 
-int draw_line(t_mlx *pmlx, t_img *pimg, int start_x, int start_y, int end_x, int end_y)
+
+int draw_line(t_img *pimg, int start_x, int start_y, int end_x, int end_y, t_color col)
 {
 	int	tmp_x;
 	int	tmp_y;
@@ -160,41 +353,41 @@ int draw_line(t_mlx *pmlx, t_img *pimg, int start_x, int start_y, int end_x, int
 	int	del_x;
 	int	del_y;
 
-	t_color	col;
 
 	if (pimg == 0)
 		return (-1);
-	col.zero = 0;
-	col.red = 0;
-	col.green = 0;
-	col.blue = 255;
-
-	set_pixel(pimg, start_y, start_x, col);
+	if (start_x < 0 || start_x > 2000)
+		return (-1);
+	if (start_y < 0 || start_y > 2000)
+		return (-1);
+	if (end_x < 0 || end_x > 2000)
+		return (-1);
+	if (end_y < 0 || end_y > 2000)
+		return (-1);
+	//set_pixel(pimg, start_y, start_x, col);
 	
 	width = abs(end_x - start_x);
 	height = abs(end_y - start_y);
-	del_x = end_x - start_x > 0? 1 : -1;
-	del_y = end_y - start_y > 0? 1: -1;
-	tmp_x = start_x + del_x;
+	del_x = (end_x - start_x) >= 0? 1 : -1;
+	del_y = (end_y - start_y) >= 0? 1: -1;
+	tmp_x = start_x;
 	tmp_y = start_y;
 	if (height > width)
 	{
 		middle_eval = height - (2 * width);
 		while (tmp_y != end_y)
 		{
+			set_pixel(pimg, tmp_y, tmp_x, col);
 			if (middle_eval > 0)
 			{
-				set_pixel(pimg, tmp_y, tmp_x, col);
 				middle_eval += -2 * (width);
 			}
 			else
 			{
 				tmp_x += del_x;
-				set_pixel(pimg, tmp_y, tmp_x, col);
 				middle_eval += 2 * (height - width);
 			}
 			tmp_y += del_y;
-			mlx_put_image_to_window(pmlx->mlx_ptr, pmlx->win_ptr, pmlx->img_ptr, 0, 0);	
 		}
 	}
 	else
@@ -202,137 +395,19 @@ int draw_line(t_mlx *pmlx, t_img *pimg, int start_x, int start_y, int end_x, int
 		middle_eval = (2 * height) - width;
 		while (tmp_x != end_x)
 		{
+			set_pixel(pimg, tmp_y, tmp_x, col);
 			if (middle_eval < 0)
 			{
-				set_pixel(pimg, tmp_y, tmp_x, col);
 				middle_eval += 2 * (height);
 			}
 			else
 			{
 				tmp_y += del_y;
-				set_pixel(pimg, tmp_y, tmp_x, col);
 				middle_eval += 2 * (height - width);
 			}
 			tmp_x += del_x;
-			mlx_put_image_to_window(pmlx->mlx_ptr, pmlx->win_ptr, pmlx->img_ptr, 0, 0);	
 		}
 	}
-	set_pixel(pimg, end_y, end_x, col);
-
-=======
-#include <stdlib.h>
-
-#define ESC 53
-
-typedef struct s_color
-{
-	unsigned int	blue :8;
-	unsigned int	green :8;
-	unsigned int	red	  :8;
-	unsigned int	zero  :8;
-} t_color;
-
-
-int	key_event(int keycode)
-{
-	if (keycode == ESC)
-		exit(1);
-	printf("%d\n", keycode);
 	return (0);
 }
 
-
-int	mouse_event(int button, int x, int y)
-{
-	printf("button: %d (%d, %d)\n", button, x, y);
-	return (0);
-}
-
-
-int	main(void)
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-	void	*img_ptr;
-
-	int		i;
-	t_color	px_color;
-
-	mlx_ptr = mlx_init();
-	if (mlx_ptr == 0)
-	{
-		perror("can't connect to x window server");
-		exit(1);
-	}
-	win_ptr = mlx_new_window(mlx_ptr, 500, 500, "test1");
-	if (win_ptr == 0)
-	{
-		perror("can't make window");
-		exit(1);
-	}
-	
-	mlx_key_hook(win_ptr, key_event, 0);
-	mlx_mouse_hook(win_ptr, mouse_event, 0);
-
-	i = 0;
-	px_color.zero = 0;
-	px_color.red = 255;
-	px_color.green = 255;
-	px_color.blue = 0;
-	int	*pcolor;
-
-	
-	pcolor = (int *)&px_color;
-	/*
-	while (i < 100)
-	{
-		mlx_pixel_put(mlx_ptr, win_ptr, 100, 100 + i, *pcolor);
-		i++;
-	}
-	i+=10;
-	*/
-	//mlx_string_put(mlx_ptr, win_ptr, 100, 100, *pcolor, "I'm test!!!!");	
-	img_ptr = mlx_new_image(mlx_ptr, 200, 200);
-	if (img_ptr == 0)
-	{
-		perror("can't make new image");
-		return (-1);
-	}
-	int	bpp;
-	int	size_line;
-	int	endian;
-	char	*image_addr;
-
-	image_addr = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
-	if (image_addr == 0)
-	{
-		perror("can't get data addr");
-		return (-1);
-	}
-	printf("bpp : %d, size_line : %d, endian : %d, image_addr : %p\n", 
-			bpp, size_line, endian, image_addr);
-	
-	t_color green;
-	green.zero = 0;
-	green.red = 0;
-	green.green = 255;
-	green.blue = 0;
-	unsigned int	tr_fm_color;
-
-	tr_fm_color = mlx_get_color_value(mlx_ptr, *(int *)&green);
-	int *piaddr;
-	printf("tr_fm_color : %d\n", tr_fm_color);
-	piaddr = (int *)image_addr;
-	i = 0;
-	
-	while (i < 100)
-	{
-		piaddr[i] = *(int *)&tr_fm_color;
-		i++;
-	}
-	mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 0, 0);
-
-	mlx_loop(mlx_ptr);
->>>>>>> c6b5e906b52c827ac43c4adec42e91e71598eefd
-	return (0);
-}
