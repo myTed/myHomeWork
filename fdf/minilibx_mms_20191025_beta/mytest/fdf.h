@@ -6,25 +6,25 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:21:12 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/03 06:12:55 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/06/03 20:17:44 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define	SCREEN_DX	30
-#define	SCREEN_DY	30
-#define SCREEN_DZ	10
-#define	PI			3.1415926535
-
-#define ESC 		65307	
-#define END_ROL_X	65367	
-#define DEL_ROL_Y	65535
-#define PGDN_ROL_Z	65366
-#define	UP			65362				
-#define DOWN		65364
-#define LEFT		65361
-#define RIGHT		65363
-#define SCALE_UP	65360
-#define SCALE_DOWN	65365
+#define	SCREEN_DX		30
+#define	SCREEN_DY		30
+#define SCREEN_DZ		10
+#define	PI				3.1415926535
+#define	ROTATION_DEGREE	10.0
+#define ESC 		53//65307	
+#define END_ROL_X	117//65367	
+#define DEL_ROL_Y	119//65535
+#define PGDN_ROL_Z	121//65366
+#define	UP			126//65362				
+#define DOWN		125//65364
+#define LEFT		123//65361
+#define RIGHT		124//65363
+#define SCALE_UP	115//65360
+#define SCALE_DOWN	116//65365
 
 typedef struct s_color
 {
@@ -58,12 +58,12 @@ typedef struct s_view_cord
 	t_color color;
 } t_view_cord;
 
-typedef struct s_camera
+typedef struct s_rotate_cord
 {
-	int	x;
-	int	y;
-	int	z;
-} t_camera_view;
+	double	x;
+	double	y;
+	double	z;
+} t_rotate_cord;
 
 typedef struct s_mlx
 {
@@ -86,15 +86,22 @@ typedef struct s_info
 	t_img			*pimg;
 	t_map_info		*pmap;
 	t_view_cord		*pvcord;
+	t_rotate_cord	*prcord;
 	t_mlx			*pmlx;
 	double			scale;
-	double			rol_x_angle;
-	double			rol_y_angle;
-	double			rol_z_angle;
-	double			up;
+	double			down;
 	double			right;	
 } t_draw_info;
 
 int	ft_atoi_base(char *str, char *base);
 int	fill_map_data(char *file_name, t_map_info *pmap);
 
+void rotate_rcord_x(t_draw_info *pdi, double angle);
+
+void rotate_rcord_y(t_draw_info *pdi, double angle);
+
+void rotate_rcord_z(t_draw_info *pid, double angle);
+
+void rotate_x(double *px, double *py, double *pz, double angle);
+void rotate_y(double *px, double *py, double *pz, double angle);
+void rotate_z(double *px, double *py, double *pz, double angle);
