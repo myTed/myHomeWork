@@ -6,14 +6,14 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/22 16:25:58 by kyolee            #+#    #+#              #
-#    Updated: 2022/06/03 20:19:05 by kyolee           ###   ########.fr        #
+#    Updated: 2022/06/08 22:48:13 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC=cc
 CFLAGS=-Wall -Wextra -Werror -g
 
-SRCS= main.c map.c map_utils.c rotate.c
+SRCS= main.c map.c map_utils.c rotate.c matrix.c
 
 #BONUS_SRCS=ft_pipex_main_bonus.c	ft_pipex_utils_gnl_bonus.c 	ft_pipex_utils_gnl_utils_bonus.c\
 		   ft_pipex_arg_bonus.c		ft_pipex_cmd_bonus.c 		ft_pipex_file_bonus.c\
@@ -36,8 +36,8 @@ NAME=fdf
 all:$(NAME)
 
 $(NAME):$(OBJECTS) $(LIB_SRCS)
-	$(CC) $(CFLAGS) -o $@ $^ -lmlx -framework OpenGL -framework AppKit
-
+	$(CC) $(CFLAGS) -v -o $@ $^ -L. -lmlx -framework OpenGL -framework AppKit
+# -fsanitize=address 
 $(LIB_SRCS) :
 	cd libft && make
 	cd gnl && make

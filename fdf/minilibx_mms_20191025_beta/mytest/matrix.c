@@ -82,18 +82,18 @@ void multiply_matrix(t_matrix *pvm, t_matrix *prm, t_matrix *pdest)
 	ft_memcpy(pdest, &tmp, sizeof(tmp));
 }
 
-void multiply_vector(t_matrix *pvm, t_cordinate *porg, t_view_cord *pview)
+void multiply_vector(t_matrix *pvm, t_view_cord *psrc, t_view_cord *pdest)
 {
 	double	tmp_x;
 	double	tmp_y;
 	double	tmp_z;
 
-	tmp_x = porg->x;
-	tmp_y = porg->y;
-	tmp_z = porg->z;
-	pview->x = (pvm->r1[0] * tmp_x) + (pvm->r1[1] * tmp_y) + (pvm->r1[2] * tmp_z);
-	pview->y = (pvm->r2[0] * tmp_x) + (pvm->r2[1] * tmp_y) + (pvm->r2[2] * tmp_z);
-	pview->z = (pvm->r3[0] * tmp_x) + (pvm->r3[2] * tmp_y) + (pvm->r3[2] * tmp_z);
+	tmp_x = psrc->x;
+	tmp_y = psrc->y;
+	tmp_z = psrc->z;
+	pdest->x = (pvm->r1[0] * tmp_x) + (pvm->r1[1] * tmp_y) + (pvm->r1[2] * tmp_z);
+	pdest->y = (pvm->r2[0] * tmp_x) + (pvm->r2[1] * tmp_y) + (pvm->r2[2] * tmp_z);
+	pdest->z = (pvm->r3[0] * tmp_x) + (pvm->r3[2] * tmp_y) + (pvm->r3[2] * tmp_z);
 }
 
 void make_view_cordinate(t_draw_info *pdi)
@@ -103,7 +103,7 @@ void make_view_cordinate(t_draw_info *pdi)
 	idx = 0;
 	while (idx < (pdi->pmap->height) * (pdi->pmap->width))
 	{
-		multiply_vector(pdi->pview_m, &(pdi->pmap->pcord[idx]), &(pdi->pvcord[idx]));
+		multiply_vector(pdi->pm_view, &(pdi->pvcord[idx]), &(pdi->pvcord[idx]));
 		idx++;
 	}
 }
@@ -120,7 +120,7 @@ void make_matrix_isometric(t_draw_info *pdi)
 	make_matrix_rotate_x(&x, -(90 + 35.264));
 	multiply_matrix(&z, &x, &tmp);
 	make_matrix_rotate_z(&z, 45);
-	multiply_matrix(&tmp, &z, pdi->piso_m);
+	multiply_matrix(&tmp, &z, pdi->pm_iso);
 }
 
 void	init_matrix(t_matrix *prm)
@@ -131,9 +131,33 @@ void	init_matrix(t_matrix *prm)
 	prm->m[2][2] = 1;
 }
 
+void	make_matrix_top_view(t_matrix *ptvm)
+{
+	ft_memset(ptvm, 0, sizeof(t_matrix));
+	ptvm->m[0][1] = 1;
+	ptvm->m[1][0] = 1;
+	ptvm->m[2][2] = -1;
+}
+
+void	make_matrix_front_view(t_matrix *pfvm)
+{
+	ft_memset(pfvm, 0, sizeof(t_matrix));
+	pfvm->m[0][1] = 1;
+	pfvm->m[1][2] = -1;
+	pfvm->m[2][0] = -1;
+}
+
+void	make_matrix_right_view(t_matrix *prvm)
+{
+	ft_memset(prvm, 0, sizeof(t_matrix));
+	prvm->m[0][0] = -1;
+	prvm->m[1][2] = -1;
+	prvm->m[2][1] = -1;
+}
+
 void make_final_matrix(t_draw_info *pdi)
 {
-	multiply_matrix(pdi->piso_m, pdi->protate_m, pdi->pview_m);
+	multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
 }
 
 

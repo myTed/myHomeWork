@@ -6,13 +6,13 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:21:12 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/08 12:17:19 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/06/08 18:57:01 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define	SCREEN_DX		30
-#define	SCREEN_DY		30
-#define SCREEN_DZ		10
+#define	SCREEN_DX		10
+#define	SCREEN_DY		10
+#define SCREEN_DZ		5
 #define	PI				3.1415926535
 #define	ROTATION_DEGREE	10.0
 #define ESC 		53//65307	
@@ -25,7 +25,9 @@
 #define RIGHT		124//65363
 #define SCALE_UP	115//65360
 #define SCALE_DOWN	116//65365
-
+#define FRONT_VIEW	18
+#define TOP_VIEW	19
+#define	RIGHT_VIEW	20
 typedef struct s_color
 {
 	unsigned int	blue:8;
@@ -81,18 +83,6 @@ typedef struct s_img
 } t_img;
 
 
-typedef struct s_info
-{
-	t_img			*pimg;
-	t_map_info		*pmap;
-	t_view_cord		*pvcord;
-	t_rotate_cord	*prcord;
-	t_mlx			*pmlx;
-	double			scale;
-	double			down;
-	double			right;	
-} t_draw_info;
-
 typedef double t_row[3];
 
 typedef struct s_matrix
@@ -111,6 +101,22 @@ typedef struct s_matrix
 		double m[3][3];
 	};
 } t_matrix;
+
+typedef struct s_info
+{
+	t_img			*pimg;
+	t_map_info		*pmap;
+	t_view_cord		*pvcord;
+	t_rotate_cord	*prcord;
+	t_mlx			*pmlx;
+	t_matrix		*pm_iso;
+	t_matrix		*pm_rotate;
+	t_matrix		*pm_view;
+	double			scale;
+	double			down;
+	double			right;	
+} t_draw_info;
+
 		
 
 
@@ -126,3 +132,14 @@ void rotate_rcord_z(t_draw_info *pid, double angle);
 void rotate_x(double *px, double *py, double *pz, double angle);
 void rotate_y(double *px, double *py, double *pz, double angle);
 void rotate_z(double *px, double *py, double *pz, double angle);
+void	init_matrix(t_matrix *prm);
+void	make_final_matrix(t_draw_info *pdi);
+void	make_matrix_isometric(t_draw_info *pdi);
+void	make_view_cordinate(t_draw_info *pdi);
+void	multiply_matrix(t_matrix *pvm, t_matrix *prm, t_matrix *pdest);
+void	make_matrix_rotate_x(t_matrix *pm, double angle);
+void	make_matrix_rotate_y(t_matrix *pm, double angle);
+void	make_matrix_rotate_z(t_matrix *pm, double angle);
+void	make_matrix_right_view(t_matrix *prvm);
+void	make_matrix_front_view(t_matrix *pfvm);
+void	make_matrix_top_view(t_matrix *ptvm);

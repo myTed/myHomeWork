@@ -69,24 +69,7 @@ void draw_col(t_img *pimg, t_map_info *pmap, t_view_cord *pvcord)
 		width_idx++;
 	}	
 }
-
-int fill_rotate_cordinate(t_draw_info *pdi)
-{
-	int	idx;
-
-	if (pdi == 0)
-		return (-1);
-	idx = 0;
-	while (idx < (pdi->pmap->width * pdi->pmap->height))
-	{
-		pdi->prcord[idx].x = (pdi->pmap->pcord[idx].x - (pdi->pmap->height / 2 ));
-		pdi->prcord[idx].y = (pdi->pmap->pcord[idx].y - (pdi->pmap->width / 2 ));
-		pdi->prcord[idx].z = pdi->pmap->pcord[idx].z;
-		idx++;
-	}
-	return (0);
-}
-
+/*
 int	iso_metric(t_draw_info *pdi)
 {
 	int	idx;
@@ -115,7 +98,7 @@ int	iso_metric(t_draw_info *pdi)
 	}
 	return (0);
 }
-
+*/
 int iso_metric2(t_draw_info *pdi)
 {
 	double	tmp_x;
@@ -161,11 +144,12 @@ int	draw_screen(t_draw_info *pdi)
 	t_color color;
 	int		idx;
 
+	
 	idx = 0;
 	while (idx < pdi->pmap->width * pdi->pmap->height)
 	{
-		pdi->pvcord[idx].x *= (SCREEN_DX * pdi->scale);
-		pdi->pvcord[idx].y *= (SCREEN_DY * pdi->scale);
+		pdi->pvcord[idx].x *= (SCREEN_DX * (1.0 + pdi->scale));
+		pdi->pvcord[idx].y *= (SCREEN_DY * (1.0 + pdi->scale));
 		pdi->pvcord[idx].z *= SCREEN_DZ;
 		idx++;
 	}
@@ -187,6 +171,21 @@ int	draw_screen(t_draw_info *pdi)
 	return (0);
 }
 
+
+void fill_cordinate_view(t_draw_info *pdi)
+{
+	int	idx;
+
+	idx = 0;
+	while (idx < pdi->pmap->width * pdi->pmap->height)
+	{
+		pdi->pvcord[idx].x = pdi->pmap->pcord[idx].x - (pdi->pmap->height/2);
+		pdi->pvcord[idx].y = pdi->pmap->pcord[idx].y - (pdi->pmap->width/2);
+		pdi->pvcord[idx].z = pdi->pmap->pcord[idx].z;
+		idx++;
+	}
+}
+
 int	key_event(int keycode, void *param)
 {
 	t_draw_info *pdi;
@@ -194,58 +193,95 @@ int	key_event(int keycode, void *param)
 	pdi = (t_draw_info *)param;
 	if (keycode == ESC)
 	{
+
+		mlx_destroy_image(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr);
 		mlx_destroy_window(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr);
+		free(pdi->pvcord);
 		exit(0);
 	}
 	clear_screen(pdi);
 
 	if (keycode == END_ROL_X)
-	{	
-		rotate_rcord_x(pdi,-ROTATION_DEGREE);
-		iso_metric(pdi);
+	{
+		t_matrix	m_rotate;
+
+		make_matrix_rotate_x(&m_rotate, -10);
+		multiply_matrix(pdi->pm_rotate, &m_rotate, pdi->pm_rotate);
+		multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
+		printf("rotate x\n");
 	}
 	else if (keycode == DEL_ROL_Y)
 	{
-		rotate_rcord_y(pdi, -ROTATION_DEGREE);	
-		iso_metric(pdi);
+		t_matrix	m_rotate;
+
+		make_matrix_rotate_y(&m_rotate, -10);
+		multiply_matrix(pdi->pm_rotate, &m_rotate, pdi->pm_rotate);
+		multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
+		printf("rotate y\n");
 	}
 	else if (keycode == PGDN_ROL_Z)
 	{
-		rotate_rcord_z(pdi, -ROTATION_DEGREE);			
-		iso_metric(pdi);
+		t_matrix	m_rotate;
+
+		make_matrix_rotate_z(&m_rotate, -10);
+		multiply_matrix(pdi->pm_rotate, &m_rotate, pdi->pm_rotate);
+		multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
+		printf("rotate z\n");
 	}
 	else if (keycode == UP)
 	{
 		pdi->down -= SCREEN_DY;
-		iso_metric(pdi);
-		
 	}
 	else if (keycode == DOWN)
 	{
 		pdi->down += SCREEN_DY;
-		iso_metric(pdi);
 	}
 	else if (keycode == LEFT)
 	{
 		pdi->right -= SCREEN_DX;
-		iso_metric(pdi);
-		
 	}
 	else if (keycode == RIGHT)
 	{
 		pdi->right += SCREEN_DX;
-		iso_metric(pdi);
 	}
 	else if (keycode == SCALE_UP)
 	{
 		pdi->scale += 0.2;
-		iso_metric(pdi);
+		if (pdi->scale >= 4.0)
+			pdi->scale = 4.0;
 	}
 	else if (keycode == SCALE_DOWN)
 	{
 		pdi->scale -= 0.2;
-		iso_metric(pdi);
+		if (pdi->scale <= -0.9)
+			pdi->scale = -0.9;
 	}
+	else if (keycode == TOP_VIEW)
+	{
+		t_matrix	m_top;
+		t_matrix	m_unit;
+		make_matrix_top_view(&m_top);
+		init_matrix(&m_unit);
+		multiply_matrix(&m_top, &m_unit, pdi->pm_view);
+	}
+	else if (keycode == RIGHT_VIEW)
+	{
+		t_matrix	m_right;
+		t_matrix	m_unit;
+		make_matrix_right_view(&m_right);
+		init_matrix(&m_unit);
+		multiply_matrix(&m_right, &m_unit, pdi->pm_view);
+	}
+	else if (keycode == FRONT_VIEW)
+	{
+		t_matrix	m_front;
+		t_matrix	m_unit;
+		make_matrix_front_view(&m_front);
+		init_matrix(&m_unit);
+		multiply_matrix(&m_front, &m_unit, pdi->pm_view);
+	}
+	fill_cordinate_view(pdi);
+	make_view_cordinate(pdi);
 	draw_screen(pdi);	
 	printf("keycode: %d\n", keycode);
 	return (0);
@@ -302,7 +338,6 @@ int draw_line(t_img *pimg, int start_x, int start_y, int end_x, int end_y, t_col
 	int	del_x;
 	int	del_y;
 
-
 	if (pimg == 0)
 		return (-1);
 	if (start_x < 0 || start_x >= 2000)
@@ -313,8 +348,6 @@ int draw_line(t_img *pimg, int start_x, int start_y, int end_x, int end_y, t_col
 		return (-1);
 	if (end_y < 0 || end_y >= 2000)
 		return (-1);
-	//set_pixel(pimg, start_y, start_x, col);
-	
 	width = abs(end_x - start_x);
 	height = abs(end_y - start_y);
 	del_x = (end_x - start_x) >= 0? 1 : -1;
@@ -365,7 +398,6 @@ int	main(int argc, char *argv[])
 	t_mlx 			min;
 	t_map_info 		map;
 	t_view_cord 	*pvcord;
-	t_rotate_cord	*prcord;
 
 	if (argc != 2)
 	{
@@ -395,7 +427,6 @@ int	main(int argc, char *argv[])
 		perror("can't create new image");
 		return (-1);
 	}
-	//t_color	col;
 	t_img	img;
 
 	img.addr = (unsigned int *)mlx_get_data_addr(min.img_ptr, &img.bpp, &img.size_line, &img.endian);
@@ -406,29 +437,31 @@ int	main(int argc, char *argv[])
 	if (fill_map_data(argv[1], &map) < 0)
 		return (-1);
 	pvcord = malloc(sizeof(t_view_cord) * map.width * map.height);
-	if (pvcord == 0)
+	if (pvcord == NULL)
 		return (-1);
-	prcord = malloc(sizeof(t_rotate_cord) * map.width * map.height);
-	if (prcord == 0)
-		return (-1);
-	
-
 	printf("map: width : %d, height: %d\n", map.width, map.height);
 	
 	t_draw_info draw_info;
+	t_matrix		m_iso;
+	t_matrix		m_view;
+	t_matrix		m_rotate;
+
 	ft_memset(&draw_info, 0, sizeof(t_draw_info));
 
 	draw_info.pimg = &img;
 	draw_info.pmap = &map;
 	draw_info.pvcord = pvcord;
-	draw_info.prcord = prcord;
 	draw_info.pmlx = &min;
-	draw_info.scale = 1.0;
+	draw_info.pm_iso = &m_iso;
+	draw_info.pm_view = &m_view;
+	draw_info.pm_rotate = &m_rotate;
 
-	if (fill_rotate_cordinate(&draw_info) < 0)
-		return (-1);
-	iso_metric(&draw_info);
-	
+	make_matrix_isometric(&draw_info);
+	init_matrix(&m_rotate);
+	init_matrix(&m_view);
+	multiply_matrix(draw_info.pm_iso, draw_info.pm_rotate, draw_info.pm_view);
+	fill_cordinate_view(&draw_info);
+	make_view_cordinate(&draw_info);
 	draw_screen(&draw_info);
 
 	mlx_key_hook(min.win_ptr, key_event, &draw_info);
