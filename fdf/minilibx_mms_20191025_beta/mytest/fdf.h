@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:21:12 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/03 20:17:44 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/06/08 12:17:19 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,27 @@ typedef struct s_info
 	double			down;
 	double			right;	
 } t_draw_info;
+
+typedef double t_row[3];
+
+typedef struct s_matrix
+{
+	union {
+		struct {
+			double _11, _12, _13;
+			double _21, _22, _23;
+			double _31, _32, _33;
+		};
+		struct {
+			t_row   r1;
+			t_row   r2;
+			t_row   r3;
+		};
+		double m[3][3];
+	};
+} t_matrix;
+		
+
 
 int	ft_atoi_base(char *str, char *base);
 int	fill_map_data(char *file_name, t_map_info *pmap);
