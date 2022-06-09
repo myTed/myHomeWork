@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:21:12 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/08 18:57:01 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/06/09 00:54:38 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 #define SCREEN_DZ		5
 #define	PI				3.1415926535
 #define	ROTATION_DEGREE	10.0
-#define ESC 		53//65307	
-#define END_ROL_X	117//65367	
-#define DEL_ROL_Y	119//65535
-#define PGDN_ROL_Z	121//65366
-#define	UP			126//65362				
-#define DOWN		125//65364
-#define LEFT		123//65361
-#define RIGHT		124//65363
-#define SCALE_UP	115//65360
-#define SCALE_DOWN	116//65365
+#define ESC 		65307//53//65307	
+#define END_ROL_X	65367//117//65367	
+#define DEL_ROL_Y	65535//119//65535
+#define PGDN_ROL_Z	65366//121//65366
+#define	UP			65362//126//65362				
+#define DOWN		65364//125//65364
+#define LEFT		65361//123//65361
+#define RIGHT		65363//124//65363
+#define SCALE_UP	65360//115//65360
+#define SCALE_DOWN	65365//116//65365
 #define FRONT_VIEW	18
 #define TOP_VIEW	19
 #define	RIGHT_VIEW	20

@@ -6,11 +6,11 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/26 14:38:14 by kyolee            #+#    #+#              #
-#    Updated: 2022/06/03 14:12:54 by kyolee           ###   ########.fr        #
+#    Updated: 2022/06/09 00:50:48 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC=cc
+CC=gcc
 CFLAGS=-Wall -Wextra -Werror
 
 SRCS=ft_gnl.c ft_gnl_utils.c

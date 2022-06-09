@@ -110,6 +110,7 @@ void make_view_cordinate(t_draw_info *pdi)
 
 void make_matrix_isometric(t_draw_info *pdi)
 {
+	/*
 	t_matrix	z;
 	t_matrix	x;
 	//t_matrix	y;
@@ -121,6 +122,31 @@ void make_matrix_isometric(t_draw_info *pdi)
 	multiply_matrix(&z, &x, &tmp);
 	make_matrix_rotate_z(&z, 45);
 	multiply_matrix(&tmp, &z, pdi->pm_iso);
+	*/
+	/*
+	pdi->pm_iso->m[0][0] = 0.7071;
+	pdi->pm_iso->m[0][1] = 0.5773;
+	pdi->pm_iso->m[0][2] = 0.408244;
+
+	pdi->pm_iso->m[1][0] = -0.7071;
+	pdi->pm_iso->m[1][1] = 0.5773;
+	pdi->pm_iso->m[1][2] = 0.408244;
+
+	pdi->pm_iso->m[2][0] = 0;
+	pdi->pm_iso->m[2][1] = 0.5773;
+	pdi->pm_iso->m[2][2] = -0.8165;
+	*/
+	pdi->pm_iso->m[0][0] = 0.7071;
+	pdi->pm_iso->m[0][1] = -0.7071;
+	pdi->pm_iso->m[0][2] = 0;
+
+	pdi->pm_iso->m[1][0] = 0.5773;
+	pdi->pm_iso->m[1][1] = 0.5773;
+	pdi->pm_iso->m[1][2] = -0.5773;
+
+	pdi->pm_iso->m[2][0] = -0.408244;
+	pdi->pm_iso->m[2][1] = -0.408244;
+	pdi->pm_iso->m[2][2] = -0.8165;
 }
 
 void	init_matrix(t_matrix *prm)

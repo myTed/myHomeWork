@@ -1,4 +1,5 @@
-#include <mlx.h>
+//#include <mlx.h>
+#include "../mlx.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -143,7 +144,6 @@ int	draw_screen(t_draw_info *pdi)
 {
 	t_color color;
 	int		idx;
-
 	
 	idx = 0;
 	while (idx < pdi->pmap->width * pdi->pmap->height)
@@ -179,8 +179,8 @@ void fill_cordinate_view(t_draw_info *pdi)
 	idx = 0;
 	while (idx < pdi->pmap->width * pdi->pmap->height)
 	{
-		pdi->pvcord[idx].x = pdi->pmap->pcord[idx].x - (pdi->pmap->height/2);
-		pdi->pvcord[idx].y = pdi->pmap->pcord[idx].y - (pdi->pmap->width/2);
+		pdi->pvcord[idx].x = pdi->pmap->pcord[idx].x - (pdi->pmap->width/2);
+		pdi->pvcord[idx].y = pdi->pmap->pcord[idx].y - (pdi->pmap->height/2);
 		pdi->pvcord[idx].z = pdi->pmap->pcord[idx].z;
 		idx++;
 	}
@@ -193,14 +193,13 @@ int	key_event(int keycode, void *param)
 	pdi = (t_draw_info *)param;
 	if (keycode == ESC)
 	{
-
-		mlx_destroy_image(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr);
+		//mlx_destroy_image(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr);
 		mlx_destroy_window(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr);
 		free(pdi->pvcord);
+		free(pdi->pmap->pcord);
 		exit(0);
 	}
 	clear_screen(pdi);
-
 	if (keycode == END_ROL_X)
 	{
 		t_matrix	m_rotate;

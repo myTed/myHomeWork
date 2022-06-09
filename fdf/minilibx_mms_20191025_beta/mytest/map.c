@@ -12,10 +12,8 @@
 
 static int	get_column_from_file(char *path_name, t_map_info *pmap)
 {
-	char	buff[256];
-	ssize_t	read_cnt;
-	int		idx;
 	int		fd;
+	char	*line;
 
 	if ((path_name == 0) || (pmap == 0))
 		return (-1);
@@ -24,66 +22,39 @@ static int	get_column_from_file(char *path_name, t_map_info *pmap)
 		return (-2);
 	while (1)
 	{
-		read_cnt = read(fd, buff, sizeof(buff));
-		if (read_cnt == 0)
-			break ;
-		else
-		{
-			idx = 0;
-			while (idx < read_cnt)
-			{
-				if (buff[idx] == '\n')
-					pmap->height++;
-				idx++;
-			}
-		}
+		line = get_next_line(fd);
+		if (line == 0)
+			break;
+		free(line);
+		pmap->height++;
 	}
 	if (close(fd) < 0)
 		return (-3);
 	return (0);
 }
 
-static int is_found_color_idx(char *str)
+static int	free_split(char **str)
 {
 	int	idx;
 
 	idx = 0;
+	if (str == 0)
+		return (-1);
 	while (str[idx] != 0)
 	{
-		if (str[idx] == ',')
-			return (idx);
+		free(str[idx]);
 		idx++;
 	}
+	free(str);
 	return (0);
 }
 
-/*
-static void display_map(t_cordinate *pcord_arry, int colum_size, int width_size)
-{
-	int	col_idx;
-	int	width_idx;
 
-	col_idx = 0;
-	width_idx = 0;
-	while (col_idx < colum_size)
-	{
-		width_idx = 0;
-		while (width_idx < width_size)
-		{
-			printf("%-4d", pcord_arry[(width_size * col_idx) + width_idx].z);
-			width_idx++;
-		}
-		printf("\n");
-		col_idx++;
-	}
-}
-*/
 static int get_width_from_file(char *file_name, t_map_info *pmap)
 {
 	int 	fd;
 	char	*line;
 	char	**width_mat_arry;
-	int		idx;
 
 	if ((file_name == 0) || (pmap == 0))
 		return (-1);
@@ -99,14 +70,7 @@ static int get_width_from_file(char *file_name, t_map_info *pmap)
 	free(line);
 	while (width_mat_arry[pmap->width] != 0)
 		pmap->width++;
-	idx = 0;
-	while (width_mat_arry[idx] != 0)
-	{
-		free(width_mat_arry[idx]);
-		idx++;
-	}
-	free(width_mat_arry);
-	
+	free_split(width_mat_arry);
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -121,10 +85,8 @@ static int get_width_from_file(char *file_name, t_map_info *pmap)
 static int fill_cordinate_from_line(char **z_values, int col_idx, t_map_info *pmap)
 {
 	int	idx;
-	int	color_idx;
-	int color_value;
 	int	widths;
-
+	int	num;
 
 	if ((z_values == 0) || (pmap == 0))
 		return (-1);
@@ -132,15 +94,10 @@ static int fill_cordinate_from_line(char **z_values, int col_idx, t_map_info *pm
 	widths = pmap->width;
 	while(z_values[idx] != 0)
 	{
-		pmap->pcord[(widths * col_idx) + idx].z = ft_atoi(z_values[idx]);
-		pmap->pcord[(widths * col_idx) + idx].y = idx;
-		pmap->pcord[(widths * col_idx) + idx].x = col_idx;
-		color_idx = is_found_color_idx(z_values[idx]);
-		if (color_idx != 0)
-		{
-			color_value = ft_atoi_base(z_values[idx] + col_idx + 3, "0123456789ABCDEF");
-			pmap->pcord[(widths * col_idx) + idx].color = *(t_color *)&color_value;
-		}
+		num = ft_atoi(z_values[idx]);
+		pmap->pcord[(widths * col_idx) + idx].z = num;
+		pmap->pcord[(widths * col_idx) + idx].y = col_idx;
+		pmap->pcord[(widths * col_idx) + idx].x = idx;
 		idx++;
 	}
 	return (0);
@@ -170,8 +127,9 @@ static int	fill_cordinate_from_file(char *file_name, t_map_info *pmap)
 			free(line);
 			return (-3);
 		}
-		col_idx++;
+		free_split(z_values_per_line);
 		free(line);
+		col_idx++;
 	}
 	return (0);
 }
@@ -196,19 +154,3 @@ int	fill_map_data(char *file_name, t_map_info *pmap)
 	return (0);
 }
 
-/*
-int	main(int argc, char **argv)
-{
-	t_map_info		map;
-	
-	if (argc != 2)
-	{
-		printf("program mapfile\n");
-		exit(1);
-	}
-	fill_map_data(argv[1], &map);
-	printf("col: %d, width: %d\n", map.height, map.width);
-	display_map(map.pcord, map.height, map.width);	
-	return (0);
-}
-*/
