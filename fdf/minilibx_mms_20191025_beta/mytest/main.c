@@ -70,59 +70,6 @@ void draw_col(t_img *pimg, t_map_info *pmap, t_view_cord *pvcord)
 		width_idx++;
 	}	
 }
-/*
-int	iso_metric(t_draw_info *pdi)
-{
-	int	idx;
-
-	idx = 0;
-	while (idx < pdi->pmap->width * pdi->pmap->height)
-	{
-		pdi->pvcord[idx].x = pdi->prcord[idx].x;
-		pdi->pvcord[idx].y = pdi->prcord[idx].y;
-		pdi->pvcord[idx].z = pdi->prcord[idx].z;
-
-		rotate_z(&(pdi->pvcord[idx].x), &(pdi->pvcord[idx].y), &(pdi->pvcord[idx].z), -45);
-		idx++;
-	}
-	idx = 0;
-	while (idx < pdi->pmap->width * pdi->pmap->height)
-	{
-		rotate_x(&(pdi->pvcord[idx].x), &(pdi->pvcord[idx].y), &(pdi->pvcord[idx].z), 90 + 35.2643897);
-		idx++;
-	}		
-	idx = 0;
-	while (idx < pdi->pmap->width * pdi->pmap->height)
-	{
-		rotate_z(&(pdi->pvcord[idx].x), &(pdi->pvcord[idx].y), &(pdi->pvcord[idx].z), 180);
-		idx++;
-	}
-	return (0);
-}
-*/
-int iso_metric2(t_draw_info *pdi)
-{
-	double	tmp_x;
-	double	tmp_y;
-	double	tmp_z;
-	int		idx;
-
-	idx = 0;
-	while (idx < pdi->pmap->width * pdi->pmap->height)
-	{
-		tmp_x = pdi->prcord[idx].x;
-		tmp_y = pdi->prcord[idx].y;
-		tmp_z = pdi->prcord[idx].z;
-
-		pdi->pvcord[idx].x = (tmp_x * -0.70710) + (0.70710 * tmp_y);
-		pdi->pvcord[idx].y = (0.408248 * tmp_x) +(0.408248 * tmp_y) + (0.816496 * tmp_z);
-		pdi->pvcord[idx].z = (-0.5777350 *tmp_x) + (-0.577350 * tmp_y) + (-0.577350 * tmp_z);
-		idx++;
-	}
-	return (0);
-}
-
-
 
 int clear_screen(t_draw_info *pdi)
 {
@@ -151,19 +98,12 @@ int	draw_screen(t_draw_info *pdi)
 		pdi->pvcord[idx].x *= (SCREEN_DX * (1.0 + pdi->scale));
 		pdi->pvcord[idx].y *= (SCREEN_DY * (1.0 + pdi->scale));
 		pdi->pvcord[idx].z *= SCREEN_DZ;
-		idx++;
-	}
-	idx = 0;
-	while (idx < pdi->pmap->width * pdi->pmap->height)
-	{
 		pdi->pvcord[idx].x += (1000 + pdi->right);
 		pdi->pvcord[idx].y += (1000 + pdi->down);
 		idx++;
 	}
+	ft_memset(&color, 0, sizeof(t_color));
 	color.green = 255;
-	color.red = 0;
-	color.blue = 0;
-	color.padd = 0;
 	set_color(pdi->pmap, pdi->pvcord, color);
 	draw_row(pdi->pimg, pdi->pmap, pdi->pvcord);
 	draw_col(pdi->pimg, pdi->pmap, pdi->pvcord);	
@@ -186,63 +126,121 @@ void fill_cordinate_view(t_draw_info *pdi)
 	}
 }
 
+
+
+int close_window(t_draw_info *pdi)
+{
+	if (pid == 0)
+		return (-1);
+	mlx_destroy_window(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr);
+	free(pdi->pvcord);
+	free(pdi->pmap->pcord);
+	return (0);
+}
+
+
+int	make_rol_x_view(t_draw_info *pdi)
+{
+	t_matrix	m_rotate;
+	
+	if (pdi == 0)
+		return (-1);
+	make_matrix_rotate_x(&m_rotate, 10);
+	multiply_matrix(pdi->pm_rotate, &m_rotate, pdi->pm_rotate);
+	multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
+	return (0);
+}
+
+int	make_rol_y_view(t_draw_info *pdi)
+{
+	t_matrix	m_rotate;
+
+	if (pdi == 0)
+		return (-1);
+	make_matrix_rotate_y(&m_rotate, 10);
+	multiply_matrix(pdi->pm_rotate, &m_rotate, pdi->pm_rotate);
+	multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
+}
+
+int	make_rol_z_view(t_draw_info *pdi)
+{
+	t_matrix	m_rotate;
+
+	if (pdi == 0)
+		return (-1);
+	make_matrix_rotate_z(&m_rotate, 10);
+	multiply_matrix(pdi->pm_rotate, &m_rotate, pdi->pm_rotate);
+	multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
+}
+
+int	make_matrix_top_view(t_draw_info *pdi)
+{
+	t_matrix	m_top;
+	t_matrix	m_unit;
+		
+	if (pdi == 0)
+		return (-1);
+	make_matrix_top_view(&m_top);
+	make_unit_matrix(&m_unit);
+	multiply_matrix(&m_top, &m_unit, pdi->pm_view);
+	return (0);
+}
+
+
+int	make_matrix_right_view(t_draw_info *pdi)
+{
+	t_matrix	m_right;
+	t_matrix	m_unit;
+		
+	if (pdi == 0)
+		return (-1);
+	make_matrix_right_view(&m_right);
+	make_unit_matrix(&m_unit);
+	multiply_matrix(&m_right, &m_unit, pdi->pm_view);
+	return (0);
+}
+
+int	make_matrix_front_view(t_draw_info *pdi)
+{
+	t_matrix	m_front;
+	t_matrix	m_unit;
+		
+	if (pdi == 0)
+		return (-1);
+	make_matrix_front_view(&m_front);
+	make_unit_matrix(&m_unit);
+	multiply_matrix(&m_front, &m_unit, pdi->pm_view);
+	return (0);
+}
+
 int	key_event(int keycode, void *param)
 {
 	t_draw_info *pdi;
 
+	if (param == 0)
+		return (-1);
 	pdi = (t_draw_info *)param;
 	if (keycode == ESC)
 	{
-		//mlx_destroy_image(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr);
-		mlx_destroy_window(pdi->pmlx->mlx_ptr, pdi->pmlx->win_ptr);
-		free(pdi->pvcord);
-		free(pdi->pmap->pcord);
+		if (close_window(pdi) < 0)
+			return (-1);
 		exit(0);
 	}
 	clear_screen(pdi);
 	if (keycode == END_ROL_X)
-	{
-		t_matrix	m_rotate;
-
-		make_matrix_rotate_x(&m_rotate, -10);
-		multiply_matrix(pdi->pm_rotate, &m_rotate, pdi->pm_rotate);
-		multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
-		printf("rotate x\n");
-	}
+		make_rol_x_view(pdi);
 	else if (keycode == DEL_ROL_Y)
-	{
-		t_matrix	m_rotate;
-
-		make_matrix_rotate_y(&m_rotate, -10);
-		multiply_matrix(pdi->pm_rotate, &m_rotate, pdi->pm_rotate);
-		multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
-		printf("rotate y\n");
-	}
+		make_rol_y_view(pdi);
 	else if (keycode == PGDN_ROL_Z)
-	{
-		t_matrix	m_rotate;
-
-		make_matrix_rotate_z(&m_rotate, -10);
-		multiply_matrix(pdi->pm_rotate, &m_rotate, pdi->pm_rotate);
-		multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
-		printf("rotate z\n");
-	}
+		make_rol_z_view(pdi);
 	else if (keycode == UP)
-	{
 		pdi->down -= SCREEN_DY;
-	}
 	else if (keycode == DOWN)
-	{
 		pdi->down += SCREEN_DY;
-	}
 	else if (keycode == LEFT)
-	{
 		pdi->right -= SCREEN_DX;
-	}
 	else if (keycode == RIGHT)
-	{
 		pdi->right += SCREEN_DX;
-	}
 	else if (keycode == SCALE_UP)
 	{
 		pdi->scale += 0.2;
@@ -257,32 +255,22 @@ int	key_event(int keycode, void *param)
 	}
 	else if (keycode == TOP_VIEW)
 	{
-		t_matrix	m_top;
-		t_matrix	m_unit;
-		make_matrix_top_view(&m_top);
-		init_matrix(&m_unit);
-		multiply_matrix(&m_top, &m_unit, pdi->pm_view);
+		if (make_matrix_top_view(pdi) < 0)
+			return (-1);
 	}
 	else if (keycode == RIGHT_VIEW)
 	{
-		t_matrix	m_right;
-		t_matrix	m_unit;
-		make_matrix_right_view(&m_right);
-		init_matrix(&m_unit);
-		multiply_matrix(&m_right, &m_unit, pdi->pm_view);
+		if (make_matrix_right_view(pdi) < 0)
+			return (-1);
 	}
 	else if (keycode == FRONT_VIEW)
 	{
-		t_matrix	m_front;
-		t_matrix	m_unit;
-		make_matrix_front_view(&m_front);
-		init_matrix(&m_unit);
-		multiply_matrix(&m_front, &m_unit, pdi->pm_view);
+		if (make_matrix_front_view(pdi) < 0)
+			return (-1);
 	}
 	fill_cordinate_view(pdi);
 	make_view_cordinate(pdi);
-	draw_screen(pdi);	
-	printf("keycode: %d\n", keycode);
+	draw_screen(pdi);
 	return (0);
 }
 
@@ -290,32 +278,6 @@ int	mouse_event(int button, int x, int y)
 {
 	printf("button : %d (%d, %d)\n",button, x, y);
 	return (0);
-}
-
-int	expose_event(void *param)
-{
-	t_mlx	*pmlx;
-	static	int x;
-
-	pmlx = (t_mlx *)param;
-
-	if (x == 0)
-	{
-		mlx_string_put(pmlx->mlx_ptr, pmlx->win_ptr, 300, 300, 0, "resize!!");
-		x++;
-	}
-	else
-	{
-		mlx_string_put(pmlx->mlx_ptr, pmlx->win_ptr, 300, 300, 0, "asdjfklasjdkf");
-		x = 0;
-	}
-	printf("expose cnt : %d\n", x);
-	return (0);
-}
-
-int	close_event(void)
-{
-	exit(0);
 }
 
 
@@ -392,6 +354,33 @@ int draw_line(t_img *pimg, int start_x, int start_y, int end_x, int end_y, t_col
 	return (0);
 }
 
+
+int	init_mlx_lib()
+{
+	min.mlx_ptr = mlx_init();
+	if (min.mlx_ptr == 0)
+	{
+		perror("can't open connection Xwinodw");
+		exit(1);
+	}
+	min.win_ptr = mlx_new_window(min.mlx_ptr, SCREEN_WIDHS, SCREEN_HEIGHTS, "FDF");
+	if (min.win_ptr == 0)
+	{
+		perror("can't create new window");
+		exit(1);
+	}
+	min.img_ptr = mlx_new_image(min.mlx_ptr, SCREEN_WIDHS, SCREEN_HEIGHTS);
+	if (min.img_ptr == 0)
+	{
+		perror("can't create new image");
+		exit(1);
+	}
+	t_img	img;
+	img.addr = (unsigned int *)mlx_get_data_addr(min.img_ptr, &img.bpp, &img.size_line, &img.endian);
+	if (img.addr == 0)
+		return (-1);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_mlx 			min;
@@ -400,47 +389,21 @@ int	main(int argc, char *argv[])
 
 	if (argc != 2)
 	{
-		perror("program filename");
-		return (-1);
+		perror("Usage: Program filename");
+		exit(1);
 	}
-	min.mlx_ptr = mlx_init();
-	if (min.mlx_ptr == 0)
+	if (is_valid_map_file(argv[1]) < 0)
 	{
-		perror("can't open connection Xwinodw");
-		return (-1);
+		perror("map error!\n");
+		exit(1);
 	}
-	min.win_ptr = mlx_new_window(min.mlx_ptr, 2000, 2000, "first my Winodw for minilibX");
-	if (min.win_ptr == 0)
-	{
-		perror("can't create new window");
-		return (-1);
-	}
-
-	mlx_mouse_hook(min.win_ptr, mouse_event, 0);
-	mlx_expose_hook(min.win_ptr, expose_event, &min);	
-	mlx_hook(min.win_ptr, 17, 0, close_event, &min);
-	
-	min.img_ptr = mlx_new_image(min.mlx_ptr, 2000, 2000);
-	if (min.img_ptr == 0)
-	{
-		perror("can't create new image");
-		return (-1);
-	}
-	t_img	img;
-
-	img.addr = (unsigned int *)mlx_get_data_addr(min.img_ptr, &img.bpp, &img.size_line, &img.endian);
-	if (img.addr == 0)
-		return (-1);
-	printf("bpp : %d, size_line : %d, endian : %d\n", img.bpp, img.size_line, img.endian);
-	
 	if (fill_map_data(argv[1], &map) < 0)
 		return (-1);
 	pvcord = malloc(sizeof(t_view_cord) * map.width * map.height);
 	if (pvcord == NULL)
 		return (-1);
-	printf("map: width : %d, height: %d\n", map.width, map.height);
 	
-	t_draw_info draw_info;
+	t_draw_info 	draw_info;
 	t_matrix		m_iso;
 	t_matrix		m_view;
 	t_matrix		m_rotate;
@@ -456,8 +419,8 @@ int	main(int argc, char *argv[])
 	draw_info.pm_rotate = &m_rotate;
 
 	make_matrix_isometric(&draw_info);
-	init_matrix(&m_rotate);
-	init_matrix(&m_view);
+	make_unit_matrix(&m_rotate);
+	make_unit_matrix(&m_view);
 	multiply_matrix(draw_info.pm_iso, draw_info.pm_rotate, draw_info.pm_view);
 	fill_cordinate_view(&draw_info);
 	make_view_cordinate(&draw_info);

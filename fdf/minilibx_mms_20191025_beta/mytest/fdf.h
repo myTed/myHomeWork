@@ -6,15 +6,17 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:21:12 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/09 00:54:38 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/06/11 03:07:17 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define	SCREEN_DX		10
-#define	SCREEN_DY		10
-#define SCREEN_DZ		5
-#define	PI				3.1415926535
-#define	ROTATION_DEGREE	10.0
+#define SCREEN_WIDHS		2000
+#define SCREEN_HEIGHTS		2000
+#define	SCREEN_DX			10
+#define	SCREEN_DY			10
+#define SCREEN_DZ			5
+#define	PI					3.1415926535
+#define	ROTATION_DEGREE		10.0
 #define ESC 		65307//53//65307	
 #define END_ROL_X	65367//117//65367	
 #define DEL_ROL_Y	65535//119//65535
@@ -132,8 +134,7 @@ void rotate_rcord_z(t_draw_info *pid, double angle);
 void rotate_x(double *px, double *py, double *pz, double angle);
 void rotate_y(double *px, double *py, double *pz, double angle);
 void rotate_z(double *px, double *py, double *pz, double angle);
-void	init_matrix(t_matrix *prm);
-void	make_final_matrix(t_draw_info *pdi);
+void	make_unit_matrix(t_matrix *prm);
 void	make_matrix_isometric(t_draw_info *pdi);
 void	make_view_cordinate(t_draw_info *pdi);
 void	multiply_matrix(t_matrix *pvm, t_matrix *prm, t_matrix *pdest);

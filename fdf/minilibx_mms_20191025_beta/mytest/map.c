@@ -49,6 +49,40 @@ static int	free_split(char **str)
 	return (0);
 }
 
+static int	is_equal_width_per_line(char *file_name , t_map_info *pmap)
+{
+	int		fd;
+	char	*line;
+	char	**pline;
+	int		width_cnt;
+
+	if ((file_name == 0) || (pmap == 0))
+		return (-1);
+	fd = open(file_name, O_RDONLY);
+	if (fd == -1)
+		return (-1);
+	width_cnt = 0;
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (line == 0)
+			break ;
+		pline = ft_split(line , ' ');
+		if (pline == 0)
+		{
+			free(line);
+			return (-1);
+		}
+		free(line);
+		while (pline[idx] != 0)
+			width_cnt++;
+		free_split(pline);
+		if (width_cnt != pmap->width)
+			return (-1);
+	}
+	if (width_cnt != 0)
+		return (0);
+}
 
 static int get_width_from_file(char *file_name, t_map_info *pmap)
 {
@@ -76,6 +110,7 @@ static int get_width_from_file(char *file_name, t_map_info *pmap)
 		line = get_next_line(fd);
 		if (line == 0)
 			break ;
+		pmap->height++;
 		free(line);
 	}
 	close(fd);
