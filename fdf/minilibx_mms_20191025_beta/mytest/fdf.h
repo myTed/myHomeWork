@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:21:12 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/11 03:07:17 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/06/11 21:44:49 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,21 @@
 #define SCREEN_DZ			5
 #define	PI					3.1415926535
 #define	ROTATION_DEGREE		10.0
-#define ESC 		65307//53//65307	
-#define END_ROL_X	65367//117//65367	
-#define DEL_ROL_Y	65535//119//65535
-#define PGDN_ROL_Z	65366//121//65366
-#define	UP			65362//126//65362				
-#define DOWN		65364//125//65364
-#define LEFT		65361//123//65361
-#define RIGHT		65363//124//65363
-#define SCALE_UP	65360//115//65360
-#define SCALE_DOWN	65365//116//65365
-#define FRONT_VIEW	18
-#define TOP_VIEW	19
-#define	RIGHT_VIEW	20
+#define ESC 				65307//53//65307	
+#define END_ROL_X			65367//117//65367	
+#define DEL_ROL_Y			65535//119//65535
+#define PGDN_ROL_Z			65366//121//65366
+#define	UP					65362//126//65362				
+#define DOWN				65364//125//65364
+#define LEFT				65361//123//65361
+#define RIGHT				65363//124//65363
+#define SCALE_UP			65360//115//65360
+#define SCALE_DOWN			65365//116//65365
+#define FRONT_VIEW			18
+#define TOP_VIEW			19
+#define	RIGHT_VIEW			20
+
+
 typedef struct s_color
 {
 	unsigned int	blue:8;
@@ -43,7 +45,6 @@ typedef struct s_cordinate
 	double	x;
 	double	y;
 	double	z;
-	t_color color;
 } t_cordinate;
 
 typedef struct s_map_info
@@ -53,13 +54,11 @@ typedef struct s_map_info
 	t_cordinate *pcord;
 } t_map_info;
 
-
 typedef struct s_view_cord
 {
 	double	x;
 	double	y;
 	double	z;
-	t_color color;
 } t_view_cord;
 
 typedef struct s_rotate_cord
@@ -104,6 +103,13 @@ typedef struct s_matrix
 	};
 } t_matrix;
 
+typedef struct m_info
+{
+	t_matrix	m_iso;
+	t_matrix	m_view;
+	t_matrix	m_rotate;
+} t_mat_info;
+
 typedef struct s_info
 {
 	t_img			*pimg;
@@ -120,20 +126,14 @@ typedef struct s_info
 } t_draw_info;
 
 		
-
-
-int	ft_atoi_base(char *str, char *base);
-int	fill_map_data(char *file_name, t_map_info *pmap);
-
-void rotate_rcord_x(t_draw_info *pdi, double angle);
-
-void rotate_rcord_y(t_draw_info *pdi, double angle);
-
-void rotate_rcord_z(t_draw_info *pid, double angle);
-
-void rotate_x(double *px, double *py, double *pz, double angle);
-void rotate_y(double *px, double *py, double *pz, double angle);
-void rotate_z(double *px, double *py, double *pz, double angle);
+int		ft_atoi_base(char *str, char *base);
+int		fill_map_data(char *file_name, t_map_info *pmap);
+void	rotate_rcord_x(t_draw_info *pdi, double angle);
+void 	rotate_rcord_y(t_draw_info *pdi, double angle);
+void	rotate_rcord_z(t_draw_info *pid, double angle);
+void	rotate_x(double *px, double *py, double *pz, double angle);
+void	rotate_y(double *px, double *py, double *pz, double angle);
+void	rotate_z(double *px, double *py, double *pz, double angle);
 void	make_unit_matrix(t_matrix *prm);
 void	make_matrix_isometric(t_draw_info *pdi);
 void	make_view_cordinate(t_draw_info *pdi);

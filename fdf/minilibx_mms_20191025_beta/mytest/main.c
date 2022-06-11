@@ -112,21 +112,6 @@ int	draw_screen(t_draw_info *pdi)
 }
 
 
-void fill_cordinate_view(t_draw_info *pdi)
-{
-	int	idx;
-
-	idx = 0;
-	while (idx < pdi->pmap->width * pdi->pmap->height)
-	{
-		pdi->pvcord[idx].x = pdi->pmap->pcord[idx].x - (pdi->pmap->width/2);
-		pdi->pvcord[idx].y = pdi->pmap->pcord[idx].y - (pdi->pmap->height/2);
-		pdi->pvcord[idx].z = pdi->pmap->pcord[idx].z;
-		idx++;
-	}
-}
-
-
 
 int close_window(t_draw_info *pdi)
 {
@@ -139,7 +124,7 @@ int close_window(t_draw_info *pdi)
 }
 
 
-int	make_rol_x_view(t_draw_info *pdi)
+int	make_matrix_rol_x_view(t_draw_info *pdi)
 {
 	t_matrix	m_rotate;
 	
@@ -151,7 +136,7 @@ int	make_rol_x_view(t_draw_info *pdi)
 	return (0);
 }
 
-int	make_rol_y_view(t_draw_info *pdi)
+int	make_matrix_rol_y_view(t_draw_info *pdi)
 {
 	t_matrix	m_rotate;
 
@@ -162,7 +147,7 @@ int	make_rol_y_view(t_draw_info *pdi)
 	multiply_matrix(pdi->pm_iso, pdi->pm_rotate, pdi->pm_view);
 }
 
-int	make_rol_z_view(t_draw_info *pdi)
+int	make_matrix_rol_z_view(t_draw_info *pdi)
 {
 	t_matrix	m_rotate;
 
@@ -228,11 +213,11 @@ int	key_event(int keycode, void *param)
 	}
 	clear_screen(pdi);
 	if (keycode == END_ROL_X)
-		make_rol_x_view(pdi);
+		make_matrix_rol_x_view(pdi);
 	else if (keycode == DEL_ROL_Y)
-		make_rol_y_view(pdi);
+		make_matrix_rol_y_view(pdi);
 	else if (keycode == PGDN_ROL_Z)
-		make_rol_z_view(pdi);
+		make_matrix_rol_z_view(pdi);
 	else if (keycode == UP)
 		pdi->down -= SCREEN_DY;
 	else if (keycode == DOWN)
@@ -268,8 +253,7 @@ int	key_event(int keycode, void *param)
 		if (make_matrix_front_view(pdi) < 0)
 			return (-1);
 	}
-	fill_cordinate_view(pdi);
-	make_view_cordinate(pdi);
+	fill_view_cordinate(pdi);
 	draw_screen(pdi);
 	return (0);
 }
@@ -355,7 +339,7 @@ int draw_line(t_img *pimg, int start_x, int start_y, int end_x, int end_y, t_col
 }
 
 
-int	init_mlx_lib()
+int	init_mlx(void)
 {
 	min.mlx_ptr = mlx_init();
 	if (min.mlx_ptr == 0)
@@ -379,51 +363,46 @@ int	init_mlx_lib()
 	img.addr = (unsigned int *)mlx_get_data_addr(min.img_ptr, &img.bpp, &img.size_line, &img.endian);
 	if (img.addr == 0)
 		return (-1);
+
 }
 
 int	main(int argc, char *argv[])
 {
 	t_mlx 			min;
 	t_map_info 		map;
-	t_view_cord 	*pvcord;
+	t_draw_info		draw_info;
+	t_mat_info		matrix_info;
 
 	if (argc != 2)
 	{
-		perror("Usage: Program filename");
+		write("Usage: Program filename");
 		exit(1);
 	}
-	if (is_valid_map_file(argv[1]) < 0)
+	if (is_valid_map_file(argv[1], &map) < 0)
 	{
-		perror("map error!\n");
+		write("map error!\n");
 		exit(1);
 	}
-	if (fill_map_data(argv[1], &map) < 0)
+	if (fill_cord_data_from_file(argv[1], &map) < 0)
 		return (-1);
 	pvcord = malloc(sizeof(t_view_cord) * map.width * map.height);
 	if (pvcord == NULL)
 		return (-1);
 	
-	t_draw_info 	draw_info;
-	t_matrix		m_iso;
-	t_matrix		m_view;
-	t_matrix		m_rotate;
-
 	ft_memset(&draw_info, 0, sizeof(t_draw_info));
-
 	draw_info.pimg = &img;
 	draw_info.pmap = &map;
 	draw_info.pvcord = pvcord;
 	draw_info.pmlx = &min;
-	draw_info.pm_iso = &m_iso;
-	draw_info.pm_view = &m_view;
-	draw_info.pm_rotate = &m_rotate;
+	draw_info.pm_iso = &matrix_info.m_iso;
+	draw_info.pm_view = &matrix_info.m_view;
+	draw_info.pm_rotate = &matrix_info.m_rotate;
 
 	make_matrix_isometric(&draw_info);
 	make_unit_matrix(&m_rotate);
 	make_unit_matrix(&m_view);
 	multiply_matrix(draw_info.pm_iso, draw_info.pm_rotate, draw_info.pm_view);
-	fill_cordinate_view(&draw_info);
-	make_view_cordinate(&draw_info);
+	fill_view_cordinate(&draw_info);
 	draw_screen(&draw_info);
 
 	mlx_key_hook(min.win_ptr, key_event, &draw_info);

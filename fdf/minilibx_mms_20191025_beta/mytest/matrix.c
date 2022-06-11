@@ -130,10 +130,18 @@ void multiply_vector(t_matrix *pvm, t_view_cord *psrc, t_view_cord *pdest)
 	pdest->z = (pvm->r3[0] * tmp_x) + (pvm->r3[2] * tmp_y) + (pvm->r3[2] * tmp_z);
 }
 
-void make_view_cordinate(t_draw_info *pdi)
+void fill_view_cordinate(t_draw_info *pdi)
 {
 	int idx;
 
+	idx = 0;
+	while (idx < pdi->pmap->width * pdi->pamp->height)
+	{
+		pdi->pvcord[idx].x = pdi->pmap->pcord[idx].x - (pdi->pmap->width/2);
+		pdi->pvcord[idx].y = pdi->pmap->pcord[idx].y - (pdi->pmap->height/2);
+		pdi->pvcord[idx].z = pdi->pmap->pcord[idx].z;
+		idx++;
+	}
 	idx = 0;
 	while (idx < (pdi->pmap->height) * (pdi->pmap->width))
 	{
