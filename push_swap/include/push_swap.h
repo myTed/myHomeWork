@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:51:21 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/27 19:26:12 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/06/28 21:08:58 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,19 @@
 		t_list	*top_b;
 		t_list	*bottom_a;
 		t_list	*bottom_b;
-		int 	(*sa)(struct s_stack *s);
-		int 	(*sb)(struct s_stack *s);
-		int 	(*ss)(struct s_stack *s);
-		int 	(*pa)(struct s_stack *s);
-		int 	(*pb)(struct s_stack *s);
-		int		(*ra)(struct s_stack *s);
-		int		(*rb)(struct s_stack *s);
-		int 	(*rr)(struct s_stack *s);
-		int 	(*rra)(struct s_stack *s);
-		int 	(*rrb)(struct s_stack *s);
-		int 	(*rrr)(struct s_stack *s);
-		int		(*init)(struct s_stack *s);
-		int		(*insert)(struct s_stack *s, t_elem elem);
 	} t_stack;
+
+int	push(t_stack *s, t_elem elem, t_list **ptop, t_list **pbottom);
+int	pop(t_stack *s, t_list **ptop, t_list **pbottom, t_elem *pdata);
+int	sa(t_stack *ps);
+int	sb(t_stack *ps);
+int	ss(t_stack *ps);
+int	pa(t_stack *ps);
+int	pb(t_stack *ps);
+int	ra(t_stack *ps);
+int	rb(t_stack *ps);
+int	rr(t_stack *ps);
+int rra(t_stack *ps);
+int	rrb(t_stack *ps);
+int	rrr(t_stack *ps);
 #endif
