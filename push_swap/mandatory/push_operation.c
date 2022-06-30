@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 07:54:24 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/28 23:50:11 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/06/30 22:04:17 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,10 @@ int	pa(t_stack *ps)
 		return (-1);
 	if (pop(ps, &ps->top_b, &ps->bottom_b, &data) < 0)
 		return (-1);
+	ps->b_data_cnt--;
 	if (push(ps, data, &ps->top_a, &ps->bottom_a) < 0)
 		return (-1);
+	ps->a_data_cnt++;
 	if (write(1, "pa\n", ft_strlen("pa\n")) < 0)
 		return (-1);
 	return (0);
@@ -101,8 +103,10 @@ int	pb(t_stack *ps)
 		return (-1);
 	if (pop(ps, &ps->top_a, &ps->bottom_a, &data) < 0)
 		return (-1);
+	ps->a_data_cnt--;
 	if (push(ps, data, &ps->top_b, &ps->bottom_b) < 0)
 		return (-1);
+	ps->b_data_cnt++;
 	if (write(1, "pb\n", ft_strlen("pb\n")) < 0)
 		return (-1);
 	return (0);
@@ -116,6 +120,8 @@ int	ra(t_stack *ps)
 		return (-2);
 	ps->bottom_a = ps->top_a;
 	ps->top_a = ps->top_a->next;
+	if (write(1, "ra\n", ft_strlen("ra\n")) < 0)
+		return (-1);
 	return (0);
 }
 
@@ -127,6 +133,8 @@ int	rb(t_stack *ps)
 		return (-2);
 	ps->bottom_b = ps->top_b;
 	ps->top_b = ps->top_b->next;	
+	if (write(1, "rb\n", ft_strlen("rb\n")) < 0)
+		return (-1);
 	return (0);
 }
 
@@ -179,4 +187,3 @@ int	rrr(t_stack *ps)
 		return (-1);
 	return (0);
 }
-

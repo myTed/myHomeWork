@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:51:21 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/28 21:08:58 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/06/30 22:04:19 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 		t_list	*top_b;
 		t_list	*bottom_a;
 		t_list	*bottom_b;
+		size_t	a_data_cnt;
+		size_t	b_data_cnt;
 	} t_stack;
 
 int	push(t_stack *s, t_elem elem, t_list **ptop, t_list **pbottom);
