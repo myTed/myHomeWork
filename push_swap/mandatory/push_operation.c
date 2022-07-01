@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 07:54:24 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/30 22:04:17 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/01 18:08:34 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	sb(t_stack *ps)
 		return (-1);
 	if (swap_list(&ps->top_b, &ps->bottom_b) < 0)
 		return (-1);
-	if (write(1, "sa\n", ft_strlen("sb\n")) < 0)
+	if (write(1, "sb\n", ft_strlen("sb\n")) < 0)
 		return (-1);
 	return (0);	
 }
@@ -69,8 +69,8 @@ int	ss(t_stack *ps)
 
 	if (ps == 0)
 		return (-1);
-	ret_sa = sa(ps);
-	ret_sb = sb(ps);
+	ret_sa = swap_list(&ps->top_a, &ps->bottom_a);
+	ret_sb = swap_list(&ps->top_b, &ps->bottom_b);
 	if ((ret_sa < 0) && (ret_sb < 0))
 		return (-1);
 	if (write(1, "ss\n", ft_strlen("ss\n")) < 0)
@@ -140,14 +140,26 @@ int	rb(t_stack *ps)
 
 int	rr(t_stack *ps)
 {
-	int	ret_ra;
-	int	ret_rb;
+	int	command_cnt;
 
 	if (ps == 0)
 		return (-1);
-	ret_ra = ra(ps);
-	ret_rb = rb(ps);
-	if ((ret_ra < 0) && (ret_rb < 0))
+	command_cnt = 0;
+	if ((ps->bottom_a != 0) && (ps->top_a != 0))
+	{
+		ps->bottom_a = ps->top_a;
+		ps->top_a = ps->top_a->next;
+		command_cnt++;
+	}
+	if ((ps->bottom_b != 0) && (ps->top_b != 0))
+	{
+		ps->bottom_b = ps->top_b;
+		ps->top_b = ps->top_b->next;
+		command_cnt++;
+	}
+	if (command_cnt == 0)
+		return (0);
+	if (write(1, "rr\n", ft_strlen("rr\n")) < 0)
 		return (-1);
 	return (0);
 }
@@ -156,10 +168,12 @@ int rra(t_stack *ps)
 {
 	if (ps == 0)
 		return (-1);
-	if ((ps->top_a == 0) || (ps->bottom_b == 0))
+	if ((ps->top_a == 0) || (ps->bottom_a == 0))
 		return (-2);
 	ps->top_a = ps->bottom_a;
 	ps->bottom_a = ps->bottom_a->prev;
+	if (write(1, "rra\n", ft_strlen("rra\n")) < 0)
+		return (-1);
 	return (0);
 }
 
@@ -171,19 +185,33 @@ int	rrb(t_stack *ps)
 		return (-2);
 	ps->top_b = ps->bottom_b;
 	ps->bottom_b = ps->bottom_b->prev;
+	if (write(1, "rrb\n", ft_strlen("rrb\n")) < 0)
+		return (-1);
 	return (0);
 }
 
 int	rrr(t_stack *ps)
 {
-	int	ret_rra;
-	int	ret_rrb;
+	int	command_cnt;
 
 	if (ps == 0)
 		return (-1);
-	ret_rra = rra(ps);
-	ret_rrb = rrb(ps);
-	if ((ret_rra < 0) && (ret_rrb < 0))
+	command_cnt = 0;
+	if ((ps->top_a != 0) && (ps->bottom_a != 0))
+	{
+		ps->top_a = ps->bottom_a;
+		ps->bottom_a = ps->bottom_a->prev;
+		command_cnt++;
+	}
+	if ((ps->top_b != 0) && (ps->bottom_b != 0))
+	{
+		ps->top_b = ps->bottom_b;
+		ps->bottom_b = ps->bottom_b->prev;
+		command_cnt++;
+	}
+	if (command_cnt == 0)
+		return (0);
+	if (write(1, "rrr\n", ft_strlen("rrr\n")) < 0)
 		return (-1);
 	return (0);
 }

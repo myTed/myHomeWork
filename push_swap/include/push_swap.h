@@ -6,10 +6,10 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:51:21 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/30 22:04:19 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/01 12:57:36 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include <stddef.h>
 
 #ifndef PUSH_SWAP_H
 	#define PUSH_SWAP_H
@@ -33,6 +33,7 @@
 
 int	push(t_stack *s, t_elem elem, t_list **ptop, t_list **pbottom);
 int	pop(t_stack *s, t_list **ptop, t_list **pbottom, t_elem *pdata);
+int	sort_bigger(t_stack *ps, int n);
 int	sa(t_stack *ps);
 int	sb(t_stack *ps);
 int	ss(t_stack *ps);

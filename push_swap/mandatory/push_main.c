@@ -8,10 +8,7 @@ int	init_stack(t_stack *s)
 {
 	if (s == 0)
 		return (-1);
-	s->top_a = 0;
-	s->top_b = 0;
-	s->bottom_a = 0;
-	s->bottom_b = 0;
+	ft_memset(s, 0, sizeof(t_stack));
 	return (0);
 }
 
@@ -127,7 +124,6 @@ int	print_stack(t_list *ptop, t_list *pbottom)
 }
 
 
-
 int	main(int argc, char *argv[])
 {
 	t_stack stack;
@@ -142,12 +138,18 @@ int	main(int argc, char *argv[])
 		arg_push(&stack, atoi(argv[idx]), &stack.top_a, &stack.bottom_a); 
 		idx++;
 	}
-	
+	/*	
 	print_stack(stack.top_a, stack.bottom_a);
 	printf("\n");
 	print_stack(stack.top_b, stack.bottom_b);
 	printf("\n");
-
+	*/	
+	sort_bigger(&stack, idx - 1);
+	/*	
+	print_stack(stack.top_a, stack.bottom_a);
+	printf("\n");
+	*/
+	/*
 	char buff[128];	
 	while (1)
 	{
@@ -214,6 +216,7 @@ int	main(int argc, char *argv[])
 		print_stack(stack.top_b, stack.bottom_b);
 		printf("\n");
 	}
+	*/
 	/*
 	idx = 1;
 	while (argv[idx])
