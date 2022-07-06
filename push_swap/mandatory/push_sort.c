@@ -6,27 +6,94 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:56:02 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/01 17:33:06 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/06 02:35:35 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 #include <stdio.h>
 
-
-int	sort_smaller(t_stack *ps, int n);
-int	sort_bigger(t_stack *ps, int n);
-
-int	select_pivot_a(t_stack *s, int n)
+int	find_maximum_value_idx(t_list *ptop, int n, int *pmax_idx)
 {
-	(void)(n);
-	return (s->top_a->data);
+	int		idx;
+	t_list 	*tmp_top;
+	t_elem	max_value;
+	
+	if (ptop == 0)
+		return (-1);
+	tmp_top = ptop;
+	max_value = tmp_top->data;
+	*pmax_idx = 0;
+	idx = 0;
+	while (idx < n - 1)
+	{
+		tmp_top = tmp_top->next;
+		if (tmp_top->data > max_value)
+		{
+			max_value = tmp_top->data;
+			(*pmax_idx)++;
+		}
+		idx++;
+	}
+	return (0);
 }
 
-int	select_pivot_b(t_stack *s, int n)
+int	sort_n2_div_2(t_stack *ps, t_list *ptop, int b_stack_a, int n)
 {
-	(void)(n);
-	return (s->top_b->data);
+	int	max_idx;
+	int	idx;
+
+	if (ptop == 0)
+		return (-1);
+	if (n == 2)
+	{
+		if (ptop->data > ptop->next->data)
+		{
+			if (b_stack_a)
+				sa(ps);
+			else
+				sb(ps);
+		}
+		return (0);
+	}
+	else
+	{
+		if (find_maximum_value_idx(ptop, n, &max_idx) < 0)
+			return (-1);
+		idx = 0;
+		if (b_stack_a)
+		{
+			while(idx < n - max_idx - 1)
+			{
+				rra(ps);
+				idx++;
+			}
+			ptop = ps->top_a;
+		}
+		else
+		{
+			while(idx < n - max_idx -1)
+			{
+				rrb(ps);
+				idx++;
+			}
+			ptop = ps->top_b;
+		}
+		sort_n2_div_2(ps, ptop, b_stack_a, n - 1);
+	}
+	return (0);
+}
+
+
+int	select_pivot(t_select_stack *pss, t_list *ptop, int size, t_elem *ppivot)
+{
+	if ((pss == 0) || (ptop == 0))
+		return (-1);
+	*ppivot = quick_select(pss, ptop, size / 2, size);
+	free_stack(&(pss->big));
+	free_stack(&(pss->medium));
+	free_stack(&(pss->small));
+	return (0);
 }
 
 int	transfer_smaller_data_than_pivot(t_stack *ps, int n, int pivot)
@@ -52,12 +119,14 @@ int	transfer_smaller_data_than_pivot(t_stack *ps, int n, int pivot)
 	return (n - pb_cnt);
 }
 
-int	sort_bigger(t_stack *ps, int n)
+int	sort_bigger(t_select_stack *pss, t_stack *ps, int n)
 {
 	int	pivot;
 	int	remain_cnt;
 	int	idx;
+	int	trans_pivot_cnt;
 
+	trans_pivot_cnt = 0;
 	if (ps == 0)
 		return (-1);
 	if (n <= 1)
@@ -70,18 +139,23 @@ int	sort_bigger(t_stack *ps, int n)
 	}
 	else
 	{
-		pivot = select_pivot_a(ps, n);
+		if (select_pivot(pss, ps->top_a, n, &pivot) < 0)
+			return (-1);
 		remain_cnt = transfer_smaller_data_than_pivot(ps, n, pivot);
 		idx = 0;
 		while (idx < remain_cnt)
 		{
 			rra(ps);
+			if ((ps->top_a->data == pivot) && (trans_pivot_cnt == 0))
+			{
+				trans_pivot_cnt = 1;
+				pb(ps);
+			}
 			idx++;
 		}
-		ra(ps);
-		sort_bigger(ps, remain_cnt - 1);
-		rra(ps);
-		sort_smaller(ps, n - remain_cnt);
+		sort_bigger(pss, ps, remain_cnt - 1);
+		pa(ps);
+		sort_smaller(pss, ps, n - remain_cnt);
 		return (0);
 	}
 }
@@ -109,7 +183,7 @@ int	transfer_bigger_data_than_pivot(t_stack *ps, int n, int pivot)
 	return (n - pa_cnt);
 }
 
-int	sort_smaller(t_stack *ps, int n)
+int	sort_smaller(t_select_stack *pss, t_stack *ps, int n)
 {
 	int pivot;
 	int	remain_cnt;
@@ -140,7 +214,8 @@ int	sort_smaller(t_stack *ps, int n)
 	}
 	else
 	{
-		pivot = select_pivot_b(ps, n);
+		if (select_pivot(pss, ps->top_b, n, &pivot) < 0)
+			return (-1);
 		remain_cnt = transfer_bigger_data_than_pivot(ps, n, pivot);
 		idx = 0;
 		while (idx < remain_cnt)
@@ -149,12 +224,12 @@ int	sort_smaller(t_stack *ps, int n)
 				printf("rrb 에러!!\n");
 			idx++;
 		}
-		sort_bigger(ps, n - remain_cnt);
+		sort_bigger(pss, ps, n - remain_cnt);
 		/*
 		if (rb(ps) < 0)
 			printf("rb 에러!!\n");
 		*/
-		sort_smaller(ps, remain_cnt);
+		sort_smaller(pss, ps, remain_cnt);
 		return (0);
 	}
 }

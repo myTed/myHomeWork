@@ -124,29 +124,102 @@ int	print_stack(t_list *ptop, t_list *pbottom)
 }
 
 
+t_elem	quick_select(t_select_stack *psel, t_list *top, size_t order, size_t size)
+{
+	t_list *tmp_top;
+	t_elem	pivot;
+	size_t	idx;
+	size_t	big_cnt;
+	size_t	medium_cnt;
+	size_t	small_cnt;
+
+	tmp_top = top;
+	pivot = tmp_top->next->data;
+	idx = 0;
+	big_cnt = 0;
+	medium_cnt = 0;
+	small_cnt = 0;
+	while (idx < size)
+	{
+		if (tmp_top->data < pivot)
+		{
+			push(&(psel->small), tmp_top->data, &(psel->small.top_a), &(psel->small.bottom_a));
+			small_cnt++;
+		}
+		else if (tmp_top->data > pivot)
+		{
+			push(&(psel->big), tmp_top->data, &(psel->big.top_a), &(psel->big.bottom_a));
+			big_cnt++;
+		}
+		else
+		{
+			push(&(psel->medium), tmp_top->data, &(psel->medium.top_a), &(psel->medium.bottom_a));
+			medium_cnt++;
+		}
+		idx++;
+		tmp_top = tmp_top->next;
+	}
+	if (small_cnt >= order)
+		return quick_select(psel, psel->small.top_a, order, small_cnt);
+	else if (small_cnt + medium_cnt < order)
+		return quick_select(psel, psel->big.top_a, order - small_cnt - medium_cnt, big_cnt);
+	else
+		return (pivot);
+}
+
+int	init_select_stack(t_select_stack *ps)
+{
+	if (ps == 0)
+		return (-1);
+	ft_memset(&ps->big, 0, sizeof(t_stack));
+	ft_memset(&ps->medium, 0, sizeof(t_stack));
+	ft_memset(&ps->small, 0, sizeof(t_stack));
+	return (0);
+}
+
 int	main(int argc, char *argv[])
 {
-	t_stack stack;
+	t_stack 		stack;
+	t_select_stack	s_stack;
+
 	int		idx;
 	
 	if (argc == 1)
 		return (-1);
 	init_stack(&stack);
+	init_select_stack(&s_stack);
 	idx = 1;
 	while (argv[idx])
 	{
 		arg_push(&stack, atoi(argv[idx]), &stack.top_a, &stack.bottom_a); 
+		stack.a_data_cnt++;
 		idx++;
 	}
-	/*	
+	/*		
 	print_stack(stack.top_a, stack.bottom_a);
 	printf("\n");
 	print_stack(stack.top_b, stack.bottom_b);
 	printf("\n");
-	*/	
-	sort_bigger(&stack, idx - 1);
-	/*	
+	*/
+	//sort_bigger(&stack, idx - 1);
+	/*
+	t_elem	one_third;
+	t_elem	two_third;
+
+	int		one_third_order = (int)(((double)(stack.a_data_cnt) / 3) + 0.5);
+	int		two_third_order = (int)(((double)(stack.a_data_cnt) * 2 / 3) + 0.5);
+	one_third = quick_select(&s_stack, &stack, one_third_order, stack.a_data_cnt);
+	two_third = quick_select(&s_stack, &stack, two_third_order, stack.a_data_cnt);
+	*/
+	sort_n2_div_2(&stack, stack.top_a, 1, idx - 1);
+	//sort_bigger(&s_stack, &stack, idx - 1);
+	
+		
 	print_stack(stack.top_a, stack.bottom_a);
+	
+	/*
+	printf("\n");
+	printf("1/3 번째 : %d, 2/3 번째 : %d\n", (int)one_third, (int)two_third);
 	printf("\n");
 	*/
 	/*
