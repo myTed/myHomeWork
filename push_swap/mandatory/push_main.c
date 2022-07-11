@@ -211,12 +211,9 @@ int	main(int argc, char *argv[])
 	one_third = quick_select(&s_stack, &stack, one_third_order, stack.a_data_cnt);
 	two_third = quick_select(&s_stack, &stack, two_third_order, stack.a_data_cnt);
 	*/
-	sort_n2_div_2(&stack, stack.top_a, 1, idx - 1);
-	//sort_bigger(&s_stack, &stack, idx - 1);
-	
-		
-	print_stack(stack.top_a, stack.bottom_a);
-	
+	//sort_n2_div_2(&stack, stack.top_a, 1, idx - 1);
+	quick_sort_a(&s_stack, &stack, idx - 1, 1);
+	//print_stack(stack.top_a, stack.bottom_a);	
 	/*
 	printf("\n");
 	printf("1/3 번째 : %d, 2/3 번째 : %d\n", (int)one_third, (int)two_third);
