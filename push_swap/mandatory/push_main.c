@@ -95,6 +95,12 @@ int	pop(t_stack *s, t_list **ptop, t_list **pbottom, t_elem *pdata)
 	return (0);
 }
 
+
+int	arg_pop(t_stack *s)
+{
+	return free_stack(s);
+}
+
 int	free_stack(t_stack *s)
 {
 	t_elem data;
@@ -181,17 +187,24 @@ int	main(int argc, char *argv[])
 {
 	t_stack 		stack;
 	t_select_stack	s_stack;
+	int				start_idx;
 
 	if (argc < 2)
 		return (0);
 	init_stack(&stack);
 	init_select_stack(&s_stack);
-	if (arg_push(&stack, argv, 1) < 0)
+	start_idx = 1;
+	if (arg_push(&stack, argv, start_idx) < 0)
 	{
+		if (arg_pop(&stack) < 0)
+			return (-1);
 		write(2, "Error\n", ft_strlen("Error\n"));
 		return (-1);
 	}
-	quick_sort_a(&s_stack, &stack, stack.a_data_cnt, 1);
+	if (stack.a_data_cnt < 6)
+		sort_size_under_handler(&stack, stack.a_data_cnt);
+	else
+		quick_sort_a(&s_stack, &stack, stack.a_data_cnt, 1);
 	//print_stack(stack.top_a, stack.bottom_a);	
 	return (0);
 }

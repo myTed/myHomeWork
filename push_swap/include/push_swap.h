@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:51:21 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/12 02:27:29 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/12 20:48:45 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -76,6 +76,12 @@ int	free_stack(t_stack *s);
 int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, int b_first_sort);
 int	quick_sort_b(t_select_stack *pss, t_stack *ps, int n, int b_first_sort);
 
+
+
+int	sort_size_under_handler(t_stack *ps,int size);
+int	find_maximum_value_idx(t_list *ptop, int n, int *pmax_idx);
+int	find_minimum_value_idx(t_list *ptop, int n, int *pmin_idx);
+int	sort_size_2_big(t_stack *ps);
 int	sa(t_stack *ps);
 int	sb(t_stack *ps);
 int	ss(t_stack *ps);

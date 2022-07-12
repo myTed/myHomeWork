@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:56:02 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/12 10:27:40 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/12 21:57:44 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	find_maximum_value_idx(t_list *ptop, int n, int *pmax_idx)
 	}
 	return (0);
 }
-/*
+
 int	find_minimum_value_idx(t_list *ptop, int n, int *pmin_idx)
 {
 	int		idx;
@@ -63,7 +63,8 @@ int	find_minimum_value_idx(t_list *ptop, int n, int *pmin_idx)
 	}
 	return (0);
 }
-*/
+
+
 int	sort_size_2_big(t_stack *ps)
 {
 	if (ps == 0)
@@ -272,53 +273,6 @@ int	sort_size_4_under_big(t_stack *ps, t_list *ptop, int n)
 }
 
 
-int	sort_size_6_under_big(t_stack *ps, t_list *ptop, int n)
-{
-	t_select_stack 	ss;
-	t_elem			m_pivot;
-	int				pb_cnt;
-	int				ra_cnt;
-	int				idx;
-
-	if ((ps == 0) || (ptop == 0))
-		return (-1);
-	ft_memset(&ss, 0, sizeof(t_select_stack));
-	m_pivot = quick_select(&ss, ptop, 4, n);
-	free_stack(&(ss.big));
-	free_stack(&(ss.medium));
-	free_stack(&(ss.small));
-	idx = 0;
-	pb_cnt = 0;
-	ra_cnt = 0;
-	while ((idx < n) && (pb_cnt < 3))
-	{
-		if (ps->top_a->data < m_pivot)
-		{
-			pb(ps);
-			pb_cnt++;
-		}
-		else
-		{
-			ra(ps);
-			ra_cnt++;
-		}
-		idx++;
-	}
-	idx = 0;
-	while (idx < ra_cnt)
-	{
-		rra(ps);
-		idx++;
-	}
-	printf("---------------\n");
-	if (sort_size_3_under_big(ps, ps->top_a, 3) < 0)
-		return (-1);
-	printf("---------------\n");
-	if (sort_size_3_under_small(ps, ps->top_b, 3) < 0)
-		return (-1);
-	return (0);
-}
-
 
 int sort_size_5_under_big(t_stack *ps, t_list *ptop, int n)
 {
@@ -330,7 +284,6 @@ int sort_size_5_under_big(t_stack *ps, t_list *ptop, int n)
 
 	if ((ps == 0) || (ptop == 0))
 		return (-1);
-	//fprintf(stderr, "sort size 5====");
 	ft_memset(&ss, 0, sizeof(t_select_stack));
 	m_pivot = quick_select(&ss, ptop, 3, n);
 	free_stack(&(ss.big));
@@ -776,7 +729,6 @@ int	quick_sort_b(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 	
 	if ((pss == 0) || (ps == 0))
 		return (-1);
-	//fprintf(stderr, "sortb ====== n ==== : %d\n",n);
 	if (n <= 0)
 		return (0);
 	if (n == 1)
@@ -794,6 +746,7 @@ int	quick_sort_b(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 		}
 		return (0);
 	}
+	/*
 	else if (n == 5)
 	{
 		if (sort_size_5_under_small(ps, ps->top_b, n) < 0)
@@ -804,6 +757,7 @@ int	quick_sort_b(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 		if (sort_size_4_under_small(ps, ps->top_b, n) < 0)
 			return (-1);
 	}
+	*/
 	else if ((n == 2) || (n == 3))
 	{
 		if (sort_size_3_under_small(ps, ps->top_b, n) < 0)
@@ -836,6 +790,7 @@ int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 		return (0);
 	if (is_already_ordered_stack_a(ps, n))
 		return (0);
+	/*
 	if (n == 5)
 	{
 		if (sort_size_5_under_big(ps, ps->top_a, n) < 0)
@@ -845,7 +800,8 @@ int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 	{
 		if (sort_size_4_under_big(ps, ps->top_a, n) < 0)
 			return (-1);
-	}	
+	}
+	*/
 	else if ((n == 2) || (n == 3))
 	{
 		if (sort_size_3_under_big(ps, ps->top_a, n) < 0)
@@ -873,54 +829,6 @@ int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 	return (0);
 }
 
-
-/*
-int	sort_bigger(t_select_stack *pss, t_stack *ps, int n)
-{
-	int	pivot;
-	int	remain_cnt;
-	int	idx;
-	int	trans_pivot_cnt;
-
-	trans_pivot_cnt = 0;
-	if (ps == 0)
-		return (-1);
-	if (n <= 1)
-		return (0);
-	else if (n == 2)
-	{
-		if (sort_size_2_big(ps) < 0)
-			return (-1);
-	}
-	else if (n == 3)
-	{
-		if (sort_size_3_big(ps, ps->top_a) < 0)
-			return (-1);
-	}
-	else
-	{
-		if (select_pivot(pss, ps->top_a, n, &pivot) < 0)
-			return (-1);
-		remain_cnt = transfer_smaller_data_than_pivot(ps, n, pivot);
-		idx = 0;
-		while (idx < remain_cnt)
-		{
-			rra(ps);
-			if ((ps->top_a->data == pivot) && (trans_pivot_cnt == 0))
-			{
-				trans_pivot_cnt = 1;
-				pb(ps);
-			}
-			idx++;
-		}
-		sort_bigger(pss, ps, remain_cnt - 1);
-		pa(ps);
-		sort_smaller(pss, ps, n - remain_cnt);
-	}
-	return (0);
-}
-*/
-
 int	transfer_bigger_data_than_pivot(t_stack *ps, int n, int pivot)
 {
 	int		idx;
@@ -943,54 +851,3 @@ int	transfer_bigger_data_than_pivot(t_stack *ps, int n, int pivot)
 	}
 	return (n - pa_cnt);
 }
-/*
-int	sort_smaller(t_select_stack *pss, t_stack *ps, int n)
-{
-	int pivot;
-	int	remain_cnt;
-	int	idx;
-
-	if (ps == 0)
-		return (-1);
-	if (n <= 0)
-		return (0);
-	else if (n == 1)
-	{
-		if (pa(ps) < 0)
-			printf("pa 에러\n");
-		return (0);
-	}
-	else if (n == 2)
-	{
-		if (sort_size_2_small(ps) < 0)
-			return (-1);
-		if (pa(ps) < 0)
-			printf("pa 에러\n");
-		if (pa(ps) < 0)
-			printf("pa 에러\n");
-		return (0);
-	}
-	else if (n == 3)
-	{
-		if (sort_size_3_small(ps, ps->top_b) < 0)
-			return (-1);
-		return (0);
-	}
-	else
-	{
-		if (select_pivot(pss, ps->top_b, n, &pivot) < 0)
-			return (-1);
-		remain_cnt = transfer_bigger_data_than_pivot(ps, n, pivot);
-		idx = 0;
-		while (idx < remain_cnt)
-		{
-			if (rrb(ps) < 0)
-				printf("rrb 에러!!\n");
-			idx++;
-		}
-		sort_bigger(pss, ps, n - remain_cnt);
-		sort_smaller(pss, ps, remain_cnt);
-		return (0);
-	}
-}
-*/
