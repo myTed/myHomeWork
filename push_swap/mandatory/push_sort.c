@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:56:02 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/11 01:18:21 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/12 10:27:40 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -731,57 +731,6 @@ int	roll_back_stack(t_stack *ps, t_partition_info *ppi)
 	return (0);
 }
 
-
-int	roll_back_stack_2(t_stack *ps, t_partition_info *ppi)
-{
-	int	idx;
-	//int	cnt;
-
-	if ((ps == 0) || (ppi == 0))
-		return (-1);
-	idx = 0;
-	//cnt = 0;
-	while (idx < ppi->ra_cnt)
-	{
-		rra(ps);
-		/*
-		if ((cnt == 0) && (ps->top_a->data == ppi->pv.two_third_pivot))
-		{
-			pb(ps);
-			cnt = 1;
-		}
-		*/
-		idx++;
-	}
-	return (0);
-}
-
-int	roll_back_stack_3(t_stack *ps, t_partition_info *ppi)
-{
-	int	idx;
-	//int	cnt;
-
-	if ((ps == 0) || (ppi == 0))
-		return (-1);
-	idx = 0;
-	//cnt = 0;
-	while (idx < ppi->rb_cnt)
-	{
-		rrb(ps);
-		/*
-		if ((cnt == 0) && (ps->top_b->data == ppi->pv.one_third_pivot))
-		{
-			pa(ps);
-			ra(ps);
-			cnt = 1;
-		}
-		*/
-		idx++;
-	}
-	return (0);
-}
-
-
 int	is_already_ordered_stack_a(t_stack *ps, int n)
 {
 	int	idx;
@@ -914,28 +863,6 @@ int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 		{	
 			if (divide_partition_stack_a(pss, ps, n, &pi) < 0)
 				return (-1);
-		/*
-		if (roll_back_stack(ps, &pi) < 0)
-			return (-1);
-		*/
-
-		/*
-		if (roll_back_stack_2(ps, &pi) < 0)
-			return (-1);
-		quick_sort_a(pss, ps, pi.ra_cnt - 1);
-		pa(ps);
-		if (roll_back_stack_3(ps, &pi) < 0)
-			return (-1);
-		quick_sort_b(pss, ps, pi.rb_cnt - 1);
-		rra(ps);
-		quick_sort_b(pss, ps, pi.pb_cnt - pi.rb_cnt);
-		*/
-		/*
-		if (roll_back_stack_2(ps, &pi) < 0)
-			return (-1);
-		if (roll_back_stack_3(ps, &pi) < 0)
-			return (-1);
-		*/
 			if (roll_back_stack(ps, &pi) < 0)
 				return (-1);
 		}

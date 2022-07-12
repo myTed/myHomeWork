@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:51:21 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/11 00:47:36 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/12 02:27:29 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -59,8 +59,10 @@
 
 
 
-
+int	arg_push(t_stack *ps, char *argv[], int idx);
+long long int ft_atol(const char *str, int *poverflow);
 int	push(t_stack *s, t_elem elem, t_list **ptop, t_list **pbottom);
+int	push_bottom(t_stack *s, t_elem elem);
 int	pop(t_stack *s, t_list **ptop, t_list **pbottom, t_elem *pdata);
 int	sort_bigger(t_select_stack *pss, t_stack *ps, int n);
 int	sort_smaller(t_select_stack *pss, t_stack *ps, int n);

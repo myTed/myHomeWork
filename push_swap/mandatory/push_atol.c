@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   push_atol.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:02:40 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/11 13:32:10 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/11 22:18:48 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 static void	skip_white_space(const char *str, int *idx)
 {
@@ -65,19 +64,18 @@ static long long int get_number(const char *str, int *idx, int *overflow)
 	return (num);
 }
 
-long long int ft_atol(const char *str)
+long long int ft_atol(const char *str, int *poverflow)
 {
 	int				idx;
 	long long int	num;
 	int				minus_signed_value;
-	int				overflow;
 
 	idx = 0;
-	overflow = 0;
+	*poverflow = 0;
 	skip_white_space(str, &idx);
 	minus_signed_value = is_minus_number(str, &idx);
-	num = get_number(str, &idx, &overflow);
-	if (overflow)
+	num = get_number(str, &idx, poverflow);
+	if (*poverflow)
 	{
 		if (minus_signed_value)
 			return (0);
@@ -92,13 +90,3 @@ long long int ft_atol(const char *str)
 			return (num);
 	}
 }
-/*
-int	main(int argc, char *argv[])
-{
-	if (argc != 2)
-		return (0);
-	printf("std_atoi %d\n",atoi(argv[1]));
-	printf("ft_atol  %lld\n",ft_atol(argv[1]));
-	return (0);
-}
-*/

@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 15:06:16 by kyolee            #+#    #+#             */
-/*   Updated: 2021/11/26 20:46:49 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/12 02:19:01 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -130,9 +130,9 @@ int	main(int argc, char *argv[])
 	char	**str;
 	int		idx;
 
-	if (argc != 3)
+	if (argc != 2)
 		return (0);
-	str = ft_split(argv[1], argv[2][0]);
+	str = ft_split(argv[1], ' ');
 	idx = 0;
 	while (str[idx] != 0)
 	{
