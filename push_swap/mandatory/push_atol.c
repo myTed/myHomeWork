@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:02:40 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/11 22:18:48 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/13 12:56:23 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	is_minus_number(const char *str, int *idx)
 	return (is_minus);
 }
 
-static long long int get_number(const char *str, int *idx, int *overflow)
+static long long int	get_number(const char *str, int *idx, int *overflow)
 {
 	int				tmp_idx;
 	long long int	num;
@@ -64,7 +64,7 @@ static long long int get_number(const char *str, int *idx, int *overflow)
 	return (num);
 }
 
-long long int ft_atol(const char *str, int *poverflow)
+long long int	ft_atol(const char *str, int *poverflow)
 {
 	int				idx;
 	long long int	num;

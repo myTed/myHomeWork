@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:56:02 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/12 21:57:44 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/13 16:39:03 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -746,18 +746,6 @@ int	quick_sort_b(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 		}
 		return (0);
 	}
-	/*
-	else if (n == 5)
-	{
-		if (sort_size_5_under_small(ps, ps->top_b, n) < 0)
-			return (-1);
-	}
-	else if (n == 4)
-	{
-		if (sort_size_4_under_small(ps, ps->top_b, n) < 0)
-			return (-1);
-	}
-	*/
 	else if ((n == 2) || (n == 3))
 	{
 		if (sort_size_3_under_small(ps, ps->top_b, n) < 0)
@@ -778,6 +766,20 @@ int	quick_sort_b(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 }
 
 
+int	quick_sort_under_a(t_stack *ps, int n)
+{
+	if (n <= 1)
+		return (0);
+	if (is_already_ordered_stack_a(ps, n))
+		return (0);
+	if (n <= 3)
+	{
+		if (sort_size_3_under_big(ps, ps->top_a, n) < 0)
+			return (-1);
+	}
+	return (0);
+}
+
 
 
 int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
@@ -786,27 +788,8 @@ int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, int b_first_sort)
 
 	if ((pss == 0) || (ps == 0))
 		return (-1);
-	if (n <= 1)
-		return (0);
-	if (is_already_ordered_stack_a(ps, n))
-		return (0);
-	/*
-	if (n == 5)
-	{
-		if (sort_size_5_under_big(ps, ps->top_a, n) < 0)
-			return (-1);
-	}
-	else if (n == 4)
-	{
-		if (sort_size_4_under_big(ps, ps->top_a, n) < 0)
-			return (-1);
-	}
-	*/
-	else if ((n == 2) || (n == 3))
-	{
-		if (sort_size_3_under_big(ps, ps->top_a, n) < 0)
-			return (-1);
-	}
+	if (quick_sort_size_less_3(ps, n) < 0)
+		return (-1);
 	else
 	{
 		if (b_first_sort)

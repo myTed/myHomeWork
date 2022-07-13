@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 07:54:24 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/05 16:24:44 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/13 15:30:45 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 int	swap_list(t_list **ptop, t_list **pbottom)
 {
-	t_list *tmp;
+	t_list	*tmp;
 
 	if ((ptop == 0) || (pbottom == 0))
 		return (-1);
@@ -27,7 +27,7 @@ int	swap_list(t_list **ptop, t_list **pbottom)
 		tmp = *ptop;
 		*ptop = *pbottom;
 		*pbottom = tmp;
-		return (0);	
+		return (0);
 	}
 	tmp = (*ptop)->next;
 	(*ptop)->next = tmp->next;
@@ -59,7 +59,7 @@ int	sb(t_stack *ps)
 		return (-1);
 	if (write(1, "sb\n", ft_strlen("sb\n")) < 0)
 		return (-1);
-	return (0);	
+	return (0);
 }
 
 int	ss(t_stack *ps)
@@ -132,7 +132,7 @@ int	rb(t_stack *ps)
 	if ((ps->bottom_b == 0) || (ps->top_b == 0))
 		return (-2);
 	ps->bottom_b = ps->top_b;
-	ps->top_b = ps->top_b->next;	
+	ps->top_b = ps->top_b->next;
 	if (write(1, "rb\n", ft_strlen("rb\n")) < 0)
 		return (-1);
 	return (0);
@@ -164,7 +164,7 @@ int	rr(t_stack *ps)
 	return (0);
 }
 
-int rra(t_stack *ps)
+int	rra(t_stack *ps)
 {
 	if (ps == 0)
 		return (-1);

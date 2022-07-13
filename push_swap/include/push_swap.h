@@ -6,15 +6,13 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:51:21 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/12 20:48:45 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/13 16:24:46 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
 
 #ifndef PUSH_SWAP_H
  #define PUSH_SWAP_H
- #define	SORT_STACK_A	1
- #define	SORT_STACK_B	0
 	typedef int	t_elem;
 	typedef struct s_list
 	{
@@ -38,6 +36,9 @@
 		t_stack big;
 		t_stack medium;
 		t_stack small;
+		size_t	big_cnt;
+		size_t	medium_cnt;
+		size_t	small_cnt;
 	} t_select_stack;
 
 	typedef struct s_pivot
@@ -49,6 +50,7 @@
 	typedef struct s_partition_info
 	{
 		t_pivot	pv;
+		int	partioned;
 		int	ra_cnt;
 		int	skip_ra_cnt;
 		int	rb_cnt;
@@ -59,7 +61,7 @@
 
 
 
-int	arg_push(t_stack *ps, char *argv[], int idx);
+int	arg_push(t_stack *ps, char *argv[], int idx, int splited);
 long long int ft_atol(const char *str, int *poverflow);
 int	push(t_stack *s, t_elem elem, t_list **ptop, t_list **pbottom);
 int	push_bottom(t_stack *s, t_elem elem);
@@ -75,9 +77,9 @@ int	free_stack(t_stack *s);
 
 int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, int b_first_sort);
 int	quick_sort_b(t_select_stack *pss, t_stack *ps, int n, int b_first_sort);
-
-
-
+int	free_split(char **str);
+int	malloc_arg_check(char *str, char ***psplit_argv, int *psplited);
+int	is_already_ordered_stack_a(t_stack *ps, int n);
 int	sort_size_under_handler(t_stack *ps,int size);
 int	find_maximum_value_idx(t_list *ptop, int n, int *pmax_idx);
 int	find_minimum_value_idx(t_list *ptop, int n, int *pmin_idx);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_main.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/13 12:54:58 by kyolee            #+#    #+#             */
+/*   Updated: 2022/07/13 15:27:14 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include "push_swap.h"
 #include <stdlib.h>
@@ -14,7 +26,7 @@ int	init_stack(t_stack *s)
 
 int	push_bottom(t_stack *ps, t_elem elem)
 {
-	t_list *pnew;
+	t_list	*pnew;
 
 	if (ps == 0)
 		return (-1);
@@ -42,11 +54,11 @@ int	push_bottom(t_stack *ps, t_elem elem)
 
 int	push(t_stack *s, t_elem elem, t_list **ptop, t_list **pbottom)
 {
-	t_list *pnew;
+	t_list	*pnew;
 
 	if (s == 0)
 		return (-1);
-	pnew = malloc(sizeof(t_list));	
+	pnew = malloc(sizeof(t_list));
 	if (pnew == 0)
 		return (-1);
 	pnew->data = elem;
@@ -70,7 +82,7 @@ int	push(t_stack *s, t_elem elem, t_list **ptop, t_list **pbottom)
 
 int	pop(t_stack *s, t_list **ptop, t_list **pbottom, t_elem *pdata)
 {
-	t_list *del;
+	t_list	*del;
 
 	if ((s == 0) || (ptop == 0) || (pbottom == 0))
 		return (-1);
@@ -95,15 +107,14 @@ int	pop(t_stack *s, t_list **ptop, t_list **pbottom, t_elem *pdata)
 	return (0);
 }
 
-
 int	arg_pop(t_stack *s)
 {
-	return free_stack(s);
+	return (free_stack(s));
 }
 
 int	free_stack(t_stack *s)
 {
-	t_elem data;
+	t_elem	data;
 
 	if (s == 0)
 		return (-1);
@@ -114,6 +125,7 @@ int	free_stack(t_stack *s)
 	return (0);
 }
 
+/*
 int	print_stack(t_list *ptop, t_list *pbottom)
 {
 	t_list *ptmp;
@@ -128,47 +140,61 @@ int	print_stack(t_list *ptop, t_list *pbottom)
 	} while (ptmp != ptop);
 	return (0);
 }
-
-
-t_elem	quick_select(t_select_stack *psel, t_list *top, size_t order, size_t size)
+*/
+int	partition_quick_select(t_elem pivot, t_list *top, t_select_stack *psel)
 {
-	t_list *tmp_top;
+	if ((psel == 0) || (top == 0))
+		return (-1);
+	if (top->data < pivot)
+	{
+		push(&(psel->small), top->data, &(psel->small.top_a),
+			&(psel->small.bottom_a));
+		psel->small_cnt++;
+	}
+	else if (top->data > pivot)
+	{
+		push(&(psel->big), top->data, &(psel->big.top_a),
+			&(psel->big.bottom_a));
+		psel->big_cnt++;
+	}
+	else
+	{
+		push(&(psel->medium), top->data, &(psel->medium.top_a),
+			&(psel->medium.bottom_a));
+		psel->medium_cnt++;
+	}
+	return (0);
+}
+
+t_elem	quick_select(
+	t_select_stack *psel,
+	t_list *top,
+	size_t order,
+	size_t size
+){
+	t_list	*tmp_top;
 	t_elem	pivot;
 	size_t	idx;
-	size_t	big_cnt;
-	size_t	medium_cnt;
-	size_t	small_cnt;
 
 	tmp_top = top;
 	pivot = tmp_top->next->data;
 	idx = 0;
-	big_cnt = 0;
-	medium_cnt = 0;
-	small_cnt = 0;
+	psel->big_cnt = 0;
+	psel->medium_cnt = 0;
+	psel->small_cnt = 0;
 	while (idx < size)
 	{
-		if (tmp_top->data < pivot)
-		{
-			push(&(psel->small), tmp_top->data, &(psel->small.top_a), &(psel->small.bottom_a));
-			small_cnt++;
-		}
-		else if (tmp_top->data > pivot)
-		{
-			push(&(psel->big), tmp_top->data, &(psel->big.top_a), &(psel->big.bottom_a));
-			big_cnt++;
-		}
-		else
-		{
-			push(&(psel->medium), tmp_top->data, &(psel->medium.top_a), &(psel->medium.bottom_a));
-			medium_cnt++;
-		}
+		if (partition_quick_select(pivot, tmp_top, psel) < 0)
+			return (-1);
 		idx++;
 		tmp_top = tmp_top->next;
 	}
-	if (small_cnt >= order)
-		return quick_select(psel, psel->small.top_a, order, small_cnt);
-	else if (small_cnt + medium_cnt < order)
-		return quick_select(psel, psel->big.top_a, order - small_cnt - medium_cnt, big_cnt);
+	if (psel->small_cnt >= order)
+		return (quick_select(psel, psel->small.top_a, order, psel->small_cnt));
+	else if (psel->small_cnt + psel->medium_cnt < order)
+		return (quick_select(psel, psel->big.top_a,
+				order - psel->small_cnt - psel->medium_cnt,
+				psel->big_cnt));
 	else
 		return (pivot);
 }
@@ -185,16 +211,18 @@ int	init_select_stack(t_select_stack *ps)
 
 int	main(int argc, char *argv[])
 {
-	t_stack 		stack;
+	t_stack			stack;
 	t_select_stack	s_stack;
 	int				start_idx;
+	int				splited;
 
 	if (argc < 2)
 		return (0);
 	init_stack(&stack);
 	init_select_stack(&s_stack);
 	start_idx = 1;
-	if (arg_push(&stack, argv, start_idx) < 0)
+	splited = 0;
+	if (arg_push(&stack, argv, start_idx, splited) < 0)
 	{
 		if (arg_pop(&stack) < 0)
 			return (-1);
@@ -202,10 +230,9 @@ int	main(int argc, char *argv[])
 		return (-1);
 	}
 	if (stack.a_data_cnt < 6)
-		sort_size_under_handler(&stack, stack.a_data_cnt);
+		sort_size_under_handler(&stack, stack.a_dat_cnt);
 	else
 		quick_sort_a(&s_stack, &stack, stack.a_data_cnt, 1);
-	//print_stack(stack.top_a, stack.bottom_a);	
+	print_stack(stack.top_a, stack.bottom_a);
 	return (0);
 }
-

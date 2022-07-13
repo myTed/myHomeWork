@@ -6,7 +6,7 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/22 16:25:58 by kyolee            #+#    #+#              #
-#    Updated: 2022/07/12 20:21:50 by kyolee           ###   ########.fr        #
+#    Updated: 2022/07/13 15:16:49 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CFLAGS=-Wall -Wextra -Werror -g
 INCLUDES=./include
 MANDATORY_DIR=mandatory/
 SRCS= push_main.c push_operation.c push_sort.c push_arg.c\
-	  push_atol.c push_sort_under_five.c
+	  push_atol.c push_sort_under_five.c push_arg_check.c
 
 BONUS_DIR=bonus/
 BONUS_SRCS= main_bonus.c\

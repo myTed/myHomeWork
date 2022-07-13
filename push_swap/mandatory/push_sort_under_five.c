@@ -1,8 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_sort_under_five.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/13 15:31:14 by kyolee            #+#    #+#             */
+/*   Updated: 2022/07/13 15:31:59 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "push_swap.h"
 #include "../libft/libft.h"
-
-
 
 static int	sort_size_under_2(t_stack *ps)
 {
@@ -86,17 +95,27 @@ static int	sort_size_under_5(t_stack *ps)
 	return (0);
 }
 
-int	sort_size_under_handler(t_stack *ps,int	size)
+int	sort_size_under_handler(t_stack *ps, int size)
 {
-	if (size == 5)
-		return (sort_size_under_5(ps));
-	else if (size == 4)
-		return (sort_size_under_4(ps));
-	else if (size == 3)
-		return (sort_size_under_3(ps));
-	else if (size == 2)
-		return (sort_size_under_2(ps));
-	else
-		return (0);
-}
+	int	ordered;
 
+	ordered = is_already_ordered_stack_a(ps, size);
+	if (ordered == 1)
+		return (0);
+	else if (ordered == -1)
+		return (-1);
+	else
+	{
+		if (size == 5)
+			return (sort_size_under_5(ps));
+		else if (size == 4)
+			return (sort_size_under_4(ps));
+		else if (size == 3)
+			return (sort_size_under_3(ps));
+		else if (size == 2)
+			return (sort_size_under_2(ps));
+		else
+			return (0);
+	}
+	return (0);
+}
