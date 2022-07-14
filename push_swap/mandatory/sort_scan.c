@@ -1,4 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_scan.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/14 21:10:27 by kyolee            #+#    #+#             */
+/*   Updated: 2022/07/14 21:10:28 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
+
+int	find_minimum_value_idx(t_list *ptop, int n, int *pmin_idx)
+{
+	int		idx;
+	t_list	*tmp_top;
+	t_elem	min_value;
+
+	if (ptop == 0)
+		return (-1);
+	tmp_top = ptop;
+	min_value = tmp_top->data;
+	*pmin_idx = 0;
+	idx = 0;
+	while (idx < n)
+	{
+		if (tmp_top->data < min_value)
+		{
+			min_value = tmp_top->data;
+			*pmin_idx = idx;
+		}
+		tmp_top = tmp_top->next;
+		idx++;
+	}
+	return (0);
+}
 
 int	is_already_ordered_stack_a(t_stack *ps, int n)
 {

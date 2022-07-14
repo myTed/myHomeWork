@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_main.c                                        :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 12:54:58 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/14 17:23:28 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/14 21:17:30 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ int	print_stack(t_list *ptop, t_list *pbottom)
 	return (0);
 }
 */
-
+/*
+	print_stack(stack.top_a, stack.bottom_a);
+*/
 int	main(int argc, char *argv[])
 {
 	t_stack				stack;
@@ -88,8 +90,5 @@ int	main(int argc, char *argv[])
 		return (sort_size_under_handler(&stack, stack.a_data_cnt));
 	else
 		quick_sort_a(&s_stack, &stack, stack.a_data_cnt, &pi);
-	/*
-	print_stack(stack.top_a, stack.bottom_a);
-	*/
 	return (0);
 }

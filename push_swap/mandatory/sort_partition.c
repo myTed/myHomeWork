@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_partition.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/14 21:07:57 by kyolee            #+#    #+#             */
+/*   Updated: 2022/07/14 21:08:44 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 #include "../libft/libft.h"
 
@@ -32,7 +44,6 @@ int	divide_partition_stack_a(
 		return (-1);
 	return (0);
 }
-
 
 int	divide_partition_a(
 	t_select_stack *pss,
@@ -69,4 +80,3 @@ int	divide_partition_stack_b(
 		return (-1);
 	return (0);
 }
-

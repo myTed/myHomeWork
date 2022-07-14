@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_transfer_a_to_b.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/14 21:09:26 by kyolee            #+#    #+#             */
+/*   Updated: 2022/07/14 21:10:20 by kyolee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 int	transfer_final_data_smaller_two_third_pivot(
@@ -71,7 +83,6 @@ int	first_transfer_smaller_data_than_two_third_pivot(
 	}
 	return (0);
 }
-
 
 int	transfer_smaller_pivot(
 		t_stack *ps,
