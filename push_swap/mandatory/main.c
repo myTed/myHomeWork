@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 12:54:58 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/14 21:17:30 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/14 22:03:56 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,9 @@ int	main(int argc, char *argv[])
 		return (-1);
 	}
 	if (stack.a_data_cnt < 6)
-		return (sort_size_under_handler(&stack, stack.a_data_cnt));
+		sort_size_under_handler(&stack, stack.a_data_cnt);
 	else
 		quick_sort_a(&s_stack, &stack, stack.a_data_cnt, &pi);
+	free_stack(&stack);
 	return (0);
 }
