@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 15:31:14 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/13 15:31:59 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/14 15:05:40 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ static int	sort_size_under_2(t_stack *ps)
 {
 	if (ps == 0)
 		return (-1);
-	return (sort_size_2_big(ps));
+	if (ps->top_a->data > ps->top_a->next->data)
+		sa(ps);
+	return (0);
 }
 
 static int	sort_size_under_3(t_stack *ps)
@@ -97,13 +99,10 @@ static int	sort_size_under_5(t_stack *ps)
 
 int	sort_size_under_handler(t_stack *ps, int size)
 {
-	int	ordered;
-
-	ordered = is_already_ordered_stack_a(ps, size);
-	if (ordered == 1)
-		return (0);
-	else if (ordered == -1)
+	if (ps == 0)
 		return (-1);
+	if (is_already_ordered_stack_a(ps, size))
+		return (0);
 	else
 	{
 		if (size == 5)

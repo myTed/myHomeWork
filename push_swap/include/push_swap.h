@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:51:21 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/13 16:24:46 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/14 20:42:32 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -50,7 +50,7 @@
 	typedef struct s_partition_info
 	{
 		t_pivot	pv;
-		int	partioned;
+		int	first_partition;
 		int	ra_cnt;
 		int	skip_ra_cnt;
 		int	rb_cnt;
@@ -62,27 +62,71 @@
 
 
 int	arg_push(t_stack *ps, char *argv[], int idx, int splited);
+int	is_already_ordered_stack_a(t_stack *ps, int n);
+int	is_already_ordered_stack_b(t_stack *ps, int n);
 long long int ft_atol(const char *str, int *poverflow);
 int	push(t_stack *s, t_elem elem, t_list **ptop, t_list **pbottom);
 int	push_bottom(t_stack *s, t_elem elem);
 int	pop(t_stack *s, t_list **ptop, t_list **pbottom, t_elem *pdata);
-int	sort_bigger(t_select_stack *pss, t_stack *ps, int n);
-int	sort_smaller(t_select_stack *pss, t_stack *ps, int n);
 t_elem	quick_select(t_select_stack *psel, t_list *top, size_t order, size_t size);
-int	sort_n2_div_2(t_stack *ps, t_list *ptop, int b_stack_a, int n);
-
-int	sort_size_3_small(t_stack *ps, t_list *ptop);
+int	sort_size_3_under_b(t_stack *ps, int n);
+int	sort_size_3_under_a(t_stack *ps, int n);
 int	free_stack(t_stack *s);
 
 
-int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, int b_first_sort);
-int	quick_sort_b(t_select_stack *pss, t_stack *ps, int n, int b_first_sort);
+int	quick_sort_a(t_select_stack *pss, t_stack *ps, int n, t_partition_info *pi);
+int	quick_sort_b(t_select_stack *pss, t_stack *ps, int n, t_partition_info *pi);
 int	free_split(char **str);
 int	malloc_arg_check(char *str, char ***psplit_argv, int *psplited);
-int	is_already_ordered_stack_a(t_stack *ps, int n);
 int	sort_size_under_handler(t_stack *ps,int size);
 int	find_maximum_value_idx(t_list *ptop, int n, int *pmax_idx);
 int	find_minimum_value_idx(t_list *ptop, int n, int *pmin_idx);
+
+int	divide_partition_a(
+	t_select_stack *pss,
+	t_stack *ps,
+	int n,
+	t_partition_info *ppi
+);
+
+int	divide_partition_stack_b(
+		t_select_stack *pss,
+		t_stack *ps,
+		int n,
+		t_partition_info *ppi
+);
+
+int	first_transfer_smaller_data_than_two_third_pivot(
+		t_stack *ps,
+		int n,
+		t_partition_info *ppi
+);
+int	transfer_smaller_data_than_two_third_pivot(
+		t_stack *ps,
+		int n,
+		t_partition_info *ppi
+);
+int	transfer_bigger_data_than_pivot(t_stack *ps, int n, int pivot);
+int	transfer_bigger_data_than_one_third_pivot(
+		t_stack *ps,
+		int n,
+		t_partition_info *ppi
+);
+int	roll_back_stack(t_stack *ps, t_partition_info *ppi);
+
+int	is_only_data_more_than_two_third_pivot(
+		t_stack *ps,
+		t_pivot *ppv,
+		int start_idx,
+		int end_idx
+);
+int	is_only_data_less_than_one_third_pivot(
+		t_stack *ps,
+		t_pivot *ppv,
+		int start_idx,
+		int end_idx
+);
+int	select_pivot(t_select_stack *pss, t_list *ptop, int size, t_pivot *ppv);
 int	sort_size_2_big(t_stack *ps);
 int	sa(t_stack *ps);
 int	sb(t_stack *ps);
