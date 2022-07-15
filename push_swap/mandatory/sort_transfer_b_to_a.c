@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/14 21:13:51 by kyolee            #+#    #+#             */
-/*   Updated: 2022/07/14 21:13:58 by kyolee           ###   ########.fr       */
+/*   Created: 2022/07/15 19:27:59 by kyolee            #+#    #+#             */
+/*   Updated: 2022/07/15 19:28:24 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,8 @@ int	transfer_bigger_data_than_one_third_pivot(
 			ppi->skip_rb_cnt = n - idx;
 			return (0);
 		}
-		else
-		{
-			if (transfer_bigger_data_pivot(ps, idx, n, ppi) < 0)
-				return (-1);
-		}	
+		if (transfer_bigger_data_pivot(ps, idx, n, ppi) < 0)
+			return (-1);
 		idx++;
 	}
 	return (0);

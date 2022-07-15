@@ -6,7 +6,7 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/22 16:25:58 by kyolee            #+#    #+#              #
-#    Updated: 2022/07/14 18:32:44 by kyolee           ###   ########.fr        #
+#    Updated: 2022/07/15 15:53:55 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,9 @@ SRCS= main.c arg.c arg_check.c atol.c\
 	  quick_select.c
 
 BONUS_DIR=bonus/
-BONUS_SRCS= main_bonus.c\
+BONUS_SRCS= main_bonus.c arg_bonus.c arg_check_bonus.c atol_bonus.c\
+	  op_swap_bonus.c op_basic_bonus.c op_pop_bonus.c op_rotate_bonus.c\
+	  gnl/gnl.c gnl/gnl_utils.c cmd_op.c
 
 LIB_SRCS=libft/libft.a
 
@@ -31,11 +33,11 @@ BONUS_OBJS=$(addprefix $(BONUS_DIR), $(patsubst %.c, %.o, $(BONUS_SRCS)))
 
 ifeq ($(BONUS), 1)
 	OBJECTS=$(BONUS_OBJS)
+	NAME=checker
 else		
 	OBJECTS=$(MANDATORY_OBJS)
+	NAME=push_swap
 endif
-
-NAME=push_swap
 
 all:$(NAME)
 
@@ -58,8 +60,10 @@ clean:
 
 fclean:clean
 	cd libft && make fclean
-	rm -rf $(NAME)
+	rm -rf push_swap checker
 
-re:fclean all
+re:
+	make fclean 
+	make all
 
 .PHONY: clean fclean re bonus

@@ -6,7 +6,7 @@
 /*   By: kyolee <kyolee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:08:10 by kyolee            #+#    #+#             */
-/*   Updated: 2022/06/28 20:49:01 by kyolee           ###   ########.fr       */
+/*   Updated: 2022/07/15 12:11:37 by kyolee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H
@@ -15,8 +15,8 @@
 
 typedef struct s_lib_list
 {
-	void			*content;
-	struct s_list	*next;
+	void				*content;
+	struct s_lib_list	*next;
 }	t_lib_list;
 int			ft_atoi(const char *str);
 void		ft_bzero(void *s, size_t n);

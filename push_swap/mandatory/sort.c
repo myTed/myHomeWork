@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/push_swap.h"
+#include "push_swap.h"
 #include "../libft/libft.h"
-#include <stdio.h>
 
 int	roll_back_stack_common(
 		t_stack *ps,
