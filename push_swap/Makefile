@@ -6,12 +6,12 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/22 16:25:58 by kyolee            #+#    #+#              #
-#    Updated: 2022/07/15 15:53:55 by kyolee           ###   ########.fr        #
+#    Updated: 2022/07/16 10:43:22 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC=gcc
-CFLAGS=-Wall -Wextra -Werror -g
+CC=cc
+CFLAGS=-Wall -Wextra -Werror
 INCLUDES=./include
 MANDATORY_DIR=mandatory/
 SRCS= main.c arg.c arg_check.c atol.c\
@@ -43,8 +43,6 @@ all:$(NAME)
 
 $(NAME):$(OBJECTS) $(LIB_SRCS)
 	$(CC) $(CFLAGS)  -v -o $@ $^
-#$(CC) $(CFLAGS) -o $@ $^ -L../../ -lmlx -lXext -lX11 -lm
-# -fsanitize=address 
 $(LIB_SRCS) :
 	cd libft && make
 

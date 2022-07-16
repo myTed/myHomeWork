@@ -6,11 +6,11 @@
 #    By: kyolee <kyolee@student.42.seoul.kr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/18 20:15:15 by kyolee            #+#    #+#              #
-#    Updated: 2022/07/05 16:03:57 by kyolee           ###   ########.fr        #
+#    Updated: 2022/07/16 10:43:08 by kyolee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC=gcc
+CC=cc
 CFLAGS=-Wall -Wextra -Werror
 
 SRCS=ft_atoi.c     ft_isascii.c  ft_memcpy.c   ft_strdup.c   ft_strncmp.c  ft_tolower.c\
